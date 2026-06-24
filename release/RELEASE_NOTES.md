@@ -1,5 +1,6 @@
-# v2.10.4
+# v2.10.5
 
+- Auto release after fix: Fallback to APK matching when metadata fetch times out
 - Auto release after fix: Fail auto release when git push does not succeed
 - Auto release after fix: Tighten updater cleanup and fix metadata asset upload
 - Auto release after fix: Fix updater cleanup fallback and add auto release hooks

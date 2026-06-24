@@ -1,10 +1,10 @@
 {
   "packageName": "com.dz.networkquiz",
-  "versionCode": 29,
-  "versionName": "2.10.4",
+  "versionCode": 30,
+  "versionName": "2.10.5",
   "apkFileName": "计算机网络复习宝典.apk",
   "apkDownloadUrl": "",
-  "releaseNotes": "# v2.10.4\n\n- Auto release after fix: Fail auto release when git push does not succeed\n- Auto release after fix: Tighten updater cleanup and fix metadata asset upload\n- Auto release after fix: Fix updater cleanup fallback and add auto release hooks\n- 新增基于 GitHub Release 的联网检查更新入口。\n- 支持应用内下载 APK、调起系统安装流程，并在写入安装会话后自动清理缓存安装包。\n- 设置页新增 GitHub 更新仓库配置，支持填写 `owner/repo` 或完整 GitHub 链接。",
-  "sha256": "5864cdc9b757093cad41fb22530e623ed18b7d597cc9dac3bccc8da50a5df43b",
-  "generatedAt": "2026-06-24T19:18:26.145086+00:00"
+  "releaseNotes": "# v2.10.5\n\n- Auto release after fix: Fallback to APK matching when metadata fetch times out\n- Auto release after fix: Fail auto release when git push does not succeed\n- Auto release after fix: Tighten updater cleanup and fix metadata asset upload\n- Auto release after fix: Fix updater cleanup fallback and add auto release hooks\n- 新增基于 GitHub Release 的联网检查更新入口。\n- 支持应用内下载 APK、调起系统安装流程，并在写入安装会话后自动清理缓存安装包。\n- 设置页新增 GitHub 更新仓库配置，支持填写 `owner/repo` 或完整 GitHub 链接。",
+  "sha256": "418edd7cca9b9bc879565f24f3a757fa87c19bb67517e837ec21cab6b5b83800",
+  "generatedAt": "2026-06-24T19:22:06.870851+00:00"
 }
