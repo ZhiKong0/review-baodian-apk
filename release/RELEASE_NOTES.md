@@ -1,5 +1,6 @@
-# v2.10.2
+# v2.10.3
 
+- Auto release after fix: Tighten updater cleanup and fix metadata asset upload
 - Auto release after fix: Fix updater cleanup fallback and add auto release hooks
 - 新增基于 GitHub Release 的联网检查更新入口。
 - 支持应用内下载 APK、调起系统安装流程，并在写入安装会话后自动清理缓存安装包。
