@@ -1,10 +1,10 @@
 {
   "packageName": "com.dz.networkquiz",
-  "versionCode": 25,
-  "versionName": "2.10.0",
+  "versionCode": 26,
+  "versionName": "2.10.1",
   "apkFileName": "计算机网络复习宝典.apk",
   "apkDownloadUrl": "",
-  "releaseNotes": "# v2.10.0\n\n- 新增基于 GitHub Release 的联网检查更新入口。\n- 支持应用内下载 APK、调起系统安装流程，并在写入安装会话后自动清理缓存安装包。\n- 设置页新增 GitHub 更新仓库配置，支持填写 `owner/repo` 或完整 GitHub 链接。",
-  "sha256": "8a690bfad292a719c73bdcb0600ddd048345902bda30c7a8f18da82157751cfd",
-  "generatedAt": "2026-06-24T17:20:19.031847+00:00"
+  "releaseNotes": "# v2.10.1\n\n- 新增基于 GitHub Release 的联网检查更新入口。\n- 支持应用内下载 APK、调起系统安装流程，并在写入安装会话后自动清理缓存安装包。\n- 设置页新增 GitHub 更新仓库配置，支持填写 `owner/repo` 或完整 GitHub 链接。",
+  "sha256": "f949bfb47cb96d10d997518f48dff0ec6c930234bb65b91ff2a9b9d288ce9fb7",
+  "generatedAt": "2026-06-24T18:18:07.311674+00:00"
 }
