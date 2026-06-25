@@ -161,7 +161,7 @@ $meta = Resolve-MetadataPath -preferredPath $MetadataOutputPath -defaultPath $de
 Ensure-ReleaseNotes -path $notes -versionName $versionName
 
 python .\tools\build_network_quiz_apk.py
-python .\tools\generate_release_metadata.py --release-notes-file $notes --output $meta
+python .\tools\generate_release_metadata.py --release-notes-file $notes --repo-slug $RepoSlug --output $meta
 
 $metaInfo = Read-JsonFile $meta
 $apk = Join-Path $root ("build\out\" + $metaInfo.apkFileName)
@@ -183,7 +183,7 @@ if (Test-ReleaseExists -repoSlug $RepoSlug -tag $tag) {
 $release = Get-ReleaseApi -repoSlug $RepoSlug -tag $tag
 $apkDownloadUrl = Find-ApkAssetUrl -release $release -preferredName $metaInfo.apkFileName
 
-python .\tools\generate_release_metadata.py --release-notes-file $notes --apk-download-url $apkDownloadUrl --output $meta
+python .\tools\generate_release_metadata.py --release-notes-file $notes --repo-slug $RepoSlug --release-html-url $release.html_url --apk-download-url $apkDownloadUrl --output $meta
 $metadataUploadPath = New-MetadataUploadCopy -sourcePath $meta
 try {
     gh release upload $tag $metadataUploadPath --repo $RepoSlug --clobber

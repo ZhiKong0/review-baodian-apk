@@ -1,5 +1,5 @@
 param(
-    [string]$RepoSlug = "ZhiKong0/network-quiz-apk"
+    [string]$RepoSlug = "ZhiKong0/review-baodian-apk"
 )
 
 $ErrorActionPreference = "Stop"

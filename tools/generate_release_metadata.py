@@ -4,6 +4,7 @@ import json
 import re
 from datetime import datetime, timezone
 from pathlib import Path
+from urllib.parse import quote
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -17,6 +18,8 @@ def parse_args():
     parser.add_argument("--apk-path", default=str(APK_PATH))
     parser.add_argument("--output", default=str(OUTPUT))
     parser.add_argument("--apk-download-url", default="")
+    parser.add_argument("--release-html-url", default="")
+    parser.add_argument("--repo-slug", default="ZhiKong0/review-baodian-apk")
     parser.add_argument("--release-notes", default="")
     parser.add_argument("--release-notes-file", default="")
     return parser.parse_args()
@@ -41,6 +44,10 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
+def encode_url_path_segment(value: str) -> str:
+    return quote(value, safe="")
+
+
 def main():
     args = parse_args()
     package_name, version_code, version_name = read_manifest()
@@ -51,13 +58,33 @@ def main():
         release_notes = Path(args.release_notes_file).read_text(encoding="utf-8").strip()
 
     output.parent.mkdir(parents=True, exist_ok=True)
+    apk_download_url = args.apk_download_url.strip()
+    release_html_url = args.release_html_url.strip() or f"https://github.com/{args.repo_slug}/releases/latest"
+    download_candidates = []
+    if apk_download_url:
+        download_candidates.append(f"https://ghfast.top/{apk_download_url}")
+        download_candidates.append(apk_download_url)
+    encoded_apk_name = encode_url_path_segment(apk_path.name)
+    latest_url = f"https://github.com/{args.repo_slug}/releases/latest/download/{encoded_apk_name}"
+    tag_url = f"https://github.com/{args.repo_slug}/releases/download/v{version_name}/{encoded_apk_name}"
+    for candidate in (
+        f"https://ghfast.top/{latest_url}",
+        latest_url,
+        f"https://ghfast.top/{tag_url}",
+        tag_url,
+    ):
+        if candidate not in download_candidates:
+            download_candidates.append(candidate)
     data = {
         "packageName": package_name,
         "versionCode": version_code,
         "versionName": version_name,
         "apkFileName": apk_path.name,
-        "apkDownloadUrl": args.apk_download_url.strip(),
+        "apkDownloadUrl": download_candidates[0] if download_candidates else apk_download_url,
+        "apkDownloadCandidates": download_candidates,
+        "releaseHtmlUrl": release_html_url,
         "releaseNotes": release_notes,
+        "apkSize": apk_path.stat().st_size if apk_path.exists() else 0,
         "sha256": sha256_file(apk_path) if apk_path.exists() else "",
         "generatedAt": datetime.now(timezone.utc).isoformat(),
     }

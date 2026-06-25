@@ -68,6 +68,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -94,7 +95,7 @@ public class MainActivity extends Activity {
     private static final String PREF_UPDATE_PENDING_CLEANUP = "update_pending_cleanup_paths";
     private static final String THEME_DARK = "dark";
     private static final String THEME_LIGHT = "light";
-    private static final String DEFAULT_UPDATE_REPO_SLUG = "ZhiKong0/network-quiz-apk";
+    private static final String DEFAULT_UPDATE_REPO_SLUG = "ZhiKong0/review-baodian-apk";
     private static final String UPDATE_METADATA_NAME = "network_quiz_update.json";
     private static final String UPDATE_CACHE_DIR = "updates";
     private static final String UPDATE_INSTALL_ACTION = "com.dz.networkquiz.UPDATE_INSTALL_STATUS";
@@ -102,6 +103,7 @@ public class MainActivity extends Activity {
     private static final String UPDATE_STATUS_REPO_NOT_CONFIGURED = "\u672a\u914d\u7f6e GitHub \u4ed3\u5e93";
     private static final String UPDATE_STATUS_UPDATED_TO_PREFIX = "\u5df2\u66f4\u65b0\u5230 ";
     private static final int HTTP_TIMEOUT_MS = 15000;
+    private static final int FAST_HTTP_TIMEOUT_MS = 6000;
     private static final int DEFAULT_WRONG_REQUIRED = 2;
     private static final int MIN_WRONG_REQUIRED = 1;
     private static final int MAX_WRONG_REQUIRED = 10;
@@ -4013,16 +4015,44 @@ public class MainActivity extends Activity {
     }
 
     private UpdateInfo fetchLatestUpdateInfo() throws Exception {
+        String repoSlug = updateRepoSlug;
+        UpdateInfo info = new UpdateInfo();
+        info.repoSlug = repoSlug;
+
+        try {
+            JSONObject fastMeta = fetchFastUpdateMetadata(repoSlug);
+            String packageName = fastMeta.optString("packageName", "").trim();
+            if (packageName.length() > 0 && !getPackageName().equals(packageName)) {
+                throw new UpdateCheckException("这个更新源不是当前 App 的安装包（包名不匹配）");
+            }
+            info.hasMetadataAsset = true;
+            info.repoTitle = repoSlug;
+            info.releaseTitle = nonEmpty(fastMeta.optString("versionName", ""), "latest");
+            info.versionName = normalizeVersionName(fastMeta.optString("versionName", ""));
+            info.versionCode = fastMeta.optInt("versionCode", 0);
+            info.apkName = nonEmpty(fastMeta.optString("apkFileName", ""), info.apkName);
+            info.downloadUrl = nonEmpty(fastMeta.optString("apkDownloadUrl", ""), info.downloadUrl);
+            info.htmlUrl = nonEmpty(fastMeta.optString("releaseHtmlUrl", ""), buildGithubReleasePageUrl(repoSlug));
+            info.notes = nonEmpty(fastMeta.optString("releaseNotes", ""), info.notes);
+            info.assetSize = fastMeta.optLong("apkSize", 0L);
+            JSONArray fastCandidates = fastMeta.optJSONArray("apkDownloadCandidates");
+            if (fastCandidates != null) {
+                for (int i = 0; i < fastCandidates.length(); i++) {
+                    appendDownloadCandidate(info.downloadCandidates, fastCandidates.optString(i, ""));
+                }
+            }
+        } catch (UpdateCheckException fastError) {
+            info.validationNotes.add("加速更新元数据读取失败，已回退到 GitHub Release：" + fastError.userMessage);
+        }
+
         JSONObject repo = fetchGithubRepoInfo();
         JSONObject release = fetchLatestReleaseJson();
-        UpdateInfo info = new UpdateInfo();
-        info.repoSlug = updateRepoSlug;
-        info.repoTitle = nonEmpty(repo.optString("full_name", ""), updateRepoSlug);
-        info.releaseTitle = nonEmpty(release.optString("name", ""), release.optString("tag_name", ""));
-        info.versionName = normalizeVersionName(release.optString("tag_name", ""));
-        info.notes = release.optString("body", "");
-        info.htmlUrl = release.optString("html_url", "");
-        info.publishedAt = release.optString("published_at", "");
+        info.repoTitle = nonEmpty(repo.optString("full_name", ""), info.repoTitle);
+        info.releaseTitle = nonEmpty(release.optString("name", ""), nonEmpty(release.optString("tag_name", ""), info.releaseTitle));
+        info.versionName = nonEmpty(normalizeVersionName(release.optString("tag_name", "")), info.versionName);
+        info.notes = nonEmpty(release.optString("body", ""), info.notes);
+        info.htmlUrl = nonEmpty(release.optString("html_url", ""), nonEmpty(info.htmlUrl, buildGithubReleasePageUrl(repoSlug)));
+        info.publishedAt = nonEmpty(release.optString("published_at", ""), info.publishedAt);
 
         JSONArray assets = release.optJSONArray("assets");
         JSONObject metadataAsset = null;
@@ -4063,6 +4093,14 @@ public class MainActivity extends Activity {
                 info.apkName = nonEmpty(meta.optString("apkFileName", ""), info.apkName);
                 info.downloadUrl = nonEmpty(meta.optString("apkDownloadUrl", ""), info.downloadUrl);
                 info.notes = nonEmpty(meta.optString("releaseNotes", ""), info.notes);
+                info.htmlUrl = nonEmpty(meta.optString("releaseHtmlUrl", ""), info.htmlUrl);
+                info.assetSize = meta.optLong("apkSize", info.assetSize);
+                JSONArray metaCandidates = meta.optJSONArray("apkDownloadCandidates");
+                if (metaCandidates != null) {
+                    for (int i = 0; i < metaCandidates.length(); i++) {
+                        appendDownloadCandidate(info.downloadCandidates, metaCandidates.optString(i, ""));
+                    }
+                }
             }
         } else {
             info.validationNotes.add("Release 未附带 network_quiz_update.json，当前会退回到直接识别 APK。");
@@ -4073,6 +4111,14 @@ public class MainActivity extends Activity {
             info.apkName = nonEmpty(info.apkName, apkAsset.optString("name", ""));
             info.downloadUrl = nonEmpty(info.downloadUrl, apkAsset.optString("browser_download_url", ""));
             info.assetSize = apkAsset.optLong("size", 0L);
+        }
+        appendDownloadCandidate(info.downloadCandidates, buildGhfastMirrorUrl(info.downloadUrl));
+        appendDownloadCandidate(info.downloadCandidates, info.downloadUrl);
+        appendDownloadCandidate(info.downloadCandidates, buildGhfastMirrorUrl(buildGithubLatestDownloadUrl(repoSlug, info.apkName)));
+        appendDownloadCandidate(info.downloadCandidates, buildGithubLatestDownloadUrl(repoSlug, info.apkName));
+        if (info.versionName.length() > 0) {
+            appendDownloadCandidate(info.downloadCandidates, buildGhfastMirrorUrl(buildGithubTagDownloadUrl(repoSlug, info.versionName, info.apkName)));
+            appendDownloadCandidate(info.downloadCandidates, buildGithubTagDownloadUrl(repoSlug, info.versionName, info.apkName));
         }
         info.apkAssetCount = apkAssets.size();
         if (info.apkAssetCount > 1) {
@@ -4087,6 +4133,9 @@ public class MainActivity extends Activity {
         }
         if (!info.hasMetadataAsset) {
             info.validationNotes.add("未提供更新元数据文件，安装前无法提前核验 APK 包名。");
+        }
+        if (!info.downloadCandidates.isEmpty()) {
+            info.downloadUrl = info.downloadCandidates.get(0);
         }
         return info;
     }
@@ -4115,8 +4164,20 @@ public class MainActivity extends Activity {
         }
     }
 
+    private JSONObject readFastGithubJsonObject(String url, String notFoundMessage, String genericMessage) throws UpdateCheckException {
+        try {
+            return readJsonObject(url, FAST_HTTP_TIMEOUT_MS, FAST_HTTP_TIMEOUT_MS);
+        } catch (Exception e) {
+            throw classifyGithubException(e, notFoundMessage, genericMessage);
+        }
+    }
+
     private JSONObject readJsonObject(String url) throws Exception {
         return new JSONObject(readTextUrl(url));
+    }
+
+    private JSONObject readJsonObject(String url, int connectTimeoutMs, int readTimeoutMs) throws Exception {
+        return new JSONObject(readTextUrl(url, connectTimeoutMs, readTimeoutMs));
     }
 
     private UpdateCheckException classifyGithubException(Exception e, String notFoundMessage, String genericMessage) {
@@ -4178,14 +4239,81 @@ public class MainActivity extends Activity {
         return apkAssets.get(0);
     }
 
+    private String buildJsDelivrUpdateMetadataUrl(String repoSlug) {
+        return "https://cdn.jsdelivr.net/gh/" + repoSlug + "@main/release/" + UPDATE_METADATA_NAME;
+    }
+
+    private String buildGithubRawUpdateMetadataUrl(String repoSlug) {
+        return "https://raw.githubusercontent.com/" + repoSlug + "/main/release/" + UPDATE_METADATA_NAME;
+    }
+
+    private String buildGithubReleasePageUrl(String repoSlug) {
+        return "https://github.com/" + repoSlug + "/releases/latest";
+    }
+
+    private String buildGithubLatestDownloadUrl(String repoSlug, String apkName) {
+        return "https://github.com/" + repoSlug + "/releases/latest/download/" + encodeUrlPathSegment(apkName);
+    }
+
+    private String buildGithubTagDownloadUrl(String repoSlug, String versionName, String apkName) {
+        return "https://github.com/" + repoSlug + "/releases/download/v" + normalizeVersionName(versionName)
+                + "/" + encodeUrlPathSegment(apkName);
+    }
+
+    private String buildGhfastMirrorUrl(String originalUrl) {
+        String trimmed = originalUrl == null ? "" : originalUrl.trim();
+        if (trimmed.length() == 0) return "";
+        if (trimmed.startsWith("https://ghfast.top/")) return trimmed;
+        return "https://ghfast.top/" + trimmed;
+    }
+
+    private String encodeUrlPathSegment(String value) {
+        String safe = value == null ? "" : value.trim();
+        if (safe.length() == 0) return "";
+        try {
+            return URLEncoder.encode(safe, "UTF-8").replace("+", "%20");
+        } catch (Exception ignored) {
+            return safe.replace(" ", "%20");
+        }
+    }
+
+    private void appendDownloadCandidate(List<String> out, String candidate) {
+        if (out == null) return;
+        String normalized = candidate == null ? "" : candidate.trim();
+        if (normalized.length() == 0) return;
+        if (!out.contains(normalized)) {
+            out.add(normalized);
+        }
+    }
+
+    private JSONObject fetchFastUpdateMetadata(String repoSlug) throws UpdateCheckException {
+        try {
+            return readFastGithubJsonObject(
+                    buildJsDelivrUpdateMetadataUrl(repoSlug),
+                    "还没有找到更新元数据文件",
+                    "读取加速更新元数据失败"
+            );
+        } catch (UpdateCheckException firstError) {
+            return readFastGithubJsonObject(
+                    buildGithubRawUpdateMetadataUrl(repoSlug),
+                    "还没有找到更新元数据文件",
+                    "读取原始更新元数据失败"
+            );
+        }
+    }
+
     private String readTextUrl(String urlValue) throws Exception {
+        return readTextUrl(urlValue, HTTP_TIMEOUT_MS, HTTP_TIMEOUT_MS);
+    }
+
+    private String readTextUrl(String urlValue, int connectTimeoutMs, int readTimeoutMs) throws Exception {
         HttpURLConnection connection = null;
         InputStream stream = null;
         BufferedReader reader = null;
         try {
             connection = (HttpURLConnection) new URL(urlValue).openConnection();
-            connection.setConnectTimeout(HTTP_TIMEOUT_MS);
-            connection.setReadTimeout(HTTP_TIMEOUT_MS);
+            connection.setConnectTimeout(connectTimeoutMs);
+            connection.setReadTimeout(readTimeoutMs);
             connection.setRequestProperty("Accept", "application/vnd.github+json");
             connection.setRequestProperty("X-GitHub-Api-Version", "2022-11-28");
             connection.setRequestProperty("User-Agent", "NetworkQuizUpdater/" + currentVersionName());
@@ -4380,12 +4508,28 @@ public class MainActivity extends Activity {
     }
 
     private File downloadUpdateApk(UpdateInfo info) throws Exception {
+        Exception lastError = null;
+        List<String> candidates = info.downloadCandidates.isEmpty()
+                ? Collections.singletonList(info.downloadUrl)
+                : info.downloadCandidates;
+        for (String candidate : candidates) {
+            try {
+                return downloadUpdateApkFromUrl(info, candidate);
+            } catch (Exception e) {
+                lastError = e;
+            }
+        }
+        if (lastError != null) throw lastError;
+        throw new IOException("没有可用的下载地址");
+    }
+
+    private File downloadUpdateApkFromUrl(UpdateInfo info, String url) throws Exception {
         HttpURLConnection connection = null;
         InputStream stream = null;
         FileOutputStream out = null;
         File tempFile = null;
         try {
-            connection = (HttpURLConnection) new URL(info.downloadUrl).openConnection();
+            connection = (HttpURLConnection) new URL(url).openConnection();
             connection.setConnectTimeout(HTTP_TIMEOUT_MS);
             connection.setReadTimeout(HTTP_TIMEOUT_MS * 2);
             connection.setRequestProperty("User-Agent", "NetworkQuizUpdater/" + currentVersionName());
@@ -4799,6 +4943,7 @@ public class MainActivity extends Activity {
         long assetSize = 0L;
         boolean hasMetadataAsset = false;
         int apkAssetCount = 0;
+        final List<String> downloadCandidates = new ArrayList<>();
         final List<String> validationNotes = new ArrayList<>();
 
         String displayVersion() {
