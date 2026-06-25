@@ -1,5 +1,6 @@
-# v2.10.17
+# v2.10.18
 
+- Auto release after fix: Updater: persist pending install state across permission flow
 - Auto release after fix: Updater: soften fallback notice and purge jsDelivr metadata
 - Auto release after fix: Updater: fix auto-update network gate and prefer fresh fast metadata
 - Auto release after fix: Release hook: ignore generated update metadata when gating auto release
