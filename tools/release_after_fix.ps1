@@ -83,6 +83,19 @@ function Invoke-NativeOrThrow([scriptblock]$command, [string]$errorMessage) {
     }
 }
 
+function Invoke-NativeWithRetry([scriptblock]$command, [string]$errorMessage, [int]$maxAttempts = 3, [int]$sleepSeconds = 3) {
+    for ($attempt = 1; $attempt -le $maxAttempts; $attempt++) {
+        & $command
+        if ($LASTEXITCODE -eq 0) {
+            return
+        }
+        if ($attempt -lt $maxAttempts) {
+            Start-Sleep -Seconds $sleepSeconds
+        }
+    }
+    throw $errorMessage
+}
+
 if (-not $RepoSlug) {
     $RepoSlug = Get-GitConfigValue "networkquiz.releaseRepo"
 }
@@ -131,8 +144,8 @@ Invoke-NativeOrThrow { git tag $tag } "Failed to create git tag $tag."
 
 $hasOrigin = Has-OriginRemote
 if ($hasOrigin) {
-    Invoke-NativeOrThrow { git push origin $Branch | Out-Null } "Failed to push branch $Branch to origin."
-    Invoke-NativeOrThrow { git push origin $tag | Out-Null } "Failed to push tag $tag to origin."
+    Invoke-NativeWithRetry { git push origin $Branch | Out-Null } "Failed to push branch $Branch to origin."
+    Invoke-NativeWithRetry { git push origin $tag | Out-Null } "Failed to push tag $tag to origin."
 }
 
 try {

@@ -143,6 +143,19 @@ function Find-ApkAssetUrl($release, [string]$preferredName) {
     return $apkAsset.browser_download_url
 }
 
+function Invoke-GhWithRetry([scriptblock]$command, [string]$errorMessage, [int]$maxAttempts = 3, [int]$sleepSeconds = 3) {
+    for ($attempt = 1; $attempt -le $maxAttempts; $attempt++) {
+        & $command
+        if ($LASTEXITCODE -eq 0) {
+            return
+        }
+        if ($attempt -lt $maxAttempts) {
+            Start-Sleep -Seconds $sleepSeconds
+        }
+    }
+    throw $errorMessage
+}
+
 Ensure-GitHubAuth
 Ensure-GitRepository
 Ensure-InitialCommit
@@ -170,14 +183,14 @@ if (-not (Test-Path $apk)) {
 }
 
 if ($CreateRepo -and -not (Has-OriginRemote)) {
-    gh repo create $RepoSlug --public --source . --remote origin --push
+    Invoke-GhWithRetry { gh repo create $RepoSlug --public --source . --remote origin --push } "Failed to create or push GitHub repo $RepoSlug."
 }
 
 if (Test-ReleaseExists -repoSlug $RepoSlug -tag $tag) {
-    gh release edit $tag --repo $RepoSlug --title $tag --notes-file $notes
-    gh release upload $tag $apk --repo $RepoSlug --clobber
+    Invoke-GhWithRetry { gh release edit $tag --repo $RepoSlug --title $tag --notes-file $notes } "Failed to edit GitHub Release $tag."
+    Invoke-GhWithRetry { gh release upload $tag $apk --repo $RepoSlug --clobber } "Failed to upload APK asset for GitHub Release $tag."
 } else {
-    gh release create $tag $apk --repo $RepoSlug --title $tag --notes-file $notes
+    Invoke-GhWithRetry { gh release create $tag $apk --repo $RepoSlug --title $tag --notes-file $notes } "Failed to create GitHub Release $tag."
 }
 
 $release = Get-ReleaseApi -repoSlug $RepoSlug -tag $tag
@@ -186,7 +199,7 @@ $apkDownloadUrl = Find-ApkAssetUrl -release $release -preferredName $metaInfo.ap
 python .\tools\generate_release_metadata.py --release-notes-file $notes --repo-slug $RepoSlug --release-html-url $release.html_url --apk-download-url $apkDownloadUrl --output $meta
 $metadataUploadPath = New-MetadataUploadCopy -sourcePath $meta
 try {
-    gh release upload $tag $metadataUploadPath --repo $RepoSlug --clobber
+    Invoke-GhWithRetry { gh release upload $tag $metadataUploadPath --repo $RepoSlug --clobber } "Failed to upload update metadata asset for GitHub Release $tag."
 } finally {
     if (Test-Path $metadataUploadPath) {
         Remove-Item $metadataUploadPath -Force -ErrorAction SilentlyContinue
