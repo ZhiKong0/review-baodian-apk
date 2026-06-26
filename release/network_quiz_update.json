@@ -1,18 +1,18 @@
 {
   "packageName": "com.dz.networkquiz",
-  "versionCode": 47,
-  "versionName": "2.10.22",
+  "versionCode": 48,
+  "versionName": "2.10.23",
   "apkFileName": "review-baodian.apk",
   "apkDownloadUrl": "https://ghfast.top/https://github.com/ZhiKong0/review-baodian-apk/releases/latest/download/review-baodian.apk",
   "apkDownloadCandidates": [
     "https://ghfast.top/https://github.com/ZhiKong0/review-baodian-apk/releases/latest/download/review-baodian.apk",
     "https://github.com/ZhiKong0/review-baodian-apk/releases/latest/download/review-baodian.apk",
-    "https://ghfast.top/https://github.com/ZhiKong0/review-baodian-apk/releases/download/v2.10.22/review-baodian.apk",
-    "https://github.com/ZhiKong0/review-baodian-apk/releases/download/v2.10.22/review-baodian.apk"
+    "https://ghfast.top/https://github.com/ZhiKong0/review-baodian-apk/releases/download/v2.10.23/review-baodian.apk",
+    "https://github.com/ZhiKong0/review-baodian-apk/releases/download/v2.10.23/review-baodian.apk"
   ],
   "releaseHtmlUrl": "https://github.com/ZhiKong0/review-baodian-apk/releases/latest",
-  "releaseNotes": "# v2.10.22\n\n- Auto release after fix: UI: replace cards with mind map mode\n- Auto release after fix: Cards: rework chapter 3 overview and mobile mind map\n- Auto release after fix: Tooling: auto-sync emulator after release\n- Auto release after fix: Updater: auto-check on every app entry\n- Auto release after fix: Updater: persist pending install state across permission flow\n- Auto release after fix: Updater: soften fallback notice and purge jsDelivr metadata\n- Auto release after fix: Updater: fix auto-update network gate and prefer fresh fast metadata\n- Auto release after fix: Release hook: ignore generated update metadata when gating auto release\n- Auto release after fix: Updater: auto-check on every app open and harden release hygiene\n- Auto release after fix: Polish option-wise explanations and updater state for v2.10.11\n- 修复多选题答案页的逐项理由展示：每个选项现在都会单独高亮显示对错依据，更容易一眼看懂。\n- 继续精修 75 道多选题的“选项判断”文案，减少脚本腔，补强贴题表达。\n- 修复更新状态文案：当本机版本比 GitHub latest 更新时，会明确提示“本机版本较新”，不再误导成“无可更新”。\n- 统一本地 release 元数据输出，APK 资产名固定为 `review-baodian.apk`，避免中文文件名带来的更新识别问题。",
-  "apkSize": 1006135,
-  "sha256": "0b84e832a5b7c4a5fac1eede90ce257bf065ff207ffea2ee253e19a34aaa7825",
-  "generatedAt": "2026-06-26T09:05:42.223912+00:00"
+  "releaseNotes": "# v2.10.23\n\n- Auto release after fix: Content: rewrite quiz explanations with tables\n- Auto release after fix: UI: replace cards with mind map mode\n- Auto release after fix: Cards: rework chapter 3 overview and mobile mind map\n- Auto release after fix: Tooling: auto-sync emulator after release\n- Auto release after fix: Updater: auto-check on every app entry\n- Auto release after fix: Updater: persist pending install state across permission flow\n- Auto release after fix: Updater: soften fallback notice and purge jsDelivr metadata\n- Auto release after fix: Updater: fix auto-update network gate and prefer fresh fast metadata\n- Auto release after fix: Release hook: ignore generated update metadata when gating auto release\n- Auto release after fix: Updater: auto-check on every app open and harden release hygiene\n- Auto release after fix: Polish option-wise explanations and updater state for v2.10.11\n- 修复多选题答案页的逐项理由展示：每个选项现在都会单独高亮显示对错依据，更容易一眼看懂。\n- 继续精修 75 道多选题的“选项判断”文案，减少脚本腔，补强贴题表达。\n- 修复更新状态文案：当本机版本比 GitHub latest 更新时，会明确提示“本机版本较新”，不再误导成“无可更新”。\n- 统一本地 release 元数据输出，APK 资产名固定为 `review-baodian.apk`，避免中文文件名带来的更新识别问题。",
+  "apkSize": 1010229,
+  "sha256": "461229a79f7c63da34b069d699d3776c02f50bd1b11b1fba9df3386bbba79af2",
+  "generatedAt": "2026-06-26T11:33:53.499851+00:00"
 }
