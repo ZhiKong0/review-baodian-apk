@@ -111,9 +111,16 @@ public class MainActivity extends Activity {
     private static final String PREF_UPDATE_PENDING_CLEANUP = "update_pending_cleanup_paths";
     private static final String PREF_PENDING_INSTALL_APK_PATH = "pending_install_apk_path";
     private static final String PREF_PENDING_INSTALL_VERSION_NAME = "pending_install_version_name";
+    private static final String PREF_LAST_TYPE_FILTER = "last_type_filter";
+    private static final String PREF_LAST_CHAPTER_FILTER = "last_chapter_filter";
+    private static final String PREF_LAST_STUDY_MODE = "last_study_mode";
+    private static final String PREF_LAST_QUESTION_PREFIX = "last_question_";
     private static final String LEGACY_UPDATE_REPO_SLUG = "ZhiKong0/network-quiz-apk";
     private static final String THEME_DARK = "dark";
     private static final String THEME_LIGHT = "light";
+    private static final String STUDY_MODE_QUIZ = "quiz";
+    private static final String STUDY_MODE_REMEMBER = "remember";
+    private static final String STUDY_MODE_WRONG = "wrong";
     private static final String DEFAULT_UPDATE_REPO_SLUG = "ZhiKong0/review-baodian-apk";
     private static final String TAG_MARKDOWN_TABLE_SCROLL = "markdown_table_scroll";
     private static final String TAG_MIND_MAP_BOARD = "mind_map_board";
@@ -266,9 +273,10 @@ public class MainActivity extends Activity {
         cleanupUpdateCache(pendingInstallKeepPath());
         loadQuestions();
         loadMemoryCards();
+        restoreStudyFilters();
         buildLayout();
         applySystemBars();
-        showAllMode();
+        showRestoredStudyMode();
         scheduleAutoUpdateCheck();
     }
 
@@ -1396,7 +1404,7 @@ public class MainActivity extends Activity {
         wrongMode = false;
         settingsMode = false;
         rebuildVisibleQuestions();
-        currentIndex = clampIndex(currentIndex, visibleQuestions.size());
+        currentIndex = restoredQuestionIndexForActiveGroup();
         renderQuestion();
     }
 
@@ -1406,7 +1414,7 @@ public class MainActivity extends Activity {
         wrongMode = false;
         settingsMode = false;
         rebuildVisibleQuestions();
-        currentIndex = clampIndex(currentIndex, visibleQuestions.size());
+        currentIndex = restoredQuestionIndexForActiveGroup();
         renderQuestion();
     }
 
@@ -1416,7 +1424,7 @@ public class MainActivity extends Activity {
         wrongMode = true;
         settingsMode = false;
         rebuildVisibleQuestions();
-        currentIndex = clampIndex(currentIndex, visibleQuestions.size());
+        currentIndex = restoredQuestionIndexForActiveGroup();
         renderQuestion();
     }
 
@@ -1449,8 +1457,62 @@ public class MainActivity extends Activity {
         if (!filterReady) return;
         if (cardMode || settingsMode) return;
         rebuildVisibleQuestions();
-        currentIndex = 0;
+        currentIndex = restoredQuestionIndexForActiveGroup();
         renderQuestion();
+    }
+
+    private void restoreStudyFilters() {
+        String savedType = prefs.getString(PREF_LAST_TYPE_FILTER, ALL_TYPES);
+        typeFilter = typeItems().contains(savedType) ? savedType : ALL_TYPES;
+        String savedChapter = prefs.getString(PREF_LAST_CHAPTER_FILTER, ALL_CHAPTERS);
+        chapterFilter = chapterItems().contains(savedChapter) ? savedChapter : ALL_CHAPTERS;
+    }
+
+    private void showRestoredStudyMode() {
+        String mode = prefs.getString(PREF_LAST_STUDY_MODE, STUDY_MODE_QUIZ);
+        if (STUDY_MODE_REMEMBER.equals(mode)) {
+            showRememberMode();
+        } else if (STUDY_MODE_WRONG.equals(mode)) {
+            showWrongMode();
+        } else {
+            showAllMode();
+        }
+    }
+
+    private String currentStudyModeValue() {
+        if (rememberMode) return STUDY_MODE_REMEMBER;
+        if (wrongMode) return STUDY_MODE_WRONG;
+        return STUDY_MODE_QUIZ;
+    }
+
+    private String lastQuestionKey(String mode, String type, String chapter) {
+        return PREF_LAST_QUESTION_PREFIX + mode + "|" + String.valueOf(type) + "|" + String.valueOf(chapter);
+    }
+
+    private int restoredQuestionIndexForActiveGroup() {
+        if (visibleQuestions.isEmpty()) return 0;
+        String label = prefs.getString(lastQuestionKey(currentStudyModeValue(), typeFilter, chapterFilter), "");
+        if (label != null && label.length() > 0) {
+            for (int i = 0; i < visibleQuestions.size(); i++) {
+                if (label.equals(visibleQuestions.get(i).label)) {
+                    return i;
+                }
+            }
+        }
+        return 0;
+    }
+
+    private void persistStudyProgress(String label) {
+        if (prefs == null || cardMode || settingsMode) return;
+        String mode = currentStudyModeValue();
+        SharedPreferences.Editor editor = prefs.edit()
+                .putString(PREF_LAST_STUDY_MODE, mode)
+                .putString(PREF_LAST_TYPE_FILTER, typeFilter)
+                .putString(PREF_LAST_CHAPTER_FILTER, chapterFilter);
+        if (label != null && label.length() > 0) {
+            editor.putString(lastQuestionKey(mode, typeFilter, chapterFilter), label);
+        }
+        editor.apply();
     }
 
     private void installSwipeNavigation(View target) {
@@ -2133,6 +2195,7 @@ public class MainActivity extends Activity {
         feedbackContainer.setVisibility(View.GONE);
 
         if (visibleQuestions.isEmpty()) {
+            persistStudyProgress(null);
             stemView.setText(emptyMessage());
             refreshEmptyMeta();
             submitButton.setText("提交");
@@ -2142,6 +2205,7 @@ public class MainActivity extends Activity {
         }
 
         Question q = currentQuestion();
+        persistStudyProgress(q.label);
         if ("tf".equals(q.type) || "single".equals(q.type)) {
             submitButton.setText("");
             submitButton.setEnabled(false);
@@ -7099,9 +7163,10 @@ public class MainActivity extends Activity {
                 });
                 return;
             }
+            float fitPadding = dp(152);
             float targetScale = Math.min(
-                    getWidth() / Math.max(1f, contentWidth + dp(56)),
-                    getHeight() / Math.max(1f, contentHeight + dp(56)));
+                    getWidth() / Math.max(1f, contentWidth + fitPadding),
+                    getHeight() / Math.max(1f, contentHeight + fitPadding));
             viewportScale = clampFloat(targetScale, MIND_MAP_MIN_SCALE, 1.05f);
             pageOffset = 0f;
             viewportOffsetY = 0f;
@@ -7249,9 +7314,10 @@ public class MainActivity extends Activity {
             }
             renderNodes.clear();
             renderNodeMap.clear();
-            float padding = dp(18);
+            float padding = dp(72);
             float totalHeight = measureSubtree(rootNode, "root", 0);
-            contentWidth = (int) Math.ceil(layoutNode(rootNode, "root", 0, padding, padding, totalHeight, BLUE, null));
+            float maxRight = layoutNode(rootNode, "root", 0, padding, padding, totalHeight, BLUE, null);
+            contentWidth = (int) Math.ceil(maxRight + padding);
             contentHeight = (int) Math.ceil(totalHeight + padding * 2f);
             if (pageAnimator == null || !pageAnimator.isRunning()) {
                 clampViewport();
@@ -7385,7 +7451,7 @@ public class MainActivity extends Activity {
                 viewportOffsetY = 0f;
                 return;
             }
-            float extra = dp(24);
+            float extra = dp(128);
             float maxX = Math.max(0f, contentWidth + extra - viewportWorldWidth());
             float maxY = Math.max(0f, contentHeight + extra - viewportWorldHeight());
             pageOffset = clampFloat(pageOffset, 0f, maxX);
@@ -7406,7 +7472,7 @@ public class MainActivity extends Activity {
 
         private void updatePageMetrics() {
             float worldPageWidth = Math.max(1f, viewportWorldWidth());
-            totalPages = Math.max(1, (int) Math.ceil((contentWidth + dp(18)) / worldPageWidth));
+            totalPages = Math.max(1, (int) Math.ceil((contentWidth + dp(72)) / worldPageWidth));
             currentPage = Math.max(0, Math.min(totalPages - 1, (int) Math.floor((pageOffset + worldPageWidth * 0.45f) / worldPageWidth)));
             notifyPageState();
         }
