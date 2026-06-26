@@ -1,5 +1,6 @@
-# v2.10.19
+# v2.10.20
 
+- Auto release after fix: Tooling: auto-sync emulator after release
 - Auto release after fix: Updater: auto-check on every app entry
 - Auto release after fix: Updater: persist pending install state across permission flow
 - Auto release after fix: Updater: soften fallback notice and purge jsDelivr metadata
