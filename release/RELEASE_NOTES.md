@@ -1,5 +1,6 @@
-# v2.10.27
+# v2.10.28
 
+- Auto release after fix: Mind map: isolate canvas drag gestures
 - Auto release after fix: Mind map: add draggable zoomable canvas
 - Auto release after fix: Release: clean update notes text
 - 思维导图画板支持单指拖动和双指缩放，导图区域内滑动不会再被外层页面或知识点切换抢走。
