@@ -2623,6 +2623,24 @@ public class MainActivity extends Activity {
         guide.setLineSpacing(dp(3), 1.0f);
         mapStage.addView(guide, new LinearLayout.LayoutParams(-1, -2));
 
+        final MindMapCanvasView canvasView = new MindMapCanvasView(this,
+                card.mindMapTitle.length() == 0 ? card.knowledge : card.mindMapTitle,
+                card.mindMapNodes);
+
+        LinearLayout actionRow = new LinearLayout(this);
+        actionRow.setOrientation(LinearLayout.HORIZONTAL);
+        actionRow.setGravity(Gravity.CENTER_VERTICAL);
+        LinearLayout.LayoutParams actionRowLp = new LinearLayout.LayoutParams(-1, -2);
+        actionRowLp.topMargin = dp(10);
+        mapStage.addView(actionRow, actionRowLp);
+
+        Button expandAllButton = mindMapActionButton("全展", BLUE);
+        Button collapseAllButton = mindMapActionButton("收起", AMBER);
+        Button fullScreenButton = mindMapActionButton("全屏", GREEN);
+        actionRow.addView(expandAllButton, mindMapActionButtonLayout(true));
+        actionRow.addView(collapseAllButton, mindMapActionButtonLayout(true));
+        actionRow.addView(fullScreenButton, mindMapActionButtonLayout(false));
+
         FrameLayout boardShell = new FrameLayout(this);
         boardShell.setTag(TAG_MIND_MAP_BOARD);
         boardShell.setBackground(roundedStrokeBackground(
@@ -2633,9 +2651,6 @@ public class MainActivity extends Activity {
         boardLp.topMargin = dp(12);
         mapStage.addView(boardShell, boardLp);
 
-        final MindMapCanvasView canvasView = new MindMapCanvasView(this,
-                card.mindMapTitle.length() == 0 ? card.knowledge : card.mindMapTitle,
-                card.mindMapNodes);
         boardShell.addView(canvasView, new FrameLayout.LayoutParams(-1, -1));
 
         final TextView boardTag = text("可拖动画板", 12, Color.WHITE, true);
@@ -2712,6 +2727,24 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 canvasView.goToNextPage();
+            }
+        });
+        expandAllButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                canvasView.expandAllBranches();
+            }
+        });
+        collapseAllButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                canvasView.collapseAllBranches();
+            }
+        });
+        fullScreenButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showMindMapFullScreen(card);
             }
         });
 
@@ -2806,6 +2839,179 @@ public class MainActivity extends Activity {
                         : Color.argb(THEME_LIGHT.equals(themeMode) ? 74 : 42, 168, 178, 198),
                 999,
                 1));
+    }
+
+    private Button mindMapActionButton(String label, int color) {
+        Button button = chromeButton(label);
+        button.setTextSize(12);
+        button.setTextColor(color);
+        button.setContentDescription(label);
+        button.setBackground(roundedStrokeBackground(
+                Color.argb(THEME_LIGHT.equals(themeMode) ? 226 : 74, 255, 255, 255),
+                Color.argb(THEME_LIGHT.equals(themeMode) ? 112 : 82, Color.red(color), Color.green(color), Color.blue(color)),
+                999,
+                1));
+        return button;
+    }
+
+    private LinearLayout.LayoutParams mindMapActionButtonLayout(boolean withRightMargin) {
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, dp(40), 1f);
+        if (withRightMargin) {
+            lp.rightMargin = dp(8);
+        }
+        return lp;
+    }
+
+    private void showMindMapFullScreen(final MemoryCard card) {
+        if (card == null || !card.hasMindMap()) return;
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+
+        FrameLayout shell = new FrameLayout(this);
+        shell.setPadding(dp(10), statusBarInset() + dp(8), dp(10), bottomSafeInset() + dp(10));
+        shell.setBackgroundColor(BG);
+
+        LinearLayout panel = new LinearLayout(this);
+        panel.setOrientation(LinearLayout.VERTICAL);
+        panel.setPadding(dp(12), dp(12), dp(12), dp(12));
+        panel.setBackground(roundedStrokeBackground(PANEL_ELEVATED, GLASS_STROKE, 26, 1));
+        shell.addView(panel, new FrameLayout.LayoutParams(-1, -1));
+
+        LinearLayout header = new LinearLayout(this);
+        header.setOrientation(LinearLayout.HORIZONTAL);
+        header.setGravity(Gravity.CENTER_VERTICAL);
+        panel.addView(header, new LinearLayout.LayoutParams(-1, -2));
+
+        LinearLayout titleBox = new LinearLayout(this);
+        titleBox.setOrientation(LinearLayout.VERTICAL);
+        TextView title = text("全屏导图", 18, TEXT, true);
+        TextView subtitle = text(card.mindMapTitle.length() == 0 ? card.knowledge : card.mindMapTitle, 11, MUTED, false);
+        subtitle.setSingleLine(true);
+        subtitle.setEllipsize(TextUtils.TruncateAt.END);
+        titleBox.addView(title, new LinearLayout.LayoutParams(-1, -2));
+        LinearLayout.LayoutParams subtitleLp = new LinearLayout.LayoutParams(-1, -2);
+        subtitleLp.topMargin = dp(3);
+        titleBox.addView(subtitle, subtitleLp);
+        header.addView(titleBox, new LinearLayout.LayoutParams(0, -2, 1f));
+
+        Button expandButton = mindMapActionButton("全展", BLUE);
+        Button collapseButton = mindMapActionButton("收起", AMBER);
+        Button closeButton = mindMapActionButton("退出", RED);
+        LinearLayout.LayoutParams headerButtonLp = new LinearLayout.LayoutParams(dp(64), dp(40));
+        headerButtonLp.leftMargin = dp(8);
+        header.addView(expandButton, headerButtonLp);
+        LinearLayout.LayoutParams collapseLp = new LinearLayout.LayoutParams(dp(64), dp(40));
+        collapseLp.leftMargin = dp(8);
+        header.addView(collapseButton, collapseLp);
+        LinearLayout.LayoutParams closeLp = new LinearLayout.LayoutParams(dp(64), dp(40));
+        closeLp.leftMargin = dp(8);
+        header.addView(closeButton, closeLp);
+
+        FrameLayout boardShell = new FrameLayout(this);
+        boardShell.setTag(TAG_MIND_MAP_BOARD);
+        boardShell.setBackground(roundedStrokeBackground(
+                THEME_LIGHT.equals(themeMode) ? Color.argb(242, 20, 25, 34) : Color.argb(248, 13, 18, 28),
+                Color.argb(THEME_LIGHT.equals(themeMode) ? 124 : 84, 115, 152, 219),
+                24,
+                1));
+        LinearLayout.LayoutParams boardLp = new LinearLayout.LayoutParams(-1, 0, 1f);
+        boardLp.topMargin = dp(12);
+        panel.addView(boardShell, boardLp);
+
+        final MindMapCanvasView canvasView = new MindMapCanvasView(this,
+                card.mindMapTitle.length() == 0 ? card.knowledge : card.mindMapTitle,
+                card.mindMapNodes);
+        boardShell.addView(canvasView, new FrameLayout.LayoutParams(-1, -1));
+
+        TextView boardTag = text("全屏画板", 12, Color.WHITE, true);
+        boardTag.setPadding(dp(10), dp(6), dp(10), dp(6));
+        boardTag.setBackground(roundedBackground(Color.argb(58, 255, 255, 255), 999));
+        FrameLayout.LayoutParams tagLp = new FrameLayout.LayoutParams(-2, -2, Gravity.TOP | Gravity.START);
+        tagLp.topMargin = dp(12);
+        tagLp.leftMargin = dp(12);
+        boardShell.addView(boardTag, tagLp);
+
+        final TextView pageChip = text("第 1 / 1 页", 12, Color.WHITE, true);
+        pageChip.setPadding(dp(10), dp(6), dp(10), dp(6));
+        pageChip.setBackground(roundedBackground(Color.argb(92, 255, 196, 86), 999));
+        FrameLayout.LayoutParams chipLp = new FrameLayout.LayoutParams(-2, -2, Gravity.TOP | Gravity.END);
+        chipLp.topMargin = dp(12);
+        chipLp.rightMargin = dp(12);
+        boardShell.addView(pageChip, chipLp);
+
+        LinearLayout pagerRow = new LinearLayout(this);
+        pagerRow.setOrientation(LinearLayout.HORIZONTAL);
+        pagerRow.setGravity(Gravity.CENTER_VERTICAL);
+        LinearLayout.LayoutParams pagerLp = new LinearLayout.LayoutParams(-1, -2);
+        pagerLp.topMargin = dp(10);
+        panel.addView(pagerRow, pagerLp);
+
+        final TextView prevButton = text("上一页", 13, BLUE, true);
+        prevButton.setGravity(Gravity.CENTER);
+        prevButton.setPadding(dp(14), dp(8), dp(14), dp(8));
+        pagerRow.addView(prevButton, new LinearLayout.LayoutParams(-2, -2));
+
+        final TextView pagerMeta = text("单指拖动 · 双指缩放", 12, MUTED, true);
+        pagerMeta.setGravity(Gravity.CENTER);
+        LinearLayout.LayoutParams metaLp = new LinearLayout.LayoutParams(0, -2, 1f);
+        metaLp.leftMargin = dp(10);
+        metaLp.rightMargin = dp(10);
+        pagerRow.addView(pagerMeta, metaLp);
+
+        final TextView nextButton = text("下一页", 13, AMBER, true);
+        nextButton.setGravity(Gravity.CENTER);
+        nextButton.setPadding(dp(14), dp(8), dp(14), dp(8));
+        pagerRow.addView(nextButton, new LinearLayout.LayoutParams(-2, -2));
+        styleMindMapPagerButton(prevButton, BLUE, false);
+        styleMindMapPagerButton(nextButton, AMBER, false);
+
+        expandButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                canvasView.expandAllBranches();
+            }
+        });
+        collapseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                canvasView.collapseAllBranches();
+            }
+        });
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        prevButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                canvasView.goToPreviousPage();
+            }
+        });
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                canvasView.goToNextPage();
+            }
+        });
+        canvasView.setPageStateListener(new MindMapPageStateListener() {
+            @Override
+            public void onPageStateChanged(int page, int totalPages, boolean canGoPrevious, boolean canGoNext) {
+                pageChip.setText("第 " + page + " / " + totalPages + " 页");
+                styleMindMapPagerButton(prevButton, BLUE, canGoPrevious);
+                styleMindMapPagerButton(nextButton, AMBER, canGoNext);
+            }
+        });
+        canvasView.selectInitialNode();
+
+        dialog.setContentView(shell);
+        dialog.show();
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
     }
 
     private List<String> defaultCardBullets() {
@@ -6845,6 +7051,46 @@ public class MainActivity extends Activity {
 
         void goToNextPage() {
             goToPage(currentPage + 1, true);
+        }
+
+        void expandAllBranches() {
+            if (pageAnimator != null) {
+                pageAnimator.cancel();
+            }
+            expandedKeys.clear();
+            collectExpandableKeys(rootNode, "root");
+            layoutDirty = true;
+            ensureLayout();
+            if (!renderNodeMap.containsKey(selectedKey)) {
+                selectedKey = "root";
+            }
+            focusPageForKey(selectedKey, true);
+            notifySelection();
+            invalidate();
+        }
+
+        void collapseAllBranches() {
+            if (pageAnimator != null) {
+                pageAnimator.cancel();
+            }
+            expandedKeys.clear();
+            expandedKeys.add("root");
+            selectedKey = "root";
+            layoutDirty = true;
+            ensureLayout();
+            focusPageForKey("root", true);
+            notifySelection();
+            invalidate();
+        }
+
+        private void collectExpandableKeys(MindMapNode node, String key) {
+            if (node == null || node.children.isEmpty()) {
+                return;
+            }
+            expandedKeys.add(key);
+            for (int i = 0; i < node.children.size(); i++) {
+                collectExpandableKeys(node.children.get(i), key + "/" + i);
+            }
         }
 
         @Override
