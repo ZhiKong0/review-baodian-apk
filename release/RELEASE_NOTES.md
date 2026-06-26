@@ -1,19 +1,6 @@
 # v2.10.25
 
-- Auto release after fix: Quiz: refine multi-option explanations and table swipes
-- Auto release after fix: UI: fix explanation markdown rendering
-- Auto release after fix: Content: rewrite quiz explanations with tables
-- Auto release after fix: UI: replace cards with mind map mode
-- Auto release after fix: Cards: rework chapter 3 overview and mobile mind map
-- Auto release after fix: Tooling: auto-sync emulator after release
-- Auto release after fix: Updater: auto-check on every app entry
-- Auto release after fix: Updater: persist pending install state across permission flow
-- Auto release after fix: Updater: soften fallback notice and purge jsDelivr metadata
-- Auto release after fix: Updater: fix auto-update network gate and prefer fresh fast metadata
-- Auto release after fix: Release hook: ignore generated update metadata when gating auto release
-- Auto release after fix: Updater: auto-check on every app open and harden release hygiene
-- Auto release after fix: Polish option-wise explanations and updater state for v2.10.11
-- 修复多选题答案页的逐项理由展示：每个选项现在都会单独高亮显示对错依据，更容易一眼看懂。
-- 继续精修 75 道多选题的“选项判断”文案，减少脚本腔，补强贴题表达。
-- 修复更新状态文案：当本机版本比 GitHub latest 更新时，会明确提示“本机版本较新”，不再误导成“无可更新”。
-- 统一本地 release 元数据输出，APK 资产名固定为 `review-baodian.apk`，避免中文文件名带来的更新识别问题。
+- 修复 Markdown 表格横向滑动时误触题目翻页的问题；现在在表格里左右滑动只滚动表格，不会切到上一题或下一题。
+- 75 道多选题已改为“选项 / 结论 / 辨析”表格化解析，每个选项都说明为什么选或不选。
+- 继续清理模板化理由，去掉“本来正确所以不选”这类空泛表达，让小白能直接看出本题考点。
+- 保留 `核心知识点 / 题目变形 / 知识拓展` 三段结构，方便刷题后复习。
