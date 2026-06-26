@@ -2896,11 +2896,21 @@ public class MainActivity extends Activity {
     private String markdownizeExplanationBlock(String text) {
         StringBuilder sb = new StringBuilder();
         String[] lines = text.replace("\r\n", "\n").replace('\r', '\n').split("\n");
+        boolean inTable = false;
         for (String rawLine : lines) {
             String line = rawLine.trim();
             if (line.length() == 0) {
                 sb.append("\n");
+                inTable = false;
                 continue;
+            }
+            if (looksLikeMarkdownTableRow(line)) {
+                sb.append(line).append("\n");
+                inTable = true;
+                continue;
+            } else if (inTable) {
+                sb.append("\n");
+                inTable = false;
             }
             if (line.startsWith("- ")) {
                 sb.append(line).append("\n");
@@ -2945,51 +2955,62 @@ public class MainActivity extends Activity {
         String[] lines = markdown.replace("\r\n", "\n").replace('\r', '\n').split("\n");
         StringBuilder paragraph = new StringBuilder();
         boolean inOptionJudgmentSection = false;
+        boolean inQuickReasonSection = false;
         for (int i = 0; i < lines.length; i++) {
             String rawLine = lines[i];
             String line = rawLine.trim();
             if (line.length() == 0) {
-                flushMarkdownParagraph(container, paragraph);
+                flushMarkdownParagraph(container, paragraph, inQuickReasonSection && !inOptionJudgmentSection);
                 addMarkdownSpacer(container, dp(4));
-                inOptionJudgmentSection = false;
                 continue;
             }
             if (isMarkdownTableStart(lines, i)) {
-                flushMarkdownParagraph(container, paragraph);
+                flushMarkdownParagraph(container, paragraph, inQuickReasonSection && !inOptionJudgmentSection);
                 i = addMarkdownTableBlock(container, lines, i);
                 inOptionJudgmentSection = false;
                 continue;
             }
             if (line.startsWith("# ")) {
-                flushMarkdownParagraph(container, paragraph);
+                flushMarkdownParagraph(container, paragraph, inQuickReasonSection && !inOptionJudgmentSection);
                 int titleColor = line.contains("错误") ? RED : GREEN;
                 inOptionJudgmentSection = false;
+                inQuickReasonSection = false;
                 addMarkdownText(container, line.substring(2), 20, titleColor, true, 0, 6, 0);
             } else if (line.startsWith("## ")) {
-                flushMarkdownParagraph(container, paragraph);
+                flushMarkdownParagraph(container, paragraph, inQuickReasonSection && !inOptionJudgmentSection);
+                String title = line.substring(3);
                 inOptionJudgmentSection = false;
-                addMarkdownText(container, line.substring(3), 18, BLUE, true, 12, 6, 0);
+                inQuickReasonSection = title.contains("快速做题") || title.contains("理由与辨析");
+                addMarkdownText(container, title, 18, BLUE, true, 12, 6, 0);
             } else if (line.startsWith("### ")) {
-                flushMarkdownParagraph(container, paragraph);
+                flushMarkdownParagraph(container, paragraph, inQuickReasonSection && !inOptionJudgmentSection);
                 String title = line.substring(4);
                 inOptionJudgmentSection = title.contains("选项判断");
                 addMarkdownText(container, title, 16, TEXT, true, 10, 4, 0);
             } else if (line.startsWith("- ")) {
-                flushMarkdownParagraph(container, paragraph);
+                flushMarkdownParagraph(container, paragraph, inQuickReasonSection && !inOptionJudgmentSection);
                 if (isReasonHighlightLine(line)) {
                     addMarkdownHighlight(container, line.substring(2));
-                } else if (inOptionJudgmentSection && isOptionJudgmentLine(line)) {
+                } else if (inOptionJudgmentSection || isOptionJudgmentLine(line)) {
                     addMarkdownOptionJudgment(container, line.substring(2));
                 } else {
                     addMarkdownText(container, "• " + line.substring(2), 15, TEXT, false, 2, 4, dp(8));
                 }
             } else {
-                inOptionJudgmentSection = false;
+                if (isStandaloneReasonHighlightLine(line)) {
+                    flushMarkdownParagraph(container, paragraph, inQuickReasonSection && !inOptionJudgmentSection);
+                    addMarkdownHighlight(container, line);
+                    inOptionJudgmentSection = false;
+                    continue;
+                }
+                if (!looksLikeMarkdownTableRow(line)) {
+                    inOptionJudgmentSection = false;
+                }
                 if (paragraph.length() > 0) paragraph.append('\n');
                 paragraph.append(line);
             }
         }
-        flushMarkdownParagraph(container, paragraph);
+        flushMarkdownParagraph(container, paragraph, inQuickReasonSection && !inOptionJudgmentSection);
     }
 
     private boolean isMarkdownTableStart(String[] lines, int index) {
@@ -3003,8 +3024,12 @@ public class MainActivity extends Activity {
         if (line == null) return false;
         String trimmed = line.trim();
         if (trimmed.length() < 5) return false;
-        if (!trimmed.startsWith("|") || !trimmed.endsWith("|")) return false;
-        return trimmed.indexOf('|', 1) > 1;
+        if (trimmed.startsWith("- ")) return false;
+        int first = trimmed.indexOf('|');
+        if (first < 0) return false;
+        int second = trimmed.indexOf('|', first + 1);
+        if (second < 0) return false;
+        return second > first + 1;
     }
 
     private boolean isMarkdownTableSeparator(String line) {
@@ -3012,7 +3037,7 @@ public class MainActivity extends Activity {
         List<String> cells = splitMarkdownTableRow(line);
         if (cells.isEmpty()) return false;
         for (String cell : cells) {
-            String normalized = cell.replace(" ", "");
+            String normalized = cell.replace(" ", "").replace("\u00A0", "");
             if (!normalized.matches(":?-{3,}:?")) {
                 return false;
             }
@@ -3146,8 +3171,16 @@ public class MainActivity extends Activity {
     }
 
     private void flushMarkdownParagraph(LinearLayout container, StringBuilder paragraph) {
+        flushMarkdownParagraph(container, paragraph, false);
+    }
+
+    private void flushMarkdownParagraph(LinearLayout container, StringBuilder paragraph, boolean highlight) {
         if (paragraph.length() == 0) return;
-        addMarkdownText(container, paragraph.toString(), 15, TEXT, false, 4, 8, 0);
+        if (highlight) {
+            addMarkdownHighlight(container, paragraph.toString());
+        } else {
+            addMarkdownText(container, paragraph.toString(), 15, TEXT, false, 4, 8, 0);
+        }
         paragraph.setLength(0);
     }
 
@@ -3174,7 +3207,8 @@ public class MainActivity extends Activity {
         String[] labels = new String[] {
                 "理由：", "底层理由：", "做题理由：", "判题理由：", "判断理由：",
                 "选择理由：", "关键理由：", "为什么选它：", "为什么这样判题：",
-                "原因：", "依据："
+                "原因：", "依据：", "本题判断：", "本题答案：", "本题填：",
+                "题眼：", "判断：", "答案：", "关键：", "错点：", "易错："
         };
         for (String label : labels) {
             if (compact.startsWith("-**" + label + "**") || compact.startsWith("-" + label)) {
@@ -3184,21 +3218,65 @@ public class MainActivity extends Activity {
         return false;
     }
 
+    private boolean isStandaloneReasonHighlightLine(String line) {
+        String compact = line == null ? "" : line.replace(" ", "").replace(':', '：');
+        String[] labels = new String[] {
+                "理由：", "底层理由：", "做题理由：", "判题理由：", "判断理由：",
+                "选择理由：", "关键理由：", "为什么选它：", "为什么这样判题：",
+                "原因：", "依据：", "本题判断：", "本题答案：", "本题填：",
+                "题眼：", "判断：", "答案：", "关键：", "错点：", "易错："
+        };
+        for (String label : labels) {
+            if (compact.startsWith(label) || compact.startsWith("**" + label + "**")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private boolean isOptionJudgmentLine(String line) {
         String trimmed = line == null ? "" : line.trim();
         if (!trimmed.startsWith("- ")) return false;
-        String body = trimmed.substring(2);
+        return isOptionBulletBody(trimmed.substring(2));
+    }
+
+    private boolean isOptionBulletBody(String value) {
+        String body = cleanOptionJudgmentDisplay(value).replace("**", "").trim();
         if (body.length() < 2) return false;
         char first = body.charAt(0);
         if (!(first >= 'A' && first <= 'Z')) return false;
-        return body.contains("：对，因为")
-                || body.contains("：错，因为")
-                || body.contains(":对，因为")
-                || body.contains(":错，因为")
-                || body.contains("：对，")
-                || body.contains("：错，")
-                || body.contains(":对，")
-                || body.contains(":错，");
+        int index = 1;
+        while (index < body.length() && Character.isWhitespace(body.charAt(index))) {
+            index++;
+        }
+        if (index >= body.length()) return false;
+        char delimiter = body.charAt(index);
+        return delimiter == '：'
+                || delimiter == ':'
+                || delimiter == '、'
+                || delimiter == '.'
+                || delimiter == '．'
+                || delimiter == ')'
+                || delimiter == '）';
+    }
+
+    private String cleanOptionJudgmentDisplay(String value) {
+        String body = value == null ? "" : value.trim();
+        boolean changed = true;
+        while (changed && body.length() > 0) {
+            changed = false;
+            if (body.startsWith("•") || body.startsWith("·")) {
+                body = body.substring(1).trim();
+                changed = true;
+            } else if (body.startsWith("- ")) {
+                body = body.substring(2).trim();
+                changed = true;
+            } else if (body.startsWith("-")) {
+                body = body.substring(1).trim();
+                changed = true;
+            }
+        }
+        return body;
     }
 
     private void addMarkdownHighlight(LinearLayout container, String value) {
@@ -3217,7 +3295,26 @@ public class MainActivity extends Activity {
     }
 
     private void addMarkdownOptionJudgment(LinearLayout container, String value) {
-        boolean correct = value.contains("：对，因为") || value.contains(":对，因为") || value.contains("：对，") || value.contains(":对，");
+        value = cleanOptionJudgmentDisplay(value);
+        String normalized = (value == null ? "" : value)
+                .replace("**", "")
+                .replace('：', ':')
+                .replace(" ", "");
+        boolean negative = normalized.contains(":不选")
+                || normalized.contains("不应选")
+                || normalized.contains("不能选")
+                || normalized.contains(":错")
+                || normalized.contains("错误")
+                || normalized.contains("不正确")
+                || normalized.contains("不成立")
+                || normalized.contains("不符合");
+        boolean positive = normalized.contains(":应选")
+                || normalized.contains(":选")
+                || normalized.contains(":对")
+                || normalized.contains("正确")
+                || normalized.contains("成立")
+                || normalized.contains("符合");
+        boolean correct = positive && !negative;
         int tint = correct ? GREEN : RED;
         int bgAlpha = THEME_LIGHT.equals(themeMode) ? 28 : 44;
         int strokeAlpha = THEME_LIGHT.equals(themeMode) ? 72 : 112;
