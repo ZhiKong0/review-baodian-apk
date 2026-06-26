@@ -1,5 +1,6 @@
-# v2.10.20
+# v2.10.21
 
+- Auto release after fix: Cards: rework chapter 3 overview and mobile mind map
 - Auto release after fix: Tooling: auto-sync emulator after release
 - Auto release after fix: Updater: auto-check on every app entry
 - Auto release after fix: Updater: persist pending install state across permission flow
