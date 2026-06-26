@@ -112,6 +112,7 @@ public class MainActivity extends Activity {
     private static final String THEME_DARK = "dark";
     private static final String THEME_LIGHT = "light";
     private static final String DEFAULT_UPDATE_REPO_SLUG = "ZhiKong0/review-baodian-apk";
+    private static final String TAG_MARKDOWN_TABLE_SCROLL = "markdown_table_scroll";
     private static final String UPDATE_METADATA_NAME = "network_quiz_update.json";
     private static final String UPDATE_CACHE_DIR = "updates";
     private static final String UPDATE_INSTALL_ACTION = "com.dz.networkquiz.UPDATE_INSTALL_STATUS";
@@ -197,6 +198,7 @@ public class MainActivity extends Activity {
     private boolean questionSeekTracking = false;
     private boolean questionSeekSyncing = false;
     private boolean suppressQuestionPageSwipe = false;
+    private boolean markdownTableGestureActive = false;
     private boolean updateBusy = false;
     private boolean autoUpdateCheckScheduled = false;
     private String updateRepoSlug = "";
@@ -285,14 +287,70 @@ public class MainActivity extends Activity {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
-        if (isQuestionPageSwipeEnabled() && handleQuestionPageSwipe(event)) {
+        int action = event.getActionMasked();
+        if (action == MotionEvent.ACTION_DOWN
+                && isQuestionPageSwipeEnabled()
+                && isTouchInsideMarkdownTable(event)) {
+            markdownTableGestureActive = true;
+            suppressQuestionPageSwipe = true;
+        }
+        if (!markdownTableGestureActive
+                && isQuestionPageSwipeEnabled()
+                && handleQuestionPageSwipe(event)) {
             return true;
         }
-        return super.dispatchTouchEvent(event);
+        boolean handled = super.dispatchTouchEvent(event);
+        if (markdownTableGestureActive
+                && (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL)) {
+            markdownTableGestureActive = false;
+            suppressQuestionPageSwipe = false;
+            requestNoIntercept(false);
+        }
+        return handled;
     }
 
     private boolean isQuestionPageSwipeEnabled() {
         return !suppressQuestionPageSwipe && !cardMode && !settingsMode;
+    }
+
+    private boolean isTouchInsideMarkdownTable(MotionEvent event) {
+        Window window = getWindow();
+        if (window == null || window.getDecorView() == null) {
+            return false;
+        }
+        return isTouchInsideTaggedView(window.getDecorView(), event.getRawX(), event.getRawY(),
+                TAG_MARKDOWN_TABLE_SCROLL);
+    }
+
+    private boolean isTouchInsideTaggedView(View view, float rawX, float rawY, String tag) {
+        if (view == null || view.getVisibility() != View.VISIBLE || !isRawPointInsideView(view, rawX, rawY)) {
+            return false;
+        }
+        Object viewTag = view.getTag();
+        if (tag.equals(viewTag)) {
+            return true;
+        }
+        if (view instanceof ViewGroup) {
+            ViewGroup group = (ViewGroup) view;
+            for (int i = group.getChildCount() - 1; i >= 0; i--) {
+                if (isTouchInsideTaggedView(group.getChildAt(i), rawX, rawY, tag)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean isRawPointInsideView(View view, float rawX, float rawY) {
+        if (view.getWidth() <= 0 || view.getHeight() <= 0) {
+            return false;
+        }
+        int[] location = new int[2];
+        view.getLocationOnScreen(location);
+        return rawX >= location[0]
+                && rawX <= location[0] + view.getWidth()
+                && rawY >= location[1]
+                && rawY <= location[1] + view.getHeight();
     }
 
     private void applyThemePalette() {
@@ -3082,8 +3140,10 @@ public class MainActivity extends Activity {
         if (header == null || header.isEmpty()) return;
 
         HorizontalScrollView scroll = new HorizontalScrollView(this);
+        scroll.setTag(TAG_MARKDOWN_TABLE_SCROLL);
         scroll.setHorizontalScrollBarEnabled(false);
         scroll.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        installMarkdownTableSwipeGuard(scroll);
 
         LinearLayout shell = new LinearLayout(this);
         shell.setOrientation(LinearLayout.VERTICAL);
@@ -3107,6 +3167,48 @@ public class MainActivity extends Activity {
         lp.topMargin = dp(8);
         lp.bottomMargin = dp(10);
         container.addView(scroll, lp);
+    }
+
+    private void installMarkdownTableSwipeGuard(final HorizontalScrollView tableScroll) {
+        final float[] start = new float[2];
+        final boolean[] horizontalDrag = new boolean[1];
+        tableScroll.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int action = event.getActionMasked();
+                if (action == MotionEvent.ACTION_DOWN) {
+                    start[0] = event.getRawX();
+                    start[1] = event.getRawY();
+                    horizontalDrag[0] = false;
+                    suppressQuestionPageSwipe = true;
+                    return false;
+                }
+                if (action == MotionEvent.ACTION_MOVE) {
+                    float dx = event.getRawX() - start[0];
+                    float dy = event.getRawY() - start[1];
+                    float absX = Math.abs(dx);
+                    float absY = Math.abs(dy);
+                    int slop = Math.max(touchSlop, dp(8));
+                    if (!horizontalDrag[0] && absX > slop && absX > absY * 1.15f) {
+                        horizontalDrag[0] = true;
+                    }
+                    if (horizontalDrag[0]) {
+                        tableScroll.getParent().requestDisallowInterceptTouchEvent(true);
+                        requestNoIntercept(true);
+                    }
+                    suppressQuestionPageSwipe = true;
+                    return false;
+                }
+                if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL) {
+                    horizontalDrag[0] = false;
+                    suppressQuestionPageSwipe = false;
+                    tableScroll.getParent().requestDisallowInterceptTouchEvent(false);
+                    requestNoIntercept(false);
+                    return false;
+                }
+                return false;
+            }
+        });
     }
 
     private TableRow buildMarkdownTableRow(List<String> cells, boolean headerRow, boolean alternateRow, int columnCount) {
