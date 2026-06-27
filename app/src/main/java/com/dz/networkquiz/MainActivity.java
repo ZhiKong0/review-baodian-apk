@@ -124,6 +124,8 @@ public class MainActivity extends Activity {
     private static final String STUDY_MODE_QUIZ = "quiz";
     private static final String STUDY_MODE_REMEMBER = "remember";
     private static final String STUDY_MODE_WRONG = "wrong";
+    private static final String STUDY_MODE_CARD = "card";
+    private static final String PREF_LAST_CARD_CHAPTER = "last_card_chapter";
     private static final String DEFAULT_UPDATE_REPO_SLUG = "ZhiKong0/review-baodian-apk";
     private static final String TAG_MARKDOWN_TABLE_SCROLL = "markdown_table_scroll";
     private static final String TAG_MIND_MAP_BOARD = "mind_map_board";
@@ -159,7 +161,7 @@ public class MainActivity extends Activity {
     private TextView swipePreviewTitle;
     private TextView swipePreviewBody;
     private LinearLayout headerContainer;
-    private View homeButton;
+    private View menuButton;
     private TextView titleView;
     private TextView metaView;
     private TextView progressPeekView;
@@ -178,9 +180,12 @@ public class MainActivity extends Activity {
     private Button chapterFilterButton;
     private Button actionButton;
     private LinearLayout bottomNavBar;
-    private TextView coursesNavButton;
-    private TextView settingsNavButton;
-    private TextView suggestionsNavButton;
+    private TextView rememberNavButton;
+    private TextView quizNavButton;
+    private TextView wrongNavButton;
+    private TextView cardsNavButton;
+    private FrameLayout sideDrawerOverlay;
+    private LinearLayout sideDrawerPanel;
     private Spinner typeSpinner;
     private Spinner chapterSpinner;
     private Button submitButton;
@@ -203,6 +208,7 @@ public class MainActivity extends Activity {
     private boolean settingsMode = false;
     private boolean homeMode = true;
     private boolean suggestionsMode = false;
+    private boolean sideDrawerOpen = false;
     private String currentCardChapter = null;
     private String typeFilter = ALL_TYPES;
     private String chapterFilter = ALL_CHAPTERS;
@@ -291,8 +297,17 @@ public class MainActivity extends Activity {
         restoreStudyFilters();
         buildLayout();
         applySystemBars();
-        showCoursesHome();
+        showRestoredStudyMode();
         scheduleAutoUpdateCheck();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (sideDrawerOpen) {
+            hideSideDrawer();
+            return;
+        }
+        super.onBackPressed();
     }
 
     @Override
@@ -370,6 +385,7 @@ public class MainActivity extends Activity {
         return !suppressQuestionPageSwipe
                 && !mindMapGestureActive
                 && !floatingExportGestureActive
+                && !sideDrawerOpen
                 && !homeMode
                 && !suggestionsMode
                 && !cardMode
@@ -1231,20 +1247,19 @@ public class MainActivity extends Activity {
         titleRow.setMinimumHeight(dp(30));
         infoCard.addView(titleRow, new LinearLayout.LayoutParams(-1, -2));
 
-        homeButton = new HomeIconButton(this);
-        homeButton.setContentDescription("返回首页");
-        homeButton.setBackground(homeButtonBackground());
-        homeButton.setVisibility(View.GONE);
-        homeButton.setClickable(true);
-        homeButton.setFocusable(true);
-        installPressFeedback(homeButton);
-        homeButton.setOnClickListener(new View.OnClickListener() {
+        menuButton = new MenuIconButton(this);
+        menuButton.setContentDescription("打开导航菜单");
+        menuButton.setBackground(menuButtonBackground());
+        menuButton.setClickable(true);
+        menuButton.setFocusable(true);
+        installPressFeedback(menuButton);
+        menuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showCoursesHome();
+                showSideDrawer();
             }
         });
-        titleRow.addView(homeButton, new FrameLayout.LayoutParams(dp(44), dp(44), Gravity.START | Gravity.CENTER_VERTICAL));
+        titleRow.addView(menuButton, new FrameLayout.LayoutParams(dp(44), dp(44), Gravity.END | Gravity.CENTER_VERTICAL));
 
         titleView = text("", 17, BLUE, true);
         titleView.setIncludeFontPadding(false);
@@ -1258,7 +1273,9 @@ public class MainActivity extends Activity {
         progressPeekView.setIncludeFontPadding(false);
         progressPeekView.setGravity(Gravity.CENTER);
         progressPeekView.setPadding(dp(9), dp(4), dp(9), dp(4));
-        titleRow.addView(progressPeekView, new FrameLayout.LayoutParams(-2, -2, Gravity.END | Gravity.CENTER_VERTICAL));
+        FrameLayout.LayoutParams progressLp = new FrameLayout.LayoutParams(-2, -2, Gravity.END | Gravity.CENTER_VERTICAL);
+        progressLp.rightMargin = dp(52);
+        titleRow.addView(progressPeekView, progressLp);
 
         metaView = text("", 11, MUTED, false);
         metaView.setIncludeFontPadding(false);
@@ -1428,6 +1445,7 @@ public class MainActivity extends Activity {
         navLp.bottomMargin = bottomSafeInset() + dp(12);
         rootFrame.addView(bottomNavBar, navLp);
         buildFloatingExportButton();
+        buildSideDrawer();
 
         prevButton = bigButton("上一个", false);
         nextButton = bigButton("下一个", true);
@@ -1513,6 +1531,7 @@ public class MainActivity extends Activity {
                 && !suggestionsMode
                 && !cardMode
                 && !settingsMode
+                && !sideDrawerOpen
                 && !visibleQuestions.isEmpty();
         floatingExportButton.setVisibility(show ? View.VISIBLE : View.GONE);
         if (!show) return;
@@ -1532,6 +1551,190 @@ public class MainActivity extends Activity {
                 }
             });
         }
+    }
+
+    private void buildSideDrawer() {
+        sideDrawerOverlay = new FrameLayout(this);
+        sideDrawerOverlay.setVisibility(View.GONE);
+        sideDrawerOverlay.setClickable(true);
+        sideDrawerOverlay.setAlpha(0f);
+
+        View scrim = new View(this);
+        scrim.setBackgroundColor(THEME_LIGHT.equals(themeMode)
+                ? Color.argb(88, 18, 24, 38)
+                : Color.argb(132, 0, 0, 0));
+        scrim.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideSideDrawer();
+            }
+        });
+        sideDrawerOverlay.addView(scrim, new FrameLayout.LayoutParams(-1, -1));
+
+        sideDrawerPanel = new LinearLayout(this);
+        sideDrawerPanel.setOrientation(LinearLayout.VERTICAL);
+        sideDrawerPanel.setPadding(dp(18), statusBarInset() + dp(18), dp(18), bottomSafeInset() + dp(18));
+        sideDrawerPanel.setBackground(drawerPanelBackground());
+        sideDrawerPanel.setClickable(true);
+        if (Build.VERSION.SDK_INT >= 21) {
+            sideDrawerPanel.setElevation(dp(24));
+        }
+        int screenWidth = getResources().getDisplayMetrics().widthPixels;
+        int drawerWidth = Math.max(dp(282), Math.min(dp(340), screenWidth - dp(42)));
+        FrameLayout.LayoutParams panelLp = new FrameLayout.LayoutParams(drawerWidth, -1, Gravity.END);
+        sideDrawerOverlay.addView(sideDrawerPanel, panelLp);
+
+        rootFrame.addView(sideDrawerOverlay, new FrameLayout.LayoutParams(-1, -1));
+    }
+
+    private void showSideDrawer() {
+        if (sideDrawerOverlay == null || sideDrawerPanel == null) return;
+        populateSideDrawer();
+        sideDrawerOpen = true;
+        suppressQuestionPageSwipe = true;
+        requestNoIntercept(true);
+        refreshFloatingExportButton();
+        sideDrawerOverlay.setVisibility(View.VISIBLE);
+        sideDrawerOverlay.bringToFront();
+        sideDrawerOverlay.setAlpha(0f);
+        sideDrawerPanel.setTranslationX(sideDrawerPanel.getWidth() > 0 ? sideDrawerPanel.getWidth() : dp(340));
+        sideDrawerOverlay.animate().alpha(1f).setDuration(160).setInterpolator(new DecelerateInterpolator()).start();
+        sideDrawerPanel.animate().translationX(0f).setDuration(220).setInterpolator(new DecelerateInterpolator()).start();
+    }
+
+    private void hideSideDrawer() {
+        if (sideDrawerOverlay == null || sideDrawerPanel == null || !sideDrawerOpen) return;
+        sideDrawerOpen = false;
+        suppressQuestionPageSwipe = false;
+        requestNoIntercept(false);
+        int width = sideDrawerPanel.getWidth() > 0 ? sideDrawerPanel.getWidth() : dp(340);
+        sideDrawerOverlay.animate().alpha(0f).setDuration(160).setInterpolator(new AccelerateInterpolator()).start();
+        sideDrawerPanel.animate()
+                .translationX(width)
+                .setDuration(180)
+                .setInterpolator(new AccelerateInterpolator())
+                .withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!sideDrawerOpen && sideDrawerOverlay != null) {
+                            sideDrawerOverlay.setVisibility(View.GONE);
+                            refreshFloatingExportButton();
+                        }
+                    }
+                })
+                .start();
+    }
+
+    private void populateSideDrawer() {
+        if (sideDrawerPanel == null) return;
+        sideDrawerPanel.removeAllViews();
+        sideDrawerPanel.setBackground(drawerPanelBackground());
+
+        TextView courseTitle = text("计算机网络", 22, TEXT, true);
+        courseTitle.setIncludeFontPadding(false);
+        sideDrawerPanel.addView(courseTitle, new LinearLayout.LayoutParams(-1, -2));
+
+        TextView version = text("备考宝典 · " + currentVersionSummary(), 12, MUTED, false);
+        version.setIncludeFontPadding(false);
+        LinearLayout.LayoutParams versionLp = new LinearLayout.LayoutParams(-1, -2);
+        versionLp.topMargin = dp(6);
+        sideDrawerPanel.addView(version, versionLp);
+
+        addDrawerSection("学习模式");
+        String activeMode = activeStudyModeForDrawer();
+        addDrawerRow("记题", "直接显示答案与理由，适合快速记忆", AMBER, STUDY_MODE_REMEMBER.equals(activeMode), new Runnable() {
+            @Override
+            public void run() {
+                showRememberMode();
+            }
+        });
+        addDrawerRow("刷题", "按题型和章节练习，保留答题反馈", BLUE, STUDY_MODE_QUIZ.equals(activeMode), new Runnable() {
+            @Override
+            public void run() {
+                showAllMode();
+            }
+        });
+        addDrawerRow("错题", "复刷错题本，按设置次数移除", RED, STUDY_MODE_WRONG.equals(activeMode), new Runnable() {
+            @Override
+            public void run() {
+                showWrongMode();
+            }
+        });
+        addDrawerRow("导图", "按章节看知识结构和分支关系", AMBER, STUDY_MODE_CARD.equals(activeMode), new Runnable() {
+            @Override
+            public void run() {
+                showCardMode(currentCardChapter);
+            }
+        });
+
+        addDrawerSection("更多");
+        addDrawerRow("课程选择", "返回课程入口，目前包含计算机网络", BLUE, homeMode, new Runnable() {
+            @Override
+            public void run() {
+                showCoursesHome();
+            }
+        });
+        addDrawerRow("设置", "主题、错题规则、导出提示词、版本更新", GREEN, settingsMode, new Runnable() {
+            @Override
+            public void run() {
+                showSettingsMode();
+            }
+        });
+        addDrawerRow("建议", "复制或分享反馈模板", AMBER, suggestionsMode, new Runnable() {
+            @Override
+            public void run() {
+                showSuggestionsMode();
+            }
+        });
+    }
+
+    private String activeStudyModeForDrawer() {
+        if (!homeMode && !settingsMode && !suggestionsMode) {
+            return currentStudyModeValue();
+        }
+        return prefs == null ? STUDY_MODE_QUIZ : prefs.getString(PREF_LAST_STUDY_MODE, STUDY_MODE_QUIZ);
+    }
+
+    private void addDrawerSection(String label) {
+        TextView section = text(label, 12, MUTED, true);
+        section.setIncludeFontPadding(false);
+        section.setLetterSpacing(0.08f);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(-1, -2);
+        lp.topMargin = dp(22);
+        lp.bottomMargin = dp(8);
+        sideDrawerPanel.addView(section, lp);
+    }
+
+    private void addDrawerRow(String title, String body, int accent, boolean active, final Runnable action) {
+        LinearLayout row = new LinearLayout(this);
+        row.setOrientation(LinearLayout.VERTICAL);
+        row.setPadding(dp(14), dp(11), dp(14), dp(11));
+        row.setBackground(drawerRowBackground(active, accent));
+        row.setClickable(true);
+        row.setFocusable(true);
+        installPressFeedback(row);
+        row.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideSideDrawer();
+                if (action != null) {
+                    v.postDelayed(action, 120);
+                }
+            }
+        });
+        TextView titleView = text(title, 15, active ? accent : TEXT, true);
+        titleView.setIncludeFontPadding(false);
+        row.addView(titleView, new LinearLayout.LayoutParams(-1, -2));
+        if (body != null && body.length() > 0) {
+            TextView bodyView = text(body, 11, MUTED, false);
+            bodyView.setLineSpacing(dp(2), 1.0f);
+            LinearLayout.LayoutParams bodyLp = new LinearLayout.LayoutParams(-1, -2);
+            bodyLp.topMargin = dp(5);
+            row.addView(bodyView, bodyLp);
+        }
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(-1, -2);
+        lp.topMargin = dp(7);
+        sideDrawerPanel.addView(row, lp);
     }
 
     private void restoreFloatingExportPosition() {
@@ -1703,12 +1906,15 @@ public class MainActivity extends Activity {
             showRememberMode();
         } else if (STUDY_MODE_WRONG.equals(mode)) {
             showWrongMode();
+        } else if (STUDY_MODE_CARD.equals(mode)) {
+            showCardMode(prefs.getString(PREF_LAST_CARD_CHAPTER, null));
         } else {
             showAllMode();
         }
     }
 
     private String currentStudyModeValue() {
+        if (cardMode) return STUDY_MODE_CARD;
         if (rememberMode) return STUDY_MODE_REMEMBER;
         if (wrongMode) return STUDY_MODE_WRONG;
         return STUDY_MODE_QUIZ;
@@ -2021,32 +2227,41 @@ public class MainActivity extends Activity {
         bar.setBackground(navBarBackground());
         bar.setElevation(dp(18));
 
-        coursesNavButton = navButton("课程", new View.OnClickListener() {
+        rememberNavButton = navButton("记题", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showCoursesHome();
+                showRememberMode();
             }
         });
-        settingsNavButton = navButton("设置", new View.OnClickListener() {
+        quizNavButton = navButton("刷题", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showSettingsMode();
+                showAllMode();
             }
         });
-        suggestionsNavButton = navButton("建议", new View.OnClickListener() {
+        wrongNavButton = navButton("错题", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showSuggestionsMode();
+                showWrongMode();
+            }
+        });
+        cardsNavButton = navButton("导图", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showCardMode(currentCardChapter);
             }
         });
 
-        bar.addView(navSlot(coursesNavButton), new LinearLayout.LayoutParams(0, dp(44), 1));
-        LinearLayout.LayoutParams settingsLp = new LinearLayout.LayoutParams(0, dp(44), 1);
-        settingsLp.leftMargin = dp(8);
-        bar.addView(navSlot(settingsNavButton), settingsLp);
-        LinearLayout.LayoutParams suggestionsLp = new LinearLayout.LayoutParams(0, dp(44), 1);
-        suggestionsLp.leftMargin = dp(8);
-        bar.addView(navSlot(suggestionsNavButton), suggestionsLp);
+        bar.addView(navSlot(rememberNavButton), new LinearLayout.LayoutParams(0, dp(44), 1));
+        LinearLayout.LayoutParams quizLp = new LinearLayout.LayoutParams(0, dp(44), 1);
+        quizLp.leftMargin = dp(6);
+        bar.addView(navSlot(quizNavButton), quizLp);
+        LinearLayout.LayoutParams wrongLp = new LinearLayout.LayoutParams(0, dp(44), 1);
+        wrongLp.leftMargin = dp(6);
+        bar.addView(navSlot(wrongNavButton), wrongLp);
+        LinearLayout.LayoutParams cardLp = new LinearLayout.LayoutParams(0, dp(44), 1);
+        cardLp.leftMargin = dp(6);
+        bar.addView(navSlot(cardsNavButton), cardLp);
         return bar;
     }
 
@@ -2055,7 +2270,7 @@ public class MainActivity extends Activity {
         view.setGravity(Gravity.CENTER);
         view.setIncludeFontPadding(false);
         view.setSingleLine(true);
-        view.setPadding(dp(16), dp(8), dp(16), dp(8));
+        view.setPadding(dp(12), dp(8), dp(12), dp(8));
         view.setBackground(navPillBackground(false));
         view.setOnClickListener(listener);
         installPressFeedback(view);
@@ -2070,10 +2285,12 @@ public class MainActivity extends Activity {
     }
 
     private void updateBottomNav() {
-        if (coursesNavButton == null) return;
-        styleNavButton(coursesNavButton, homeMode || (!settingsMode && !suggestionsMode));
-        styleNavButton(settingsNavButton, settingsMode);
-        styleNavButton(suggestionsNavButton, suggestionsMode);
+        if (rememberNavButton == null) return;
+        boolean onStudyPage = !homeMode && !settingsMode && !suggestionsMode;
+        styleNavButton(rememberNavButton, onStudyPage && rememberMode);
+        styleNavButton(quizNavButton, onStudyPage && !rememberMode && !wrongMode && !cardMode);
+        styleNavButton(wrongNavButton, onStudyPage && wrongMode);
+        styleNavButton(cardsNavButton, onStudyPage && cardMode);
     }
 
     private void styleNavButton(TextView view, boolean active) {
@@ -2086,8 +2303,8 @@ public class MainActivity extends Activity {
     private void refreshChrome() {
         if (titleView == null || metaView == null) return;
         updateBottomNav();
+        setHeaderMenuVisible(true);
         if (homeMode) {
-            setHeaderHomeVisible(false);
             applyHeaderTitleStyle("备考宝典", BLUE);
             clearHeaderTitleAction();
             metaView.setVisibility(View.GONE);
@@ -2097,7 +2314,6 @@ public class MainActivity extends Activity {
             return;
         }
 
-        setHeaderHomeVisible(true);
         if (suggestionsMode) {
             applyHeaderTitleStyle("建议", AMBER);
             clearHeaderTitleAction();
@@ -2186,14 +2402,14 @@ public class MainActivity extends Activity {
         syncQuestionSeekBar();
     }
 
-    private void setHeaderHomeVisible(boolean visible) {
-        if (homeButton == null) return;
-        homeButton.setBackground(homeButtonBackground());
-        homeButton.setVisibility(visible ? View.VISIBLE : View.GONE);
+    private void setHeaderMenuVisible(boolean visible) {
+        if (menuButton == null) return;
+        menuButton.setBackground(menuButtonBackground());
+        menuButton.setVisibility(visible ? View.VISIBLE : View.GONE);
         if (visible) {
-            homeButton.bringToFront();
+            menuButton.bringToFront();
         }
-        homeButton.invalidate();
+        menuButton.invalidate();
     }
 
     private void setQuestionSeekVisible(boolean visible) {
@@ -2899,6 +3115,13 @@ public class MainActivity extends Activity {
         visibleCards.addAll(buildMemoryCards(chapter));
         currentCardIndex = 0;
         cardBackVisible = true;
+        SharedPreferences.Editor editor = prefs.edit().putString(PREF_LAST_STUDY_MODE, STUDY_MODE_CARD);
+        if (chapter == null || chapter.length() == 0) {
+            editor.remove(PREF_LAST_CARD_CHAPTER);
+        } else {
+            editor.putString(PREF_LAST_CARD_CHAPTER, chapter);
+        }
+        editor.apply();
         renderQuestion();
     }
 
@@ -4231,7 +4454,7 @@ public class MainActivity extends Activity {
         return drawable;
     }
 
-    private GradientDrawable homeButtonBackground() {
+    private GradientDrawable menuButtonBackground() {
         GradientDrawable drawable = new GradientDrawable(
                 GradientDrawable.Orientation.TOP_BOTTOM,
                 new int[]{
@@ -4243,6 +4466,48 @@ public class MainActivity extends Activity {
         drawable.setStroke(dp(1), THEME_LIGHT.equals(themeMode)
                 ? Color.argb(120, 202, 214, 238)
                 : Color.argb(76, 220, 230, 250));
+        return drawable;
+    }
+
+    private GradientDrawable drawerPanelBackground() {
+        GradientDrawable drawable = new GradientDrawable(
+                GradientDrawable.Orientation.TOP_BOTTOM,
+                new int[]{
+                        THEME_LIGHT.equals(themeMode) ? Color.argb(244, 255, 255, 255) : Color.argb(232, 34, 40, 54),
+                        THEME_LIGHT.equals(themeMode) ? Color.argb(218, 241, 246, 255) : Color.argb(214, 23, 29, 42)
+                }
+        );
+        drawable.setCornerRadii(new float[]{
+                dp(30), dp(30),
+                0, 0,
+                0, 0,
+                dp(30), dp(30)
+        });
+        drawable.setStroke(dp(1), THEME_LIGHT.equals(themeMode)
+                ? Color.argb(126, 216, 226, 244)
+                : Color.argb(72, 218, 230, 250));
+        return drawable;
+    }
+
+    private GradientDrawable drawerRowBackground(boolean active, int accent) {
+        GradientDrawable drawable = new GradientDrawable(
+                GradientDrawable.Orientation.LEFT_RIGHT,
+                active
+                        ? new int[]{
+                        Color.argb(THEME_LIGHT.equals(themeMode) ? 74 : 96,
+                                Color.red(accent), Color.green(accent), Color.blue(accent)),
+                        THEME_LIGHT.equals(themeMode) ? Color.argb(170, 255, 255, 255) : Color.argb(42, 255, 255, 255)
+                }
+                        : new int[]{
+                        THEME_LIGHT.equals(themeMode) ? Color.argb(126, 255, 255, 255) : Color.argb(62, 255, 255, 255),
+                        THEME_LIGHT.equals(themeMode) ? Color.argb(72, 246, 249, 255) : Color.argb(28, 255, 255, 255)
+                }
+        );
+        drawable.setCornerRadius(dp(22));
+        drawable.setStroke(dp(1), active
+                ? Color.argb(THEME_LIGHT.equals(themeMode) ? 116 : 82,
+                Color.red(accent), Color.green(accent), Color.blue(accent))
+                : (THEME_LIGHT.equals(themeMode) ? Color.argb(70, 210, 220, 238) : Color.argb(38, 210, 222, 244)));
         return drawable;
     }
 
@@ -7581,11 +7846,10 @@ public class MainActivity extends Activity {
         return (int) (value * getResources().getDisplayMetrics().density + 0.5f);
     }
 
-    private class HomeIconButton extends View {
+    private class MenuIconButton extends View {
         private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        private final Path path = new Path();
 
-        HomeIconButton(Context context) {
+        MenuIconButton(Context context) {
             super(context);
         }
 
@@ -7603,22 +7867,9 @@ public class MainActivity extends Activity {
             paint.setStrokeJoin(Paint.Join.ROUND);
             paint.setColor(THEME_LIGHT.equals(themeMode) ? BLUE : Color.WHITE);
 
-            path.reset();
-            path.moveTo(w * 0.24f, h * 0.48f);
-            path.lineTo(w * 0.50f, h * 0.25f);
-            path.lineTo(w * 0.76f, h * 0.48f);
-            canvas.drawPath(path, paint);
-
-            path.reset();
-            path.moveTo(w * 0.31f, h * 0.47f);
-            path.lineTo(w * 0.31f, h * 0.73f);
-            path.lineTo(w * 0.44f, h * 0.73f);
-            path.lineTo(w * 0.44f, h * 0.58f);
-            path.lineTo(w * 0.56f, h * 0.58f);
-            path.lineTo(w * 0.56f, h * 0.73f);
-            path.lineTo(w * 0.69f, h * 0.73f);
-            path.lineTo(w * 0.69f, h * 0.47f);
-            canvas.drawPath(path, paint);
+            canvas.drawLine(w * 0.29f, h * 0.34f, w * 0.71f, h * 0.34f, paint);
+            canvas.drawLine(w * 0.29f, h * 0.50f, w * 0.71f, h * 0.50f, paint);
+            canvas.drawLine(w * 0.29f, h * 0.66f, w * 0.71f, h * 0.66f, paint);
         }
     }
 
