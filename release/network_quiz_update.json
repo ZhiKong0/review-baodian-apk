@@ -11,8 +11,8 @@
     "https://github.com/ZhiKong0/review-baodian-apk/releases/download/v2.10.37/review-baodian.apk"
   ],
   "releaseHtmlUrl": "https://github.com/ZhiKong0/review-baodian-apk/releases/latest",
-  "releaseNotes": "# v2.10.37\n\n- Auto release after fix: UI: prioritize study navigation\n- Auto release after fix: UI: add exam home navigation\n- 新增“备考宝典”课程首页，启动后先进入课程选择页。\n- 底部全局导航改为“课程 / 设置 / 建议”三项。\n- “计算机网络”课程入口会恢复上次筛选分组和题目位置。\n- 课程内“刷题 / 记题 / 错题 / 导图”切换移到顶部标题 chip。\n- 学习页、设置页、建议页新增顶部左上角自绘 Home 按钮，可返回课程首页。\n- 新增建议页，可复制或分享反馈建议模板。\n- 应用显示名称改为“备考宝典”，本地中文 APK 产物同步改名。",
+  "releaseNotes": "# v2.10.37\n\n- 启动 App 后默认恢复上次学习页；无记录时进入“刷题”，不再先停在课程首页。\n- 底部高频导航改为“记题 / 刷题 / 错题 / 导图”，在设置、建议、课程页也能一键回到学习模式。\n- 右上角新增自绘三横菜单按钮，点击从右侧打开玻璃侧边栏。\n- 侧边栏包含学习模式、课程选择、设置、建议，并显示当前课程“计算机网络”和版本号。\n- 课程选择页保留为低频入口；App 显示名称继续保持“备考宝典”。\n- 抽屉打开时会屏蔽题目横滑并隐藏悬浮导出箭头，避免误触。",
   "apkSize": 1104439,
-  "sha256": "890d21c3fc464d6d92316930c6c722beae2a39bbfdde182f82a06b310fa89fdc",
-  "generatedAt": "2026-06-27T07:05:41.935712+00:00"
+  "sha256": "ab62a2e2adc6b6b35c3e3c750b9c8ec7dcda43bc940a8886b09477f41e9ef4ef",
+  "generatedAt": "2026-06-27T07:08:31.656215+00:00"
 }
