@@ -45,10 +45,10 @@ function Test-GitHubCliAccess {
 }
 
 function Ensure-GitHubAuth {
-    if (Test-GitHubCliAccess) {
+    if (Try-LoadGitHubTokenFromCredentialManager -and (Test-GitHubCliAccess)) {
         return
     }
-    if (Try-LoadGitHubTokenFromCredentialManager -and (Test-GitHubCliAccess)) {
+    if (Test-GitHubCliAccess) {
         return
     }
     throw "GitHub CLI has not logged in yet. Run 'gh auth login' first, or ensure git-credential-manager already stores a usable GitHub token."

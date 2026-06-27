@@ -78,6 +78,9 @@ if ($dirty.Length -gt 0) {
 try {
     $env:CODEX_AUTO_RELEASE_RUNNING = "1"
     & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root "tools\release_after_fix.ps1") -FixSummary $subject
+    if ($LASTEXITCODE -ne 0) {
+        throw "release_after_fix.ps1 exited with code $LASTEXITCODE"
+    }
     Write-HookLog("Auto release succeeded for commit: $subject")
 
     try {
