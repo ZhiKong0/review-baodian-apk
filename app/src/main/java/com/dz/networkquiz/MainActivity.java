@@ -36,7 +36,10 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
+import android.text.style.SubscriptSpan;
+import android.text.style.SuperscriptSpan;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -3859,27 +3862,16 @@ public class MainActivity extends Activity {
     }
 
     private void renderQuestionStem(Question q) {
-        if (usesMathRenderer(q)) {
-            stemView.setVisibility(View.GONE);
-            if (mathStemContainer != null) {
-                renderMathMarkdown(mathStemContainer, q.stem, dp(96));
-            }
-        } else {
-            if (mathStemContainer != null) {
-                mathStemContainer.removeAllViews();
-                mathStemContainer.setVisibility(View.GONE);
-            }
-            stemView.setVisibility(View.VISIBLE);
-            stemView.setText(q.stem);
+        if (mathStemContainer != null) {
+            mathStemContainer.removeAllViews();
+            mathStemContainer.setVisibility(View.GONE);
         }
+        stemView.setVisibility(View.VISIBLE);
+        stemView.setText(inlineMarkdown(q == null ? "" : q.stem));
     }
 
     private void renderQuestionMarkdown(LinearLayout container, String markdown, Question q) {
-        if (usesMathRenderer(q)) {
-            renderMathMarkdown(container, markdown, dp(160));
-        } else {
-            renderMarkdown(container, markdown);
-        }
+        renderMarkdown(container, markdown);
     }
 
     private void renderMathMarkdown(final LinearLayout container, String markdown, int initialHeightPx) {
@@ -4276,11 +4268,8 @@ public class MainActivity extends Activity {
     }
 
     private void addOptionView(final Question q, final Option opt) {
-        if (usesMathRenderer(q)) {
-            addMathOptionView(q, opt);
-            return;
-        }
-        TextView view = text(opt.text, 18, TEXT, false);
+        TextView view = text("", 18, TEXT, false);
+        view.setText(inlineMarkdown(opt.text));
         view.setGravity(Gravity.CENTER_VERTICAL);
         view.setMinHeight(dp(62));
         view.setBackground(optionBackground(false));
@@ -4308,44 +4297,6 @@ public class MainActivity extends Activity {
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(-1, -2);
         lp.bottomMargin = dp(10);
         optionList.addView(view, lp);
-    }
-
-    private void addMathOptionView(final Question q, final Option opt) {
-        final LinearLayout box = new LinearLayout(this);
-        box.setOrientation(LinearLayout.VERTICAL);
-        box.setGravity(Gravity.CENTER_VERTICAL);
-        box.setMinimumHeight(dp(62));
-        box.setBackground(optionBackground(false));
-        box.setPadding(dp(12), dp(10), dp(12), dp(10));
-        box.setClickable(true);
-        box.setFocusable(true);
-        box.setTag(opt.key);
-        box.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (submitted || rememberMode) return;
-                selected.clear();
-                selected.add(opt.key);
-                refreshOptionStyles(q);
-                submitAnswer();
-            }
-        });
-        renderMathMarkdown(box, opt.text, dp(64));
-        if (box.getChildCount() > 0) {
-            View child = box.getChildAt(0);
-            child.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    if (event.getAction() == MotionEvent.ACTION_UP) {
-                        box.performClick();
-                    }
-                    return true;
-                }
-            });
-        }
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(-1, -2);
-        lp.bottomMargin = dp(10);
-        optionList.addView(box, lp);
     }
 
     private void refreshOptionStyles(Question q) {
@@ -5321,25 +5272,269 @@ public class MainActivity extends Activity {
 
     private CharSequence inlineMarkdown(String value) {
         SpannableStringBuilder out = new SpannableStringBuilder();
+        if (value == null || value.length() == 0) return out;
+        String text = value.replace("\r\n", "\n").replace('\r', '\n');
+        int index = 0;
+        while (index < text.length()) {
+            if (text.startsWith("**", index)) {
+                int end = text.indexOf("**", index + 2);
+                if (end < 0) {
+                    out.append(text.substring(index));
+                    break;
+                }
+                int spanStart = out.length();
+                out.append(text, index + 2, end);
+                out.setSpan(new StyleSpan(Typeface.BOLD), spanStart, out.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                index = end + 2;
+                continue;
+            }
+            if (text.startsWith("$$", index)) {
+                int end = text.indexOf("$$", index + 2);
+                if (end < 0) {
+                    appendFormulaFragment(out, text.substring(index + 2));
+                    break;
+                }
+                appendFormulaFragment(out, text.substring(index + 2, end));
+                index = end + 2;
+                continue;
+            }
+            if (text.startsWith("$", index)) {
+                int end = text.indexOf("$", index + 1);
+                if (end < 0) {
+                    out.append(text.substring(index));
+                    break;
+                }
+                appendFormulaFragment(out, text.substring(index + 1, end));
+                index = end + 1;
+                continue;
+            }
+            if (text.startsWith("\\(", index)) {
+                int end = text.indexOf("\\)", index + 2);
+                if (end < 0) {
+                    out.append(text.substring(index));
+                    break;
+                }
+                appendFormulaFragment(out, text.substring(index + 2, end));
+                index = end + 2;
+                continue;
+            }
+            if (text.startsWith("\\[", index)) {
+                int end = text.indexOf("\\]", index + 2);
+                if (end < 0) {
+                    out.append(text.substring(index));
+                    break;
+                }
+                appendFormulaFragment(out, text.substring(index + 2, end));
+                index = end + 2;
+                continue;
+            }
+            out.append(text.charAt(index));
+            index++;
+        }
+        return out;
+    }
+
+    private void appendFormulaFragment(SpannableStringBuilder out, String raw) {
+        if (raw == null || raw.length() == 0) return;
+        String text = normalizeFormulaText(raw);
+        int index = 0;
+        while (index < text.length()) {
+            char ch = text.charAt(index);
+            if (ch == '^' || ch == '_') {
+                boolean superscript = ch == '^';
+                index++;
+                if (index >= text.length()) break;
+                String token;
+                if (text.charAt(index) == '{') {
+                    int end = findMatchingBrace(text, index);
+                    if (end < 0) {
+                        token = text.substring(index + 1);
+                        index = text.length();
+                    } else {
+                        token = text.substring(index + 1, end);
+                        index = end + 1;
+                    }
+                } else {
+                    int start = index;
+                    while (index < text.length() && isFormulaScriptChar(text.charAt(index))) {
+                        index++;
+                    }
+                    token = text.substring(start, index);
+                }
+                token = stripFormulaGrouping(token);
+                int spanStart = out.length();
+                out.append(token);
+                if (out.length() > spanStart) {
+                    out.setSpan(new RelativeSizeSpan(0.82f), spanStart, out.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    if (superscript) {
+                        out.setSpan(new SuperscriptSpan(), spanStart, out.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    } else {
+                        out.setSpan(new SubscriptSpan(), spanStart, out.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    }
+                }
+                continue;
+            }
+            if (ch != '{' && ch != '}') {
+                out.append(ch);
+            }
+            index++;
+        }
+    }
+
+    private boolean isFormulaScriptChar(char c) {
+        return Character.isLetterOrDigit(c)
+                || c == '+' || c == '-' || c == '.' || c == '/'
+                || c == '(' || c == ')'
+                || c == 'ω' || c == 'Ω' || c == 'π' || c == 'θ'
+                || c == 'δ' || c == 'λ' || c == 'α' || c == 'β'
+                || c == 'γ' || c == 'μ' || c == 'φ' || c == 'τ'
+                || c == 'σ' || c == 'ρ' || c == 'ψ';
+    }
+
+    private int findMatchingBrace(String text, int openIndex) {
+        if (text == null || openIndex < 0 || openIndex >= text.length() || text.charAt(openIndex) != '{') return -1;
+        int depth = 0;
+        for (int i = openIndex; i < text.length(); i++) {
+            char c = text.charAt(i);
+            if (c == '{') depth++;
+            else if (c == '}') {
+                depth--;
+                if (depth == 0) return i;
+            }
+        }
+        return -1;
+    }
+
+    private String normalizeFormulaText(String text) {
+        if (text == null || text.length() == 0) return "";
+        String out = text.replace("\r\n", "\n").replace('\r', '\n');
+        out = normalizeFormulaFractions(out);
+        out = normalizeFormulaSquareRoots(out);
+        out = normalizeOneGroupCommand(out, "\\mathrm", "", "");
+        out = normalizeOneGroupCommand(out, "\\operatorname", "", "");
+        out = out.replace("\\begin{aligned}", "");
+        out = out.replace("\\end{aligned}", "");
+        out = out.replace("\\begin{cases}", "");
+        out = out.replace("\\end{cases}", "");
+        out = out.replace("\\left", "");
+        out = out.replace("\\right", "");
+        out = out.replace("\\,", "");
+        out = out.replace("\\;", "");
+        out = out.replace("\\!", "");
+        out = out.replace("\\\\", "\n");
+        out = out.replace("&=", "=");
+        out = out.replace("&", "");
+        out = out.replace("\\cdot", "·");
+        out = out.replace("\\times", "×");
+        out = out.replace("\\pm", "±");
+        out = out.replace("\\infty", "∞");
+        out = out.replace("\\omega", "ω");
+        out = out.replace("\\Omega", "Ω");
+        out = out.replace("\\pi", "π");
+        out = out.replace("\\theta", "θ");
+        out = out.replace("\\delta", "δ");
+        out = out.replace("\\lambda", "λ");
+        out = out.replace("\\alpha", "α");
+        out = out.replace("\\beta", "β");
+        out = out.replace("\\gamma", "γ");
+        out = out.replace("\\mu", "μ");
+        out = out.replace("\\varphi", "φ");
+        out = out.replace("\\phi", "φ");
+        out = out.replace("\\tau", "τ");
+        out = out.replace("\\sigma", "σ");
+        out = out.replace("\\rho", "ρ");
+        out = out.replace("\\psi", "ψ");
+        out = out.replace("\\sin", "sin");
+        out = out.replace("\\cos", "cos");
+        out = out.replace("\\tan", "tan");
+        out = out.replace("\\ln", "ln");
+        out = out.replace("\\log", "log");
+        out = out.replace("\\exp", "exp");
+        out = out.replace("\\int", "∫");
+        out = out.replace("\\sum", "∑");
+        out = out.replace("\\leq", "≤");
+        out = out.replace("\\le", "≤");
+        out = out.replace("\\geq", "≥");
+        out = out.replace("\\ge", "≥");
+        out = out.replace("\\neq", "≠");
+        out = out.replace("\\approx", "≈");
+        out = out.replace("\\rightarrow", "→");
+        out = out.replace("\\leftarrow", "←");
+        out = out.replace("\\to", "→");
+        out = out.replace("\\", "");
+        return out.replaceAll("[ \\t\\x0B\\f]+", " ").trim();
+    }
+
+    private String normalizeFormulaFractions(String value) {
+        return normalizeTwoGroupCommand(value, "\\frac", "(", ")/(", ")");
+    }
+
+    private String normalizeFormulaSquareRoots(String value) {
+        return normalizeOneGroupCommand(value, "\\sqrt", "√(", ")");
+    }
+
+    private String normalizeOneGroupCommand(String value, String command, String prefix, String suffix) {
+        if (value == null || value.length() == 0) return "";
+        StringBuilder out = new StringBuilder();
         int index = 0;
         while (index < value.length()) {
-            int start = value.indexOf("**", index);
+            int start = value.indexOf(command + "{", index);
             if (start < 0) {
                 out.append(value.substring(index));
                 break;
             }
-            out.append(value.substring(index, start));
-            int end = value.indexOf("**", start + 2);
-            if (end < 0) {
+            out.append(value, index, start);
+            int groupStart = start + command.length();
+            int groupEnd = findMatchingBrace(value, groupStart);
+            if (groupEnd < 0) {
                 out.append(value.substring(start));
                 break;
             }
-            int spanStart = out.length();
-            out.append(value.substring(start + 2, end));
-            out.setSpan(new StyleSpan(Typeface.BOLD), spanStart, out.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            index = end + 2;
+            String body = value.substring(groupStart + 1, groupEnd);
+            out.append(prefix).append(body).append(suffix);
+            index = groupEnd + 1;
         }
-        return out;
+        return out.toString();
+    }
+
+    private String normalizeTwoGroupCommand(String value, String command, String prefix, String middle, String suffix) {
+        if (value == null || value.length() == 0) return "";
+        StringBuilder out = new StringBuilder();
+        int index = 0;
+        while (index < value.length()) {
+            int start = value.indexOf(command + "{", index);
+            if (start < 0) {
+                out.append(value.substring(index));
+                break;
+            }
+            out.append(value, index, start);
+            int firstStart = start + command.length();
+            int firstEnd = findMatchingBrace(value, firstStart);
+            if (firstEnd < 0 || firstEnd + 1 >= value.length() || value.charAt(firstEnd + 1) != '{') {
+                out.append(value.substring(start));
+                break;
+            }
+            int secondStart = firstEnd + 1;
+            int secondEnd = findMatchingBrace(value, secondStart);
+            if (secondEnd < 0) {
+                out.append(value.substring(start));
+                break;
+            }
+            String first = value.substring(firstStart + 1, firstEnd);
+            String second = value.substring(secondStart + 1, secondEnd);
+            out.append(prefix).append(first).append(middle).append(second).append(suffix);
+            index = secondEnd + 1;
+        }
+        return out.toString();
+    }
+
+    private String stripFormulaGrouping(String token) {
+        if (token == null) return "";
+        String out = token.trim();
+        while (out.startsWith("{") && out.endsWith("}") && findMatchingBrace(out, 0) == out.length() - 1) {
+            out = out.substring(1, out.length() - 1).trim();
+        }
+        return normalizeFormulaText(out);
     }
 
     private void paintSubmittedOptions(Question q) {
@@ -9271,4 +9466,3 @@ public class MainActivity extends Activity {
         }
     }
 }
-

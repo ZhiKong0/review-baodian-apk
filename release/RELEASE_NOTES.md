@@ -1,6 +1,8 @@
-# v2.10.41
+# v2.10.42
 
-- Auto release after fix: Add the second course "Signal and Systems" with offline formula rendering and course-isolated state.
+- 修复“信号与系统”题目公式渲染：不再把整题塞进 WebView，选项、题干和解析统一使用与“计算机网络”相同的原生排版。
+- 修复信号题选项字号/高度过大的问题；公式只在 `$...$` 等片段内做离线上下标、希腊字母、根号和常见运算符显示。
+- 已在模拟器验证信号-Q04 初始页和答题解析页均不再裸露 `$`、`\sin`、`\sqrt` 等 LaTeX 标记。
 
 - Auto release after fix: Quiz: add marked essay questions
 - Auto release after fix: Release: harden exam prep auto publishing
