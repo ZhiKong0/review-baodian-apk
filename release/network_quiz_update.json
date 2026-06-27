@@ -1,18 +1,18 @@
 {
   "packageName": "com.dz.networkquiz",
-  "versionCode": 59,
-  "versionName": "2.10.34",
+  "versionCode": 60,
+  "versionName": "2.10.35",
   "apkFileName": "review-baodian.apk",
-  "apkDownloadUrl": "https://ghfast.top/https://github.com/ZhiKong0/review-baodian-apk/releases/download/v2.10.34/review-baodian.apk",
+  "apkDownloadUrl": "https://ghfast.top/https://github.com/ZhiKong0/review-baodian-apk/releases/latest/download/review-baodian.apk",
   "apkDownloadCandidates": [
-    "https://ghfast.top/https://github.com/ZhiKong0/review-baodian-apk/releases/download/v2.10.34/review-baodian.apk",
-    "https://github.com/ZhiKong0/review-baodian-apk/releases/download/v2.10.34/review-baodian.apk",
     "https://ghfast.top/https://github.com/ZhiKong0/review-baodian-apk/releases/latest/download/review-baodian.apk",
-    "https://github.com/ZhiKong0/review-baodian-apk/releases/latest/download/review-baodian.apk"
+    "https://github.com/ZhiKong0/review-baodian-apk/releases/latest/download/review-baodian.apk",
+    "https://ghfast.top/https://github.com/ZhiKong0/review-baodian-apk/releases/download/v2.10.35/review-baodian.apk",
+    "https://github.com/ZhiKong0/review-baodian-apk/releases/download/v2.10.35/review-baodian.apk"
   ],
-  "releaseHtmlUrl": "https://github.com/ZhiKong0/review-baodian-apk/releases/tag/v2.10.34",
-  "releaseNotes": "# v2.10.34\n\n- 修复“本题理由”不再高亮的问题：`本题理由：`、`直接理由：`、`核心理由：` 都会进入浅色马克笔高亮块。\n- 记题模式和答题后的解析页共用同一套识别规则，避免同一段理由在不同页面显示不一致。\n- 模拟器已验证：第 3 章 `3-72` 的“本题理由”恢复为浅黄色高亮块，不再显示为普通圆点列表。",
+  "releaseHtmlUrl": "https://github.com/ZhiKong0/review-baodian-apk/releases/latest",
+  "releaseNotes": "# v2.10.35\n\n- Auto release after fix: UI: add floating question export\n- 修复“本题理由”不再高亮的问题：`本题理由：`、`直接理由：`、`核心理由：` 都会进入浅色马克笔高亮块。\n- 记题模式和答题后的解析页共用同一套识别规则，避免同一段理由在不同页面显示不一致。\n- 模拟器已验证：第 3 章 `3-72` 的“本题理由”恢复为浅黄色高亮块，不再显示为普通圆点列表。",
   "apkSize": 1096245,
-  "sha256": "776caab81161b0be7cf73a666dce98b989567c684c43e6b2e4a1f184b65897f2",
-  "generatedAt": "2026-06-27T04:47:36.142755+00:00"
+  "sha256": "1479eafd42c745167a8840c494dc33fd41e465107a0ff0b1a797e5d0e7d32b2b",
+  "generatedAt": "2026-06-27T05:23:34.610214+00:00"
 }
