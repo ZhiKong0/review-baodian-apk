@@ -115,6 +115,9 @@ public class MainActivity extends Activity {
     private static final String PREF_LAST_CHAPTER_FILTER = "last_chapter_filter";
     private static final String PREF_LAST_STUDY_MODE = "last_study_mode";
     private static final String PREF_LAST_QUESTION_PREFIX = "last_question_";
+    private static final String PREF_EXPORT_PROMPT_TEMPLATE = "export_prompt_template";
+    private static final String PREF_FLOAT_EXPORT_X = "float_export_x";
+    private static final String PREF_FLOAT_EXPORT_Y = "float_export_y";
     private static final String LEGACY_UPDATE_REPO_SLUG = "ZhiKong0/network-quiz-apk";
     private static final String THEME_DARK = "dark";
     private static final String THEME_LIGHT = "light";
@@ -124,6 +127,7 @@ public class MainActivity extends Activity {
     private static final String DEFAULT_UPDATE_REPO_SLUG = "ZhiKong0/review-baodian-apk";
     private static final String TAG_MARKDOWN_TABLE_SCROLL = "markdown_table_scroll";
     private static final String TAG_MIND_MAP_BOARD = "mind_map_board";
+    private static final String TAG_FLOATING_EXPORT_BUTTON = "floating_export_button";
     private static final String UPDATE_METADATA_NAME = "network_quiz_update.json";
     private static final String UPDATE_CACHE_DIR = "updates";
     private static final String UPDATE_INSTALL_ACTION = "com.dz.networkquiz.UPDATE_INSTALL_STATUS";
@@ -161,6 +165,8 @@ public class MainActivity extends Activity {
     private TextView updateVersionLineView;
     private TextView updateRepoLineView;
     private TextView updateStatusLineView;
+    private TextView exportPromptLineView;
+    private TextView floatingExportButton;
     private SeekBar questionSeekBar;
     private TextView stemView;
     private LinearLayout memoryReasonContainer;
@@ -213,6 +219,13 @@ public class MainActivity extends Activity {
     private boolean suppressQuestionPageSwipe = false;
     private boolean markdownTableGestureActive = false;
     private boolean mindMapGestureActive = false;
+    private boolean floatingExportGestureActive = false;
+    private boolean floatingExportDragging = false;
+    private boolean floatingExportPositionReady = false;
+    private float floatingExportDownRawX = 0f;
+    private float floatingExportDownRawY = 0f;
+    private float floatingExportStartX = 0f;
+    private float floatingExportStartY = 0f;
     private boolean updateBusy = false;
     private boolean autoUpdateCheckScheduled = false;
     private String updateRepoSlug = "";
@@ -311,6 +324,12 @@ public class MainActivity extends Activity {
             requestNoIntercept(true);
         }
         if (action == MotionEvent.ACTION_DOWN
+                && isTouchInsideFloatingExportButton(event)) {
+            floatingExportGestureActive = true;
+            suppressQuestionPageSwipe = true;
+            requestNoIntercept(true);
+        }
+        if (action == MotionEvent.ACTION_DOWN
                 && isQuestionPageSwipeEnabled()
                 && isTouchInsideMarkdownTable(event)) {
             markdownTableGestureActive = true;
@@ -318,6 +337,7 @@ public class MainActivity extends Activity {
         }
         if (!markdownTableGestureActive
                 && !mindMapGestureActive
+                && !floatingExportGestureActive
                 && isQuestionPageSwipeEnabled()
                 && handleQuestionPageSwipe(event)) {
             return true;
@@ -335,11 +355,21 @@ public class MainActivity extends Activity {
             suppressQuestionPageSwipe = false;
             requestNoIntercept(false);
         }
+        if (floatingExportGestureActive
+                && (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL)) {
+            floatingExportGestureActive = false;
+            suppressQuestionPageSwipe = false;
+            requestNoIntercept(false);
+        }
         return handled;
     }
 
     private boolean isQuestionPageSwipeEnabled() {
-        return !suppressQuestionPageSwipe && !mindMapGestureActive && !cardMode && !settingsMode;
+        return !suppressQuestionPageSwipe
+                && !mindMapGestureActive
+                && !floatingExportGestureActive
+                && !cardMode
+                && !settingsMode;
     }
 
     private boolean isTouchInsideMarkdownTable(MotionEvent event) {
@@ -358,6 +388,15 @@ public class MainActivity extends Activity {
         }
         return isTouchInsideTaggedView(window.getDecorView(), event.getRawX(), event.getRawY(),
                 TAG_MIND_MAP_BOARD);
+    }
+
+    private boolean isTouchInsideFloatingExportButton(MotionEvent event) {
+        Window window = getWindow();
+        if (window == null || window.getDecorView() == null) {
+            return false;
+        }
+        return isTouchInsideTaggedView(window.getDecorView(), event.getRawX(), event.getRawY(),
+                TAG_FLOATING_EXPORT_BUTTON);
     }
 
     private boolean isTouchInsideTaggedView(View view, float rawX, float rawY, String tag) {
@@ -1369,10 +1408,149 @@ public class MainActivity extends Activity {
         navLp.rightMargin = dp(18);
         navLp.bottomMargin = bottomSafeInset() + dp(12);
         rootFrame.addView(bottomNavBar, navLp);
+        buildFloatingExportButton();
 
         prevButton = bigButton("上一个", false);
         nextButton = bigButton("下一个", true);
         filterReady = true;
+    }
+
+    private void buildFloatingExportButton() {
+        floatingExportButton = text("↗", 19, THEME_LIGHT.equals(themeMode) ? BLUE : Color.WHITE, true);
+        floatingExportButton.setTag(TAG_FLOATING_EXPORT_BUTTON);
+        floatingExportButton.setContentDescription("导出当前题目");
+        floatingExportButton.setGravity(Gravity.CENTER);
+        floatingExportButton.setIncludeFontPadding(false);
+        floatingExportButton.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        floatingExportButton.setBackground(floatingExportBackground());
+        floatingExportButton.setAlpha(0.48f);
+        floatingExportButton.setVisibility(View.GONE);
+        if (Build.VERSION.SDK_INT >= 21) {
+            floatingExportButton.setElevation(dp(9));
+        }
+        floatingExportButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shareCurrentQuestion();
+            }
+        });
+        floatingExportButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int action = event.getActionMasked();
+                if (action == MotionEvent.ACTION_DOWN) {
+                    floatingExportGestureActive = true;
+                    floatingExportDragging = false;
+                    suppressQuestionPageSwipe = true;
+                    requestNoIntercept(true);
+                    floatingExportDownRawX = event.getRawX();
+                    floatingExportDownRawY = event.getRawY();
+                    floatingExportStartX = v.getX();
+                    floatingExportStartY = v.getY();
+                    v.setAlpha(0.86f);
+                    v.bringToFront();
+                    return true;
+                }
+                if (action == MotionEvent.ACTION_MOVE) {
+                    float dx = event.getRawX() - floatingExportDownRawX;
+                    float dy = event.getRawY() - floatingExportDownRawY;
+                    if (!floatingExportDragging
+                            && Math.max(Math.abs(dx), Math.abs(dy)) > Math.max(dp(3), touchSlop / 2)) {
+                        floatingExportDragging = true;
+                    }
+                    if (floatingExportDragging) {
+                        placeFloatingExportButton(floatingExportStartX + dx, floatingExportStartY + dy);
+                    }
+                    return true;
+                }
+                if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL) {
+                    boolean wasDragging = floatingExportDragging;
+                    v.setAlpha(0.48f);
+                    if (wasDragging) {
+                        saveFloatingExportPosition();
+                    } else if (action == MotionEvent.ACTION_UP) {
+                        v.performClick();
+                    }
+                    floatingExportDragging = false;
+                    floatingExportGestureActive = false;
+                    suppressQuestionPageSwipe = false;
+                    requestNoIntercept(false);
+                    return true;
+                }
+                return true;
+            }
+        });
+        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(dp(46), dp(46));
+        lp.gravity = Gravity.END | Gravity.CENTER_VERTICAL;
+        lp.rightMargin = dp(4);
+        rootFrame.addView(floatingExportButton, lp);
+    }
+
+    private void refreshFloatingExportButton() {
+        if (floatingExportButton == null) return;
+        floatingExportButton.setBackground(floatingExportBackground());
+        floatingExportButton.setTextColor(THEME_LIGHT.equals(themeMode) ? BLUE : Color.WHITE);
+        boolean show = !cardMode && !settingsMode && !visibleQuestions.isEmpty();
+        floatingExportButton.setVisibility(show ? View.VISIBLE : View.GONE);
+        if (!show) return;
+        floatingExportButton.bringToFront();
+        if (!floatingExportPositionReady) {
+            floatingExportButton.post(new Runnable() {
+                @Override
+                public void run() {
+                    restoreFloatingExportPosition();
+                }
+            });
+        } else {
+            floatingExportButton.post(new Runnable() {
+                @Override
+                public void run() {
+                    placeFloatingExportButton(floatingExportButton.getX(), floatingExportButton.getY());
+                }
+            });
+        }
+    }
+
+    private void restoreFloatingExportPosition() {
+        if (rootFrame == null || floatingExportButton == null
+                || rootFrame.getWidth() <= 0 || rootFrame.getHeight() <= 0) {
+            return;
+        }
+        float savedX = prefs.getFloat(PREF_FLOAT_EXPORT_X, Float.NaN);
+        float savedY = prefs.getFloat(PREF_FLOAT_EXPORT_Y, Float.NaN);
+        if (Float.isNaN(savedX) || Float.isNaN(savedY)) {
+            savedX = rootFrame.getWidth() - dp(50);
+            savedY = statusBarInset() + dp(168);
+        }
+        placeFloatingExportButton(savedX, savedY);
+        floatingExportPositionReady = true;
+    }
+
+    private void placeFloatingExportButton(float x, float y) {
+        if (rootFrame == null || floatingExportButton == null
+                || rootFrame.getWidth() <= 0 || rootFrame.getHeight() <= 0) {
+            return;
+        }
+        int width = Math.max(floatingExportButton.getWidth(), dp(46));
+        int height = Math.max(floatingExportButton.getHeight(), dp(46));
+        float minX = dp(2);
+        float maxX = Math.max(minX, rootFrame.getWidth() - width - dp(2));
+        float minY = statusBarInset() + dp(82);
+        float maxY = Math.max(minY, rootFrame.getHeight() - height - bottomSafeInset() - dp(92));
+        floatingExportButton.setX(clampFloat(x, minX, maxX));
+        floatingExportButton.setY(clampFloat(y, minY, maxY));
+    }
+
+    private void saveFloatingExportPosition() {
+        if (floatingExportButton == null) return;
+        prefs.edit()
+                .putFloat(PREF_FLOAT_EXPORT_X, floatingExportButton.getX())
+                .putFloat(PREF_FLOAT_EXPORT_Y, floatingExportButton.getY())
+                .apply();
+    }
+
+    private float clampFloat(float value, float min, float max) {
+        return Math.max(min, Math.min(max, value));
     }
 
     private int statusBarInset() {
@@ -2165,6 +2343,7 @@ public class MainActivity extends Activity {
 
     private void renderQuestion() {
         refreshChrome();
+        refreshFloatingExportButton();
         if (settingsMode) {
             renderSettingsPage();
             return;
@@ -2374,6 +2553,14 @@ public class MainActivity extends Activity {
         optionList.addView(wrongRuleCard, new LinearLayout.LayoutParams(-1, -2));
         addSettingsSectionTitle(optionList, "导出与分享", "");
         LinearLayout exportCard = settingsCard();
+        exportPromptLineView = settingsValueLine("题目导出提示词", exportPromptSummary());
+        exportCard.addView(exportPromptLineView, new LinearLayout.LayoutParams(-1, -2));
+        addSettingsActionCardButton(exportCard, "设置题目导出提示词", false, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showExportPromptConfigDialog();
+            }
+        });
         addSettingsActionCardButton(exportCard, "分享当前题目", false, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -3769,6 +3956,26 @@ public class MainActivity extends Activity {
         return drawable;
     }
 
+    private GradientDrawable floatingExportBackground() {
+        int fill = THEME_LIGHT.equals(themeMode)
+                ? Color.argb(154, 255, 255, 255)
+                : Color.argb(104, 41, 47, 63);
+        int stroke = Color.argb(THEME_LIGHT.equals(themeMode) ? 118 : 82,
+                Color.red(BLUE), Color.green(BLUE), Color.blue(BLUE));
+        GradientDrawable drawable = new GradientDrawable(
+                GradientDrawable.Orientation.TOP_BOTTOM,
+                new int[]{
+                        fill,
+                        THEME_LIGHT.equals(themeMode)
+                                ? Color.argb(116, 239, 244, 255)
+                                : Color.argb(74, 21, 25, 36)
+                }
+        );
+        drawable.setCornerRadius(dp(23));
+        drawable.setStroke(dp(1), stroke);
+        return drawable;
+    }
+
     private GradientDrawable headerPanelBackground() {
         int start = THEME_LIGHT.equals(themeMode)
                 ? Color.argb(246, 255, 255, 255)
@@ -4369,6 +4576,148 @@ public class MainActivity extends Activity {
         }
     }
 
+    private String defaultExportPromptTemplate() {
+        return "请你像计算机网络老师一样，帮我把这道题讲到小白能懂。\n"
+                + "请基于 App 的短解析和知识点详解继续展开：题眼是什么、为什么这样选、其他常见想法错在哪里、我应该怎么记。";
+    }
+
+    private String exportPromptTemplate() {
+        String value = prefs.getString(PREF_EXPORT_PROMPT_TEMPLATE, "");
+        if (value == null || value.trim().length() == 0) {
+            return defaultExportPromptTemplate();
+        }
+        return value;
+    }
+
+    private String exportPromptSummary() {
+        String value = prefs.getString(PREF_EXPORT_PROMPT_TEMPLATE, "");
+        if (value == null || value.trim().length() == 0) {
+            return "默认";
+        }
+        return "自定义";
+    }
+
+    private String applyExportPromptTemplate(Question q) {
+        String text = exportPromptTemplate();
+        if (q == null) return text;
+        return text
+                .replace("{label}", safeText(q.label))
+                .replace("{type}", safeText(q.typeName))
+                .replace("{chapter}", safeText(q.chapter))
+                .replace("{knowledge}", safeText(q.knowledge))
+                .replace("{answer}", safeText(displayAnswer(q)))
+                .replace("{stem}", safeText(q.stem));
+    }
+
+    private String safeText(String value) {
+        return value == null ? "" : value;
+    }
+
+    private void showExportPromptConfigDialog() {
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+
+        FrameLayout shell = new FrameLayout(this);
+        shell.setPadding(dp(18), statusBarInset() + dp(18), dp(18), bottomSafeInset() + dp(14));
+        shell.setBackgroundColor(Color.argb(THEME_LIGHT.equals(themeMode) ? 54 : 84, 11, 17, 26));
+
+        LinearLayout panel = new LinearLayout(this);
+        panel.setOrientation(LinearLayout.VERTICAL);
+        panel.setPadding(dp(18), dp(18), dp(18), dp(16));
+        panel.setBackground(choiceSheetBackground());
+        panel.setElevation(dp(12));
+        shell.addView(panel, new FrameLayout.LayoutParams(-1, -2, Gravity.CENTER));
+
+        TextView title = text("题目导出提示词", 18, TEXT, true);
+        panel.addView(title, new LinearLayout.LayoutParams(-1, -2));
+
+        final EditText input = new EditText(this);
+        input.setText(exportPromptTemplate());
+        input.setHint("可用 {label}、{type}、{chapter}、{knowledge}、{answer}、{stem}");
+        input.setSingleLine(false);
+        input.setMinLines(5);
+        input.setMaxLines(9);
+        input.setGravity(Gravity.TOP | Gravity.START);
+        input.setInputType(InputType.TYPE_CLASS_TEXT
+                | InputType.TYPE_TEXT_FLAG_MULTI_LINE
+                | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+        input.setTextColor(TEXT);
+        input.setHintTextColor(MUTED);
+        input.setPadding(dp(14), dp(12), dp(14), dp(12));
+        input.setBackground(roundedStrokeBackground(PANEL, GLASS_STROKE, 18, 1));
+        input.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int action = event.getActionMasked();
+                if (action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_MOVE) {
+                    requestNoIntercept(true);
+                } else if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL) {
+                    requestNoIntercept(false);
+                }
+                return false;
+            }
+        });
+        LinearLayout.LayoutParams inputLp = new LinearLayout.LayoutParams(-1, -2);
+        inputLp.topMargin = dp(14);
+        panel.addView(input, inputLp);
+
+        Button saveButton = bigButton("保存", true);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String value = input.getText().toString().trim();
+                SharedPreferences.Editor editor = prefs.edit();
+                if (value.length() == 0 || value.equals(defaultExportPromptTemplate())) {
+                    editor.remove(PREF_EXPORT_PROMPT_TEMPLATE);
+                } else {
+                    editor.putString(PREF_EXPORT_PROMPT_TEMPLATE, value);
+                }
+                editor.apply();
+                dialog.dismiss();
+                Toast.makeText(MainActivity.this, "题目导出提示词已保存", Toast.LENGTH_SHORT).show();
+                renderQuestion();
+            }
+        });
+        LinearLayout.LayoutParams saveLp = new LinearLayout.LayoutParams(-1, dp(46));
+        saveLp.topMargin = dp(14);
+        panel.addView(saveButton, saveLp);
+
+        Button resetButton = bigButton("恢复默认", false);
+        resetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                input.setText(defaultExportPromptTemplate());
+                prefs.edit().remove(PREF_EXPORT_PROMPT_TEMPLATE).apply();
+                if (exportPromptLineView != null) {
+                    exportPromptLineView.setText("题目导出提示词 · " + exportPromptSummary());
+                }
+                Toast.makeText(MainActivity.this, "已恢复默认提示词", Toast.LENGTH_SHORT).show();
+            }
+        });
+        LinearLayout.LayoutParams resetLp = new LinearLayout.LayoutParams(-1, dp(46));
+        resetLp.topMargin = dp(8);
+        panel.addView(resetButton, resetLp);
+
+        Button closeButton = chromeButton("关闭");
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        LinearLayout.LayoutParams closeLp = new LinearLayout.LayoutParams(-1, dp(44));
+        closeLp.topMargin = dp(8);
+        panel.addView(closeButton, closeLp);
+
+        dialog.setContentView(shell);
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
+        dialog.show();
+    }
+
     private void shareCurrentQuestion() {
         if (cardMode) {
             Toast.makeText(this, "当前是思维导图模式，请回到题目后再分享本题", Toast.LENGTH_SHORT).show();
@@ -4430,8 +4779,7 @@ public class MainActivity extends Activity {
 
     private String buildCurrentQuestionShareText(Question q) {
         StringBuilder sb = new StringBuilder();
-        sb.append("请你像计算机网络老师一样，帮我把这道题讲到小白能懂。");
-        sb.append("请基于 App 的短解析和知识点详解继续展开：题眼是什么、为什么这样选、其他常见想法错在哪里、我应该怎么记。\n\n");
+        sb.append(applyExportPromptTemplate(q).trim()).append("\n\n");
         sb.append("# ").append(q.label).append(" ").append(q.typeName).append("\n\n");
         sb.append("- 章节：").append(q.chapter).append("\n");
         sb.append("- 知识点：").append(q.knowledge).append("\n");
