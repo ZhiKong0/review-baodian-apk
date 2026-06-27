@@ -1,4 +1,6 @@
-# v2.10.40
+# v2.10.41
+
+- Auto release after fix: Add the second course "Signal and Systems" with offline formula rendering and course-isolated state.
 
 - Auto release after fix: Quiz: add marked essay questions
 - Auto release after fix: Release: harden exam prep auto publishing

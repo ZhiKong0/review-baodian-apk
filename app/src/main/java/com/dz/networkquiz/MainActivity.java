@@ -53,6 +53,10 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.webkit.ValueCallback;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -115,6 +119,7 @@ public class MainActivity extends Activity {
     private static final String PREF_LAST_CHAPTER_FILTER = "last_chapter_filter";
     private static final String PREF_LAST_STUDY_MODE = "last_study_mode";
     private static final String PREF_LAST_QUESTION_PREFIX = "last_question_";
+    private static final String PREF_CURRENT_COURSE = "current_course";
     private static final String PREF_EXPORT_PROMPT_TEMPLATE = "export_prompt_template";
     private static final String PREF_FLOAT_EXPORT_X = "float_export_x";
     private static final String PREF_FLOAT_EXPORT_Y = "float_export_y";
@@ -128,6 +133,10 @@ public class MainActivity extends Activity {
     private static final String STUDY_MODE_CARD = "card";
     private static final String QUESTION_TYPE_ESSAY = "essay";
     private static final String PREF_LAST_CARD_CHAPTER = "last_card_chapter";
+    private static final String COURSE_NETWORK = "network";
+    private static final String COURSE_SIGNAL_SYSTEM = "signal_system";
+    private static final String COURSE_NETWORK_NAME = "计算机网络";
+    private static final String COURSE_SIGNAL_SYSTEM_NAME = "信号与系统";
     private static final String DEFAULT_UPDATE_REPO_SLUG = "ZhiKong0/exam-prep-handbook-apk";
     private static final String TAG_MARKDOWN_TABLE_SCROLL = "markdown_table_scroll";
     private static final String TAG_MIND_MAP_BOARD = "mind_map_board";
@@ -158,6 +167,7 @@ public class MainActivity extends Activity {
     private final List<EditText> blankInputs = new ArrayList<>();
     private LinearLayout optionList;
     private LinearLayout imageList;
+    private LinearLayout mathStemContainer;
     private FrameLayout pageFrame;
     private FrameLayout rootFrame;
     private ScrollView scrollView;
@@ -218,6 +228,7 @@ public class MainActivity extends Activity {
     private String currentCardChapter = null;
     private String typeFilter = ALL_TYPES;
     private String chapterFilter = ALL_CHAPTERS;
+    private String currentCourseId = COURSE_NETWORK;
     private int currentCardIndex = 0;
     private boolean cardBackVisible = false;
     private float swipeStartX = 0;
@@ -285,6 +296,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         prefs = getSharedPreferences("quiz_state", MODE_PRIVATE);
         themeMode = prefs.getString(PREF_THEME_MODE, THEME_LIGHT);
+        currentCourseId = normalizeCourseId(prefs.getString(PREF_CURRENT_COURSE, COURSE_NETWORK));
         String savedRepoSlug = prefs.getString(PREF_UPDATE_REPO_SLUG, "");
         updateRepoSlug = ensureDefaultUpdateRepoSlug(savedRepoSlug);
         if (!updateRepoSlug.equals(normalizeRepoSlug(savedRepoSlug))) {
@@ -545,9 +557,71 @@ public class MainActivity extends Activity {
         getWindow().getDecorView().setSystemUiVisibility(visibility);
     }
 
-    private void loadQuestions() {
+    private String normalizeCourseId(String value) {
+        if (COURSE_SIGNAL_SYSTEM.equals(value)) return COURSE_SIGNAL_SYSTEM;
+        return COURSE_NETWORK;
+    }
+
+    private String courseName(String courseId) {
+        return COURSE_SIGNAL_SYSTEM.equals(normalizeCourseId(courseId))
+                ? COURSE_SIGNAL_SYSTEM_NAME
+                : COURSE_NETWORK_NAME;
+    }
+
+    private String currentCourseName() {
+        return courseName(currentCourseId);
+    }
+
+    private boolean isSignalSystemCourse() {
+        return COURSE_SIGNAL_SYSTEM.equals(currentCourseId);
+    }
+
+    private String currentQuestionsAssetName() {
+        return questionsAssetName(currentCourseId);
+    }
+
+    private String questionsAssetName(String courseId) {
+        return COURSE_SIGNAL_SYSTEM.equals(normalizeCourseId(courseId))
+                ? "signal_system_questions.json"
+                : "questions.json";
+    }
+
+    private String coursePrefName(String base) {
+        if (COURSE_NETWORK.equals(currentCourseId)) return base;
+        return base + "_" + currentCourseId;
+    }
+
+    private int assetQuestionCount(String courseId) {
+        if (normalizeCourseId(courseId).equals(currentCourseId)) {
+            return allQuestions.size();
+        }
         try {
-            String json = readAssetText("questions.json");
+            return new JSONArray(readAssetText(questionsAssetName(courseId))).length();
+        } catch (Exception ignored) {
+            return 0;
+        }
+    }
+
+    private int assetChapterCount(String courseId) {
+        if (normalizeCourseId(courseId).equals(currentCourseId)) {
+            return chapterList().size();
+        }
+        Set<String> chapters = new LinkedHashSet<>();
+        try {
+            JSONArray arr = new JSONArray(readAssetText(questionsAssetName(courseId)));
+            for (int i = 0; i < arr.length(); i++) {
+                String chapter = arr.getJSONObject(i).optString("chapter", "");
+                if (chapter.length() > 0) chapters.add(chapter);
+            }
+        } catch (Exception ignored) {
+        }
+        return chapters.size();
+    }
+
+    private void loadQuestions() {
+        allQuestions.clear();
+        try {
+            String json = readAssetText(currentQuestionsAssetName());
             JSONArray arr = new JSONArray(json);
             for (int i = 0; i < arr.length(); i++) {
                 JSONObject obj = arr.getJSONObject(i);
@@ -563,6 +637,7 @@ public class MainActivity extends Activity {
                 q.quickExplanation = obj.optString("quickExplanation", "");
                 q.knowledgeDetail = obj.optString("knowledgeDetail", "");
                 q.explanation = obj.optString("explanation", "");
+                q.courseId = currentCourseId;
                 JSONArray opts = obj.optJSONArray("options");
                 if (opts != null) {
                     for (int j = 0; j < opts.length(); j++) {
@@ -586,6 +661,9 @@ public class MainActivity extends Activity {
 
     private void loadMemoryCards() {
         allMemoryCards.clear();
+        if (isSignalSystemCourse()) {
+            return;
+        }
         try {
             String json = readAssetText("chapter_cards.json");
             JSONArray arr = new JSONArray(json);
@@ -1410,6 +1488,12 @@ public class MainActivity extends Activity {
         installQuestionPageSwipeProxy(stemView);
         contentContainer.addView(stemView, new LinearLayout.LayoutParams(-1, -2));
 
+        mathStemContainer = new LinearLayout(this);
+        mathStemContainer.setOrientation(LinearLayout.VERTICAL);
+        mathStemContainer.setVisibility(View.GONE);
+        installQuestionPageSwipeProxy(mathStemContainer);
+        contentContainer.addView(mathStemContainer, new LinearLayout.LayoutParams(-1, -2));
+
         imageList = new LinearLayout(this);
         imageList.setOrientation(LinearLayout.VERTICAL);
         imageList.setPadding(0, dp(14), 0, 0);
@@ -1646,14 +1730,14 @@ public class MainActivity extends Activity {
         appTitle.setIncludeFontPadding(false);
         sideDrawerPanel.addView(appTitle, new LinearLayout.LayoutParams(-1, -2));
 
-        TextView courseTitle = text("计算机网络 · " + currentVersionSummary(), 12, MUTED, false);
+        TextView courseTitle = text(currentCourseName() + " · " + currentVersionSummary(), 12, MUTED, false);
         courseTitle.setIncludeFontPadding(false);
         LinearLayout.LayoutParams courseLp = new LinearLayout.LayoutParams(-1, -2);
         courseLp.topMargin = dp(6);
         sideDrawerPanel.addView(courseTitle, courseLp);
 
         addDrawerSection("更多");
-        addDrawerRow("课程选择", "返回课程入口，目前包含计算机网络", BLUE, homeMode, new Runnable() {
+        addDrawerRow("课程选择", "切换计算机网络 / 信号与系统", BLUE, homeMode, new Runnable() {
             @Override
             public void run() {
                 showCoursesHome();
@@ -1677,7 +1761,7 @@ public class MainActivity extends Activity {
         if (!homeMode && !settingsMode && !suggestionsMode) {
             return currentStudyModeValue();
         }
-        return prefs == null ? STUDY_MODE_QUIZ : prefs.getString(PREF_LAST_STUDY_MODE, STUDY_MODE_QUIZ);
+        return prefs == null ? STUDY_MODE_QUIZ : prefs.getString(coursePrefName(PREF_LAST_STUDY_MODE), STUDY_MODE_QUIZ);
     }
 
     private void addDrawerSection(String label) {
@@ -1879,20 +1963,20 @@ public class MainActivity extends Activity {
     }
 
     private void restoreStudyFilters() {
-        String savedType = prefs.getString(PREF_LAST_TYPE_FILTER, ALL_TYPES);
+        String savedType = prefs.getString(coursePrefName(PREF_LAST_TYPE_FILTER), ALL_TYPES);
         typeFilter = typeItems().contains(savedType) ? savedType : ALL_TYPES;
-        String savedChapter = prefs.getString(PREF_LAST_CHAPTER_FILTER, ALL_CHAPTERS);
+        String savedChapter = prefs.getString(coursePrefName(PREF_LAST_CHAPTER_FILTER), ALL_CHAPTERS);
         chapterFilter = chapterItems().contains(savedChapter) ? savedChapter : ALL_CHAPTERS;
     }
 
     private void showRestoredStudyMode() {
-        String mode = prefs.getString(PREF_LAST_STUDY_MODE, STUDY_MODE_QUIZ);
+        String mode = prefs.getString(coursePrefName(PREF_LAST_STUDY_MODE), STUDY_MODE_QUIZ);
         if (STUDY_MODE_REMEMBER.equals(mode)) {
             showRememberMode();
         } else if (STUDY_MODE_WRONG.equals(mode)) {
             showWrongMode();
         } else if (STUDY_MODE_CARD.equals(mode)) {
-            showCardMode(prefs.getString(PREF_LAST_CARD_CHAPTER, null));
+            showCardMode(prefs.getString(coursePrefName(PREF_LAST_CARD_CHAPTER), null));
         } else {
             showAllMode();
         }
@@ -1906,7 +1990,7 @@ public class MainActivity extends Activity {
     }
 
     private String lastQuestionKey(String mode, String type, String chapter) {
-        return PREF_LAST_QUESTION_PREFIX + mode + "|" + String.valueOf(type) + "|" + String.valueOf(chapter);
+        return coursePrefName(PREF_LAST_QUESTION_PREFIX) + mode + "|" + String.valueOf(type) + "|" + String.valueOf(chapter);
     }
 
     private int restoredQuestionIndexForActiveGroup() {
@@ -1926,9 +2010,9 @@ public class MainActivity extends Activity {
         if (prefs == null || homeMode || suggestionsMode || cardMode || settingsMode) return;
         String mode = currentStudyModeValue();
         SharedPreferences.Editor editor = prefs.edit()
-                .putString(PREF_LAST_STUDY_MODE, mode)
-                .putString(PREF_LAST_TYPE_FILTER, typeFilter)
-                .putString(PREF_LAST_CHAPTER_FILTER, chapterFilter);
+                .putString(coursePrefName(PREF_LAST_STUDY_MODE), mode)
+                .putString(coursePrefName(PREF_LAST_TYPE_FILTER), typeFilter)
+                .putString(coursePrefName(PREF_LAST_CHAPTER_FILTER), chapterFilter);
         if (label != null && label.length() > 0) {
             editor.putString(lastQuestionKey(mode, typeFilter, chapterFilter), label);
         }
@@ -2519,11 +2603,20 @@ public class MainActivity extends Activity {
     private List<String> typeItems() {
         List<String> items = new ArrayList<>();
         items.add(ALL_TYPES);
-        items.add("判断题");
-        items.add("单选题");
-        items.add("多选题");
-        items.add("填空题");
-        items.add("大题");
+        Set<String> present = new LinkedHashSet<>();
+        for (Question q : allQuestions) {
+            if (q.typeName != null && q.typeName.length() > 0) {
+                present.add(q.typeName);
+            }
+        }
+        String[] order = new String[] {"判断题", "单选题", "多选题", "填空题", "大题"};
+        for (String name : order) {
+            if (present.contains(name)) {
+                items.add(name);
+                present.remove(name);
+            }
+        }
+        items.addAll(present);
         return items;
     }
 
@@ -2677,6 +2770,11 @@ public class MainActivity extends Activity {
 
         if (visibleQuestions.isEmpty()) {
             persistStudyProgress(null);
+            if (mathStemContainer != null) {
+                mathStemContainer.removeAllViews();
+                mathStemContainer.setVisibility(View.GONE);
+            }
+            stemView.setVisibility(View.VISIBLE);
             stemView.setText(emptyMessage());
             refreshEmptyMeta();
             submitButton.setText("提交");
@@ -2705,7 +2803,7 @@ public class MainActivity extends Activity {
             submitButton.setVisibility(rememberMode ? View.GONE : View.VISIBLE);
         }
         refreshMeta(q);
-        stemView.setText(q.stem);
+        renderQuestionStem(q);
 
         for (String path : q.images) {
             addImage(path);
@@ -2730,6 +2828,10 @@ public class MainActivity extends Activity {
         submitted = false;
         lastAnswerOk = null;
         optionList.removeAllViews();
+        if (mathStemContainer != null) {
+            mathStemContainer.removeAllViews();
+            mathStemContainer.setVisibility(View.GONE);
+        }
         imageList.removeAllViews();
         memoryReasonContainer.removeAllViews();
         memoryReasonContainer.setVisibility(View.GONE);
@@ -2766,39 +2868,8 @@ public class MainActivity extends Activity {
         sectionLp.topMargin = dp(18);
         optionList.addView(section, sectionLp);
 
-        LinearLayout courseCard = new LinearLayout(this);
-        courseCard.setOrientation(LinearLayout.VERTICAL);
-        courseCard.setPadding(dp(18), dp(16), dp(18), dp(16));
-        courseCard.setBackground(courseEntryBackground());
-        courseCard.setClickable(true);
-        courseCard.setFocusable(true);
-        courseCard.setContentDescription("进入计算机网络课程");
-        if (Build.VERSION.SDK_INT >= 21) {
-            courseCard.setElevation(dp(4));
-        }
-        installPressFeedback(courseCard);
-        courseCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showRestoredStudyMode();
-            }
-        });
-        TextView courseTitle = text("计算机网络", 20, TEXT, true);
-        courseTitle.setIncludeFontPadding(false);
-        courseCard.addView(courseTitle, new LinearLayout.LayoutParams(-1, -2));
-        TextView courseMeta = text(allQuestions.size() + " 题 · " + chapterList().size()
-                + " 章 · 刷题 / 记题 / 错题 / 导图", 13, MUTED, false);
-        courseMeta.setLineSpacing(dp(3), 1.0f);
-        LinearLayout.LayoutParams courseMetaLp = new LinearLayout.LayoutParams(-1, -2);
-        courseMetaLp.topMargin = dp(8);
-        courseCard.addView(courseMeta, courseMetaLp);
-        TextView courseAction = text("继续学习", 13, BLUE, true);
-        LinearLayout.LayoutParams courseActionLp = new LinearLayout.LayoutParams(-1, -2);
-        courseActionLp.topMargin = dp(14);
-        courseCard.addView(courseAction, courseActionLp);
-        LinearLayout.LayoutParams courseLp = new LinearLayout.LayoutParams(-1, -2);
-        courseLp.topMargin = dp(10);
-        optionList.addView(courseCard, courseLp);
+        addCourseEntryCard(COURSE_NETWORK);
+        addCourseEntryCard(COURSE_SIGNAL_SYSTEM);
 
         scrollView.post(new Runnable() {
             @Override
@@ -2806,6 +2877,66 @@ public class MainActivity extends Activity {
                 scrollView.scrollTo(0, 0);
             }
         });
+    }
+
+    private void addCourseEntryCard(final String courseId) {
+        boolean active = normalizeCourseId(courseId).equals(currentCourseId);
+        LinearLayout courseCard = new LinearLayout(this);
+        courseCard.setOrientation(LinearLayout.VERTICAL);
+        courseCard.setPadding(dp(18), dp(16), dp(18), dp(16));
+        courseCard.setBackground(courseEntryBackground());
+        courseCard.setClickable(true);
+        courseCard.setFocusable(true);
+        courseCard.setContentDescription("进入" + courseName(courseId) + "课程");
+        if (Build.VERSION.SDK_INT >= 21) {
+            courseCard.setElevation(dp(4));
+        }
+        installPressFeedback(courseCard);
+        courseCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchCourse(courseId);
+            }
+        });
+        TextView courseTitle = text(courseName(courseId), 20, active ? BLUE : TEXT, true);
+        courseTitle.setIncludeFontPadding(false);
+        courseCard.addView(courseTitle, new LinearLayout.LayoutParams(-1, -2));
+        String features = COURSE_SIGNAL_SYSTEM.equals(normalizeCourseId(courseId))
+                ? "刷题 / 记题 / 错题 · 导图稍后补"
+                : "刷题 / 记题 / 错题 / 导图";
+        TextView courseMeta = text(assetQuestionCount(courseId) + " 题 · " + assetChapterCount(courseId)
+                + " 章 · " + features, 13, MUTED, false);
+        courseMeta.setLineSpacing(dp(3), 1.0f);
+        LinearLayout.LayoutParams courseMetaLp = new LinearLayout.LayoutParams(-1, -2);
+        courseMetaLp.topMargin = dp(8);
+        courseCard.addView(courseMeta, courseMetaLp);
+        TextView courseAction = text(active ? "继续当前课程" : "切换并学习", 13, BLUE, true);
+        LinearLayout.LayoutParams courseActionLp = new LinearLayout.LayoutParams(-1, -2);
+        courseActionLp.topMargin = dp(14);
+        courseCard.addView(courseAction, courseActionLp);
+        LinearLayout.LayoutParams courseLp = new LinearLayout.LayoutParams(-1, -2);
+        courseLp.topMargin = dp(10);
+        optionList.addView(courseCard, courseLp);
+    }
+
+    private void switchCourse(String courseId) {
+        String next = normalizeCourseId(courseId);
+        if (!next.equals(currentCourseId)) {
+            currentCourseId = next;
+            prefs.edit().putString(PREF_CURRENT_COURSE, currentCourseId).apply();
+            loadQuestions();
+            loadMemoryCards();
+            restoreStudyFilters();
+            visibleQuestions.clear();
+            visibleCards.clear();
+            currentIndex = 0;
+            currentCardIndex = 0;
+            currentCardChapter = null;
+            submitted = false;
+            lastAnswerOk = null;
+            Toast.makeText(this, "已切换到" + currentCourseName(), Toast.LENGTH_SHORT).show();
+        }
+        showRestoredStudyMode();
     }
 
     private void renderSuggestionsPage() {
@@ -2856,6 +2987,10 @@ public class MainActivity extends Activity {
         lastAnswerOk = null;
         optionList.setPadding(0, dp(16), 0, dp(8));
         optionList.removeAllViews();
+        if (mathStemContainer != null) {
+            mathStemContainer.removeAllViews();
+            mathStemContainer.setVisibility(View.GONE);
+        }
         imageList.removeAllViews();
         memoryReasonContainer.removeAllViews();
         memoryReasonContainer.setVisibility(View.GONE);
@@ -2865,9 +3000,11 @@ public class MainActivity extends Activity {
         if (visibleCards.isEmpty()) {
             if (filterRowView != null) filterRowView.setVisibility(View.VISIBLE);
             stemView.setVisibility(View.VISIBLE);
-            stemView.setText("当前没有可显示的思维导图");
+            stemView.setText(isSignalSystemCourse()
+                    ? "信号与系统导图暂未生成"
+                    : "当前没有可显示的思维导图");
             progressPeekView.setText("0/0");
-            metaView.setText("请重新选择章节");
+            metaView.setText(isSignalSystemCourse() ? "先用刷题 / 记题 / 错题复习" : "请重新选择章节");
             return;
         }
         if (currentCardIndex < 0) currentCardIndex = 0;
@@ -3079,11 +3216,11 @@ public class MainActivity extends Activity {
         visibleCards.addAll(buildMemoryCards(chapter));
         currentCardIndex = 0;
         cardBackVisible = true;
-        SharedPreferences.Editor editor = prefs.edit().putString(PREF_LAST_STUDY_MODE, STUDY_MODE_CARD);
+        SharedPreferences.Editor editor = prefs.edit().putString(coursePrefName(PREF_LAST_STUDY_MODE), STUDY_MODE_CARD);
         if (chapter == null || chapter.length() == 0) {
-            editor.remove(PREF_LAST_CARD_CHAPTER);
+            editor.remove(coursePrefName(PREF_LAST_CARD_CHAPTER));
         } else {
-            editor.putString(PREF_LAST_CARD_CHAPTER, chapter);
+            editor.putString(coursePrefName(PREF_LAST_CARD_CHAPTER), chapter);
         }
         editor.apply();
         renderQuestion();
@@ -3717,6 +3854,276 @@ public class MainActivity extends Activity {
         return values;
     }
 
+    private boolean usesMathRenderer(Question q) {
+        return q != null && COURSE_SIGNAL_SYSTEM.equals(q.courseId);
+    }
+
+    private void renderQuestionStem(Question q) {
+        if (usesMathRenderer(q)) {
+            stemView.setVisibility(View.GONE);
+            if (mathStemContainer != null) {
+                renderMathMarkdown(mathStemContainer, q.stem, dp(96));
+            }
+        } else {
+            if (mathStemContainer != null) {
+                mathStemContainer.removeAllViews();
+                mathStemContainer.setVisibility(View.GONE);
+            }
+            stemView.setVisibility(View.VISIBLE);
+            stemView.setText(q.stem);
+        }
+    }
+
+    private void renderQuestionMarkdown(LinearLayout container, String markdown, Question q) {
+        if (usesMathRenderer(q)) {
+            renderMathMarkdown(container, markdown, dp(160));
+        } else {
+            renderMarkdown(container, markdown);
+        }
+    }
+
+    private void renderMathMarkdown(final LinearLayout container, String markdown, int initialHeightPx) {
+        container.removeAllViews();
+        container.setVisibility(View.VISIBLE);
+        WebView webView = new WebView(this);
+        webView.setBackgroundColor(Color.TRANSPARENT);
+        webView.setVerticalScrollBarEnabled(false);
+        webView.setHorizontalScrollBarEnabled(false);
+        webView.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        WebSettings settings = webView.getSettings();
+        settings.setJavaScriptEnabled(true);
+        settings.setDefaultTextEncodingName("utf-8");
+        settings.setAllowFileAccess(true);
+        settings.setAllowContentAccess(true);
+        settings.setTextZoom(100);
+        settings.setLoadWithOverviewMode(false);
+        settings.setUseWideViewPort(false);
+        webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageFinished(final WebView view, String url) {
+                resizeMathWebView(view, 120);
+                resizeMathWebView(view, 600);
+                resizeMathWebView(view, 1200);
+            }
+        });
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(-1, Math.max(dp(64), initialHeightPx));
+        lp.bottomMargin = dp(8);
+        container.addView(webView, lp);
+        webView.loadDataWithBaseURL(
+                "file:///android_asset/",
+                buildMathHtml(markdown == null ? "" : markdown),
+                "text/html",
+                "UTF-8",
+                null);
+    }
+
+    private void resizeMathWebView(final WebView view, int delayMs) {
+        view.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (Build.VERSION.SDK_INT < 19) return;
+                view.evaluateJavascript("(function(){return Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);})()",
+                        new ValueCallback<String>() {
+                            @Override
+                            public void onReceiveValue(String value) {
+                                try {
+                                    String clean = value == null ? "0" : value.replace("\"", "").trim();
+                                    int cssHeight = (int) Math.ceil(Double.parseDouble(clean));
+                                    int px = Math.min(dp(12000), Math.max(dp(64), (int) (cssHeight * getResources().getDisplayMetrics().density) + dp(18)));
+                                    ViewGroup.LayoutParams lp = view.getLayoutParams();
+                                    if (lp != null && Math.abs(lp.height - px) > dp(4)) {
+                                        lp.height = px;
+                                        view.setLayoutParams(lp);
+                                    }
+                                } catch (Exception ignored) {
+                                }
+                            }
+                        });
+            }
+        }, delayMs);
+    }
+
+    private String buildMathHtml(String markdown) {
+        return "<!doctype html><html><head><meta charset=\"utf-8\">"
+                + "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1\">"
+                + "<style>"
+                + "html,body{margin:0;padding:0;background:transparent;color:" + cssColor(TEXT) + ";font-family:sans-serif;font-size:16px;line-height:1.58;}"
+                + "body{padding:2px 2px 10px 2px;}"
+                + "h1{font-size:20px;line-height:1.35;color:" + cssColor(BLUE) + ";margin:0 0 10px;font-weight:800;}"
+                + "h2{font-size:18px;color:" + cssColor(BLUE) + ";margin:14px 0 8px;font-weight:800;}"
+                + "h3{font-size:16px;color:" + cssColor(TEXT) + ";margin:12px 0 6px;font-weight:800;}"
+                + "p{margin:0 0 10px;}"
+                + "ul{margin:0 0 10px 20px;padding:0;}"
+                + "li{margin:0 0 7px;}"
+                + "code{background:rgba(128,128,128,.16);border-radius:6px;padding:1px 4px;}"
+                + ".reason{background:" + cssColor(HIGHLIGHT) + ";border-radius:10px;padding:9px 10px;margin:8px 0;font-weight:700;}"
+                + "table{border-collapse:separate;border-spacing:0;width:100%;margin:8px 0 12px;font-size:14px;}"
+                + "th,td{border:1px solid " + cssColor(CHIP_STROKE) + ";padding:7px 8px;vertical-align:top;}"
+                + "th{background:rgba(120,150,255,.14);font-weight:800;}"
+                + "mjx-container[jax='SVG']{overflow-x:auto;overflow-y:hidden;max-width:100%;padding:2px 0;}"
+                + "</style>"
+                + "<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\\\(','\\\\)']],displayMath:[['$$','$$'],['\\\\[','\\\\]']],processEscapes:true},svg:{fontCache:'none'},options:{skipHtmlTags:['script','noscript','style','textarea','pre']}};</script>"
+                + "<script src=\"mathjax/tex-svg-full.js\"></script>"
+                + "</head><body>" + markdownToHtml(markdown) + "</body></html>";
+    }
+
+    private String markdownToHtml(String markdown) {
+        String[] lines = markdown.replace("\r\n", "\n").replace('\r', '\n').split("\n");
+        StringBuilder html = new StringBuilder();
+        StringBuilder paragraph = new StringBuilder();
+        boolean inList = false;
+        for (int i = 0; i < lines.length; i++) {
+            String line = lines[i] == null ? "" : lines[i].trim();
+            if (line.startsWith("$$")) {
+                flushHtmlParagraph(html, paragraph);
+                if (inList) {
+                    html.append("</ul>");
+                    inList = false;
+                }
+                StringBuilder math = new StringBuilder(line);
+                while (!line.endsWith("$$") || math.length() <= 2) {
+                    i++;
+                    if (i >= lines.length) break;
+                    line = lines[i] == null ? "" : lines[i].trim();
+                    math.append("\n").append(line);
+                    if (line.endsWith("$$") && math.length() > 2) break;
+                }
+                html.append("<div>").append(escapeHtml(math.toString())).append("</div>");
+                continue;
+            }
+            if (line.length() == 0) {
+                flushHtmlParagraph(html, paragraph);
+                if (inList) {
+                    html.append("</ul>");
+                    inList = false;
+                }
+                continue;
+            }
+            if (isMarkdownTableStart(lines, i)) {
+                flushHtmlParagraph(html, paragraph);
+                if (inList) {
+                    html.append("</ul>");
+                    inList = false;
+                }
+                i = appendHtmlTable(html, lines, i);
+                continue;
+            }
+            if (line.startsWith("# ")) {
+                flushHtmlParagraph(html, paragraph);
+                if (inList) {
+                    html.append("</ul>");
+                    inList = false;
+                }
+                html.append("<h1>").append(inlineHtml(line.substring(2))).append("</h1>");
+            } else if (line.startsWith("## ")) {
+                flushHtmlParagraph(html, paragraph);
+                if (inList) {
+                    html.append("</ul>");
+                    inList = false;
+                }
+                html.append("<h2>").append(inlineHtml(line.substring(3))).append("</h2>");
+            } else if (line.startsWith("### ")) {
+                flushHtmlParagraph(html, paragraph);
+                if (inList) {
+                    html.append("</ul>");
+                    inList = false;
+                }
+                html.append("<h3>").append(inlineHtml(line.substring(4))).append("</h3>");
+            } else if (isStandaloneReasonHighlightLine(line)) {
+                flushHtmlParagraph(html, paragraph);
+                if (inList) {
+                    html.append("</ul>");
+                    inList = false;
+                }
+                html.append("<div class=\"reason\">").append(inlineHtml(line)).append("</div>");
+            } else if (line.startsWith("- ")) {
+                flushHtmlParagraph(html, paragraph);
+                if (!inList) {
+                    html.append("<ul>");
+                    inList = true;
+                }
+                String item = line.substring(2);
+                if (isReasonHighlightLine(line)) {
+                    html.append("</ul><div class=\"reason\">").append(inlineHtml(item)).append("</div><ul>");
+                } else {
+                    html.append("<li>").append(inlineHtml(item)).append("</li>");
+                }
+            } else {
+                if (paragraph.length() > 0) paragraph.append("<br>");
+                paragraph.append(inlineHtml(line));
+            }
+        }
+        flushHtmlParagraph(html, paragraph);
+        if (inList) html.append("</ul>");
+        return html.toString();
+    }
+
+    private int appendHtmlTable(StringBuilder html, String[] lines, int start) {
+        List<String> header = splitMarkdownTableRow(lines[start]);
+        html.append("<table><thead><tr>");
+        for (String cell : header) {
+            html.append("<th>").append(inlineHtml(cell)).append("</th>");
+        }
+        html.append("</tr></thead><tbody>");
+        int i = start + 2;
+        while (i < lines.length && looksLikeMarkdownTableRow(lines[i])) {
+            List<String> row = splitMarkdownTableRow(lines[i]);
+            html.append("<tr>");
+            for (String cell : row) {
+                html.append("<td>").append(inlineHtml(cell)).append("</td>");
+            }
+            html.append("</tr>");
+            i++;
+        }
+        html.append("</tbody></table>");
+        return i - 1;
+    }
+
+    private void flushHtmlParagraph(StringBuilder html, StringBuilder paragraph) {
+        if (paragraph.length() == 0) return;
+        html.append("<p>").append(paragraph).append("</p>");
+        paragraph.setLength(0);
+    }
+
+    private String inlineHtml(String value) {
+        String escaped = escapeHtml(value == null ? "" : value);
+        StringBuilder out = new StringBuilder();
+        int index = 0;
+        while (index < escaped.length()) {
+            int start = escaped.indexOf("**", index);
+            if (start < 0) {
+                out.append(escaped.substring(index));
+                break;
+            }
+            out.append(escaped, index, start);
+            int end = escaped.indexOf("**", start + 2);
+            if (end < 0) {
+                out.append(escaped.substring(start));
+                break;
+            }
+            out.append("<strong>").append(escaped, start + 2, end).append("</strong>");
+            index = end + 2;
+        }
+        return out.toString()
+                .replace("`", "")
+                .replace("\\n", "<br>");
+    }
+
+    private String escapeHtml(String value) {
+        return value == null ? "" : value
+                .replace("&", "&amp;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;");
+    }
+
+    private String cssColor(int color) {
+        return String.format(Locale.US, "rgba(%d,%d,%d,%.3f)",
+                Color.red(color),
+                Color.green(color),
+                Color.blue(color),
+                Color.alpha(color) / 255f);
+    }
+
     private Question currentQuestion() {
         return visibleQuestions.get(currentIndex);
     }
@@ -3809,7 +4216,7 @@ public class MainActivity extends Activity {
             sb.append("## 解析\n\n");
             sb.append(markdownizeExplanationBlock(q.explanation)).append("\n");
         }
-        renderMarkdown(feedbackContainer, sb.toString());
+        renderQuestionMarkdown(feedbackContainer, sb.toString(), q);
         addEssaySelfAssessmentButtons(q);
         scrollView.post(new Runnable() {
             @Override
@@ -3869,6 +4276,10 @@ public class MainActivity extends Activity {
     }
 
     private void addOptionView(final Question q, final Option opt) {
+        if (usesMathRenderer(q)) {
+            addMathOptionView(q, opt);
+            return;
+        }
         TextView view = text(opt.text, 18, TEXT, false);
         view.setGravity(Gravity.CENTER_VERTICAL);
         view.setMinHeight(dp(62));
@@ -3897,6 +4308,44 @@ public class MainActivity extends Activity {
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(-1, -2);
         lp.bottomMargin = dp(10);
         optionList.addView(view, lp);
+    }
+
+    private void addMathOptionView(final Question q, final Option opt) {
+        final LinearLayout box = new LinearLayout(this);
+        box.setOrientation(LinearLayout.VERTICAL);
+        box.setGravity(Gravity.CENTER_VERTICAL);
+        box.setMinimumHeight(dp(62));
+        box.setBackground(optionBackground(false));
+        box.setPadding(dp(12), dp(10), dp(12), dp(10));
+        box.setClickable(true);
+        box.setFocusable(true);
+        box.setTag(opt.key);
+        box.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (submitted || rememberMode) return;
+                selected.clear();
+                selected.add(opt.key);
+                refreshOptionStyles(q);
+                submitAnswer();
+            }
+        });
+        renderMathMarkdown(box, opt.text, dp(64));
+        if (box.getChildCount() > 0) {
+            View child = box.getChildAt(0);
+            child.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    if (event.getAction() == MotionEvent.ACTION_UP) {
+                        box.performClick();
+                    }
+                    return true;
+                }
+            });
+        }
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(-1, -2);
+        lp.bottomMargin = dp(10);
+        optionList.addView(box, lp);
     }
 
     private void refreshOptionStyles(Question q) {
@@ -3945,7 +4394,7 @@ public class MainActivity extends Activity {
     }
 
     private void showFeedback(Question q, boolean ok) {
-        renderMarkdown(feedbackContainer, buildFeedbackMarkdown(q, ok));
+        renderQuestionMarkdown(feedbackContainer, buildFeedbackMarkdown(q, ok), q);
         Toast.makeText(this, shortProgressToast(q, ok), Toast.LENGTH_SHORT).show();
         refreshMeta(q);
         scrollView.post(new Runnable() {
@@ -4923,7 +5372,7 @@ public class MainActivity extends Activity {
             memoryReasonContainer.setVisibility(View.GONE);
             return;
         }
-        renderMarkdown(memoryReasonContainer, "## 理由与辨析\n\n" + markdown);
+        renderQuestionMarkdown(memoryReasonContainer, "## 理由与辨析\n\n" + markdown, q);
         LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) memoryReasonContainer.getLayoutParams();
         if (lp != null) {
             lp.topMargin = dp(12);
@@ -5046,19 +5495,19 @@ public class MainActivity extends Activity {
     }
 
     private Set<String> getWrongSet() {
-        return new HashSet<>(prefs.getStringSet("wrong", new HashSet<>()));
+        return new HashSet<>(prefs.getStringSet(coursePrefName("wrong"), new HashSet<>()));
     }
 
     private void addWrong(String label) {
         Set<String> wrong = getWrongSet();
         wrong.add(label);
-        prefs.edit().putStringSet("wrong", wrong).putInt(wrongMasteryKey(label), 0).apply();
+        prefs.edit().putStringSet(coursePrefName("wrong"), wrong).putInt(wrongMasteryKey(label), 0).apply();
     }
 
     private void removeWrong(String label) {
         Set<String> wrong = getWrongSet();
         if (wrong.remove(label)) {
-            prefs.edit().putStringSet("wrong", wrong).remove(wrongMasteryKey(label)).apply();
+            prefs.edit().putStringSet(coursePrefName("wrong"), wrong).remove(wrongMasteryKey(label)).apply();
         }
     }
 
@@ -5112,7 +5561,7 @@ public class MainActivity extends Activity {
     }
 
     private String wrongMasteryKey(String label) {
-        return "wrong_mastery_" + label;
+        return coursePrefName("wrong_mastery_" + label);
     }
 
     private int getWrongMasteryCount(String label) {
@@ -5165,7 +5614,8 @@ public class MainActivity extends Activity {
         } else {
             refreshMeta(currentQuestion());
             if (submitted && lastAnswerOk != null) {
-                renderMarkdown(feedbackContainer, buildFeedbackMarkdown(currentQuestion(), lastAnswerOk));
+                Question q = currentQuestion();
+                renderQuestionMarkdown(feedbackContainer, buildFeedbackMarkdown(q, lastAnswerOk), q);
             }
         }
     }
@@ -5212,10 +5662,10 @@ public class MainActivity extends Activity {
             String md = buildWrongMarkdown(wrong);
             shareMarkdownFile(
                     ExportProvider.EXPORT_NAME,
-                    "计算机网络错题本",
+                    currentCourseName() + "错题本",
                     "分享错题本",
                     md,
-                    "计算机网络错题本 Markdown 文件见附件。",
+                    currentCourseName() + "错题本 Markdown 文件见附件。",
                     "已生成错题本 Markdown，并打开分享"
             );
         } catch (Exception e) {
@@ -5254,7 +5704,7 @@ public class MainActivity extends Activity {
         StringBuilder sb = new StringBuilder();
         sb.append("# 备考宝典反馈建议\n\n");
         sb.append("- App 版本：").append(currentVersionSummary()).append("\n");
-        sb.append("- 当前课程：计算机网络\n");
+        sb.append("- 当前课程：").append(currentCourseName()).append("\n");
         sb.append("- 当前页面：").append(currentPageSummary()).append("\n");
         sb.append("- 当前筛选：").append(activeFilterText()).append("\n");
         sb.append("- 当前题目：").append(currentQuestionSummaryForFeedback()).append("\n\n");
@@ -5287,7 +5737,7 @@ public class MainActivity extends Activity {
     }
 
     private String defaultExportPromptTemplate() {
-        return "请你像“备考宝典：计算机网络”的老师一样，帮我把这道题讲到小白能懂。\n"
+        return "请你像“备考宝典：" + currentCourseName() + "”的老师一样，帮我把这道题讲到小白能懂。\n"
                 + "请基于 App 的短解析和知识点详解继续展开：题眼是什么、为什么这样选、其他常见想法错在哪里、我应该怎么记。";
     }
 
@@ -5316,7 +5766,8 @@ public class MainActivity extends Activity {
                 .replace("{chapter}", safeText(q.chapter))
                 .replace("{knowledge}", safeText(q.knowledge))
                 .replace("{answer}", safeText(displayAnswer(q)))
-                .replace("{stem}", safeText(q.stem));
+                .replace("{stem}", safeText(q.stem))
+                .replace("{course}", safeText(currentCourseName()));
     }
 
     private String safeText(String value) {
@@ -5442,12 +5893,12 @@ public class MainActivity extends Activity {
             String text = buildCurrentQuestionShareText(q);
             ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
             if (clipboard != null) {
-                clipboard.setPrimaryClip(ClipData.newPlainText("备考宝典：计算机网络当前题目", text));
+                clipboard.setPrimaryClip(ClipData.newPlainText("备考宝典：" + currentCourseName() + "当前题目", text));
             }
 
             Intent send = new Intent(Intent.ACTION_SEND);
             send.setType("text/plain");
-            send.putExtra(Intent.EXTRA_SUBJECT, "备考宝典：计算机网络题目 " + q.label);
+            send.putExtra(Intent.EXTRA_SUBJECT, "备考宝典：" + currentCourseName() + "题目 " + q.label);
             send.putExtra(Intent.EXTRA_TEXT, text);
             startActivity(Intent.createChooser(send, "发送当前题目给 AI / QQ"));
             Toast.makeText(this, "已复制当前题目，并打开分享", Toast.LENGTH_SHORT).show();
@@ -5490,7 +5941,7 @@ public class MainActivity extends Activity {
     private String buildCurrentQuestionShareText(Question q) {
         StringBuilder sb = new StringBuilder();
         sb.append(applyExportPromptTemplate(q).trim()).append("\n\n");
-        sb.append("# ").append(q.label).append(" ").append(q.typeName).append("\n\n");
+        sb.append("# 备考宝典：").append(currentCourseName()).append(" ").append(q.label).append(" ").append(q.typeName).append("\n\n");
         sb.append("- 章节：").append(q.chapter).append("\n");
         sb.append("- 知识点：").append(q.knowledge).append("\n");
         sb.append("- 正确答案：").append(displayAnswer(q)).append("\n\n");
@@ -5509,7 +5960,7 @@ public class MainActivity extends Activity {
     private String buildWrongMarkdown(Set<String> wrong) {
         StringBuilder sb = new StringBuilder();
         int required = wrongRequiredCorrectCount();
-        sb.append("# 计算机网络错题本\n\n");
+        sb.append("# ").append(currentCourseName()).append("错题本\n\n");
         sb.append("- 导出时间：").append(new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA).format(new Date())).append("\n");
         sb.append("- 错题数量：").append(wrong.size()).append("\n\n");
         sb.append("- 当前移除规则：错题必须在错题本模式中连续答对 ").append(required).append(" 次才会移出。\n\n");
@@ -8004,6 +8455,7 @@ public class MainActivity extends Activity {
         String quickExplanation;
         String knowledgeDetail;
         String explanation;
+        String courseId;
         int blankCount;
         final List<Option> options = new ArrayList<>();
         final List<String> images = new ArrayList<>();
