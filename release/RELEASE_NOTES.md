@@ -1,5 +1,6 @@
-# v2.10.51
+# v2.10.52
 
+- Auto release after fix: Fix update download mirror fallback
 - Auto release after fix: Refine Xi Thought explanations
 - 重写“习近平思想”441 道题的答案解析，减少模板化话术，改为“本题重点 / 答案逻辑 / 选项辨析 / 易混辨析 / 复习抓手”的清晰结构。
 - 大题解析改为“答题主线 / 答题要点 / 为什么这样答 / 易漏点 / 层次辨析”，方便直接背诵和考场组织答案。
