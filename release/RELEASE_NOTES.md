@@ -1,5 +1,6 @@
-# v2.10.55
+# v2.10.56
 
+- Auto release after fix: Add data structures course
 - Auto release after fix: Make Xi explanations knowledge focused
 - Auto release after fix: Refine Xi highlighted explanations
 - Auto release after fix: Improve suggestions and Xi highlight
