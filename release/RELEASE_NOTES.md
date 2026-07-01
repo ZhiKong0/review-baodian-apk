@@ -1,5 +1,6 @@
-# v2.10.59
+# v2.10.60
 
+- Auto release after fix: Reduce launcher icon scale
 - Auto release after fix: Adjust launcher icon safe area
 - Auto release after fix: Update data structures PTA question bank
 - Auto release after fix: Fix course drawer copy
