@@ -1,5 +1,6 @@
-# v2.10.54
+# v2.10.55
 
+- Auto release after fix: Make Xi explanations knowledge focused
 - Auto release after fix: Refine Xi highlighted explanations
 - Auto release after fix: Improve suggestions and Xi highlight
 - Auto release after fix: Fix update download mirror fallback
