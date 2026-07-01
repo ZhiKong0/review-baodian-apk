@@ -1,20 +1,20 @@
 {
   "packageName": "com.dz.networkquiz",
-  "versionCode": 86,
-  "versionName": "2.10.61",
+  "versionCode": 87,
+  "versionName": "2.10.62",
   "apkFileName": "exam-prep-handbook.apk",
-  "apkDownloadUrl": "https://github.com/ZhiKong0/exam-prep-handbook-apk/releases/download/v2.10.61/exam-prep-handbook.apk",
+  "apkDownloadUrl": "https://github.com/ZhiKong0/exam-prep-handbook-apk/releases/download/v2.10.62/exam-prep-handbook.apk",
   "apkDownloadCandidates": [
-    "https://github.com/ZhiKong0/exam-prep-handbook-apk/releases/download/v2.10.61/exam-prep-handbook.apk",
-    "https://gh-proxy.com/https://github.com/ZhiKong0/exam-prep-handbook-apk/releases/download/v2.10.61/exam-prep-handbook.apk",
-    "https://ghfast.top/https://github.com/ZhiKong0/exam-prep-handbook-apk/releases/download/v2.10.61/exam-prep-handbook.apk",
+    "https://github.com/ZhiKong0/exam-prep-handbook-apk/releases/download/v2.10.62/exam-prep-handbook.apk",
+    "https://gh-proxy.com/https://github.com/ZhiKong0/exam-prep-handbook-apk/releases/download/v2.10.62/exam-prep-handbook.apk",
+    "https://ghfast.top/https://github.com/ZhiKong0/exam-prep-handbook-apk/releases/download/v2.10.62/exam-prep-handbook.apk",
     "https://github.com/ZhiKong0/exam-prep-handbook-apk/releases/latest/download/exam-prep-handbook.apk",
     "https://gh-proxy.com/https://github.com/ZhiKong0/exam-prep-handbook-apk/releases/latest/download/exam-prep-handbook.apk",
     "https://ghfast.top/https://github.com/ZhiKong0/exam-prep-handbook-apk/releases/latest/download/exam-prep-handbook.apk"
   ],
   "releaseHtmlUrl": "https://github.com/ZhiKong0/exam-prep-handbook-apk/releases/latest",
-  "releaseNotes": "# v2.10.61\n\n- 替换“数据结构”课程题库为李俊老师 2026-07-01 发布的 3 套 PTA 复习练习。\n- 新题库共 239 题：判断题 120、单选题 100、函数题 4、编程题 15。\n- 两套“练习题6”按来源保留题号标签；客观题答案按旧题库题干/正确选项自动对齐，并补齐复杂度、队列、列表等少量新顺序题的答案。\n- 19 道函数题/编程题补充 Python 参考代码和直接解析，重点讲清输入输出、分支、循环、递归、类与栈匹配。\n- 新增可复跑导入脚本和报告，后续 PTA 原始抓取数据可重新生成 App 题库。",
+  "releaseNotes": "# v2.10.62\n\n- Auto release after fix: Update data structures PTA review bank\n- 替换“数据结构”课程题库为李俊老师 2026-07-01 发布的 3 套 PTA 复习练习。\n- 新题库共 239 题：判断题 120、单选题 100、函数题 4、编程题 15。\n- 两套“练习题6”按来源保留题号标签；客观题答案按旧题库题干/正确选项自动对齐，并补齐复杂度、队列、列表等少量新顺序题的答案。\n- 19 道函数题/编程题补充 Python 参考代码和直接解析，重点讲清输入输出、分支、循环、递归、类与栈匹配。\n- 新增可复跑导入脚本和报告，后续 PTA 原始抓取数据可重新生成 App 题库。",
   "apkSize": 34836917,
-  "sha256": "7bc42ff649e14bd554386777da3d3aa887f0beaf4358b2df50e083d03c263acf",
-  "generatedAt": "2026-07-01T14:37:37.776200+00:00"
+  "sha256": "350b1329cf8260202ef765a6e05d0b341c283494e832d9204a047d74e2b13ce3",
+  "generatedAt": "2026-07-01T14:38:29.426567+00:00"
 }
