@@ -1,5 +1,6 @@
-# v2.10.57
+# v2.10.58
 
+- Auto release after fix: Update data structures PTA question bank
 - Auto release after fix: Fix course drawer copy
 - Auto release after fix: Add data structures course
 - Auto release after fix: Make Xi explanations knowledge focused
