@@ -1,16 +1,16 @@
 {
   "packageName": "com.dz.networkquiz",
-  "versionCode": 95,
-  "versionName": "2.10.70",
+  "versionCode": 97,
+  "versionName": "2.10.72",
   "apkFileName": "exam-prep-handbook.apk",
-  "apkDownloadUrl": "https://ghfast.top/https://github.com/ZhiKong0/exam-prep-handbook-apk/releases/download/v2.10.70/exam-prep-handbook.apk",
+  "apkDownloadUrl": "https://ghfast.top/https://github.com/ZhiKong0/exam-prep-handbook-apk/releases/download/v2.10.72/exam-prep-handbook.apk",
   "apkDownloadCandidates": [
-    "https://ghfast.top/https://github.com/ZhiKong0/exam-prep-handbook-apk/releases/download/v2.10.70/exam-prep-handbook.apk",
+    "https://ghfast.top/https://github.com/ZhiKong0/exam-prep-handbook-apk/releases/download/v2.10.72/exam-prep-handbook.apk",
     "https://ghfast.top/https://github.com/ZhiKong0/exam-prep-handbook-apk/releases/latest/download/exam-prep-handbook.apk"
   ],
-  "releaseHtmlUrl": "https://github.com/ZhiKong0/exam-prep-handbook-apk/releases/tag/v2.10.70",
-  "releaseNotes": "# v2.10.70\n\n- Auto release after fix: Restore data structures review bank v2.10.69\n- 数据结构课程恢复为李俊老师图片中那批 PTA 复习题，共 239 题，不再使用后续合并的 460 题全集。\n- 题型保持为：判断题 120、单选题 100、函数题 4、编程题 15，章节导图继续覆盖 5 个数据结构复习章节。\n- 保留函数题/编程题的大题式答案显示，并优化程序题题干分段、代码块和样例的阅读效果。",
-  "apkSize": 34869859,
-  "sha256": "91651302b1f6e5d885492b6215d826b3fd87a384930701c1d15c3a997876e677",
-  "generatedAt": "2026-07-02T16:00:40.814968+00:00"
+  "releaseHtmlUrl": "https://github.com/ZhiKong0/exam-prep-handbook-apk/releases/latest",
+  "releaseNotes": "# v2.10.72\n\n- Auto release after fix: Improve data structures explanations v2.10.71\n- 优化数据结构 239 道 PTA 复习题的答案解析，减少套话和重复模板。\n- 判断题改为直接说明题干哪一处概念成立或错误；单选题补充选项辨析。\n- 函数题和编程题补充输入、核心逻辑、边界条件、输出格式说明，便于按题学会知识点。\n- 保留 239 题题库范围：判断题 120、单选题 100、函数题 4、编程题 15。",
+  "apkSize": 34894435,
+  "sha256": "f33cc91fc6c4fc22073b07be4eacd586031f759791a600d2f4326fe977bb1407",
+  "generatedAt": "2026-07-02T16:23:14.173900+00:00"
 }
