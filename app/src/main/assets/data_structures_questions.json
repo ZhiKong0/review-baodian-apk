@@ -4,7 +4,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "定义方法的时候，首行要相对于类定义的第一行缩进。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-1",
     "images": [],
     "answer": "TRUE",
@@ -21,7 +30,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "已知算法 A 的时间复杂度为 O(n\n3\n)，算法 B 的时间复杂度为 O(nlogn)，则实际执行时算法 B 一定比算法 A 快。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-2",
     "images": [],
     "answer": "FALSE",
@@ -38,7 +56,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "链表中逻辑上相邻的元素，其物理位置也一定相邻。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-3",
     "images": [],
     "answer": "FALSE",
@@ -55,7 +82,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "创建对象是通过调用构造方法完成的。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-4",
     "images": [],
     "answer": "TRUE",
@@ -72,7 +108,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "一般来讲，若线性表最频繁的操作是在中间插入和删除元素，则宜采用链式实现，不宜采用顺序实现。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-5",
     "images": [],
     "answer": "TRUE",
@@ -89,7 +134,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "一棵二叉树的先序遍历和后序遍历顺序相反，那么这棵二叉树的每一个节点都没有左孩子或者右孩子。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-6",
     "images": [],
     "answer": "TRUE",
@@ -106,7 +160,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "不论是入队列操作还是入栈操作,在顺序存储结构上都需要考虑\"溢出\"情况。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-7",
     "images": [],
     "answer": "TRUE",
@@ -123,7 +186,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "二叉树通常有顺序存储结构和链式存储结构。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-8",
     "images": [],
     "answer": "TRUE",
@@ -140,7 +212,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "树中子树的个数允许为0。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-9",
     "images": [],
     "answer": "TRUE",
@@ -157,7 +238,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "方法本质是一个函数。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-10",
     "images": [],
     "answer": "TRUE",
@@ -174,7 +264,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "在具有N个结点的单链表中，访问结点和增加结点的时间复杂度分别对应为O(1)和O(N)。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-11",
     "images": [],
     "answer": "FALSE",
@@ -191,7 +290,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "对二叉搜索树（BST）进行后序遍历，可得到一个递减的序列。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-12",
     "images": [],
     "answer": "FALSE",
@@ -208,7 +316,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "位于同一层上的结点彼此称为兄弟结点。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-13",
     "images": [],
     "answer": "FALSE",
@@ -225,7 +342,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "二叉搜索树T的最大元素有可能不位于树根的右子树。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-14",
     "images": [],
     "answer": "TRUE",
@@ -242,7 +368,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "类的继承使得子类拥有父类的属性和方法。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-15",
     "images": [],
     "answer": "TRUE",
@@ -259,7 +394,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "构造方法的名字在Python中固定为“__init__”。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-16",
     "images": [],
     "answer": "TRUE",
@@ -276,7 +420,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "二叉树只能用二叉链表表示。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-17",
     "images": [],
     "answer": "FALSE",
@@ -293,7 +446,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "在Python中，私有属性的命名以两个下划线字符开始，并用self引用。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-18",
     "images": [],
     "answer": "TRUE",
@@ -310,7 +472,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "Python类定义中每个成员方法都必须要有一个self参数，通常该参数都放在第一个位置上。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-19",
     "images": [],
     "answer": "TRUE",
@@ -327,7 +498,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "中根遍历二叉查找树所得序列一定是有序序列。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-20",
     "images": [],
     "answer": "TRUE",
@@ -344,7 +524,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "类方法必须包含参数self，且为第一个参数，self代表的是类的实例，即当前对象的地址。\nself不是Python关键字，可以将self均换成其他标识符如abc也是可以正常执行的。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-21",
     "images": [],
     "answer": "FALSE",
@@ -361,7 +550,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "常见的顺序查找、二分法查找、散列（哈希）查找算法中，一般情况下二分法查找最快。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-22",
     "images": [],
     "answer": "FALSE",
@@ -378,7 +576,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "算法分析的两个主要方面是时间复杂度和空间复杂度的分析。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-23",
     "images": [],
     "answer": "TRUE",
@@ -395,7 +602,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "继承的主要作用是代码复用，子类可以拥有父类的所有属性和方法。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-24",
     "images": [],
     "answer": "TRUE",
@@ -412,7 +628,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "Python中的元组是不可变的。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-25",
     "images": [],
     "answer": "TRUE",
@@ -429,7 +654,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "类的构造方法只有在创建对象时才会被自动调用。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-26",
     "images": [],
     "answer": "TRUE",
@@ -446,7 +680,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "二分查找算法能适用于元素无序的顺序表。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-27",
     "images": [],
     "answer": "FALSE",
@@ -463,7 +706,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "同一双亲的孩子彼此称为兄弟结点。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-28",
     "images": [],
     "answer": "TRUE",
@@ -480,7 +732,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "一般来讲，若线性表最频繁的操作是在中间插入和删除元素，则宜采用顺序实现，不宜采用链式实现。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-29",
     "images": [],
     "answer": "FALSE",
@@ -497,7 +758,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "二叉搜索树的最小元素一定位于树根的左子树。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-30",
     "images": [],
     "answer": "FALSE",
@@ -514,7 +784,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "二叉树中，若一个结点只有左孩子或右孩子，则该结点与其孩子结点的逻辑关系为一对一的关系。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-31",
     "images": [],
     "answer": "TRUE",
@@ -531,7 +810,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "二分查找算法能适用于元素有序的顺序表。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-32",
     "images": [],
     "answer": "TRUE",
@@ -548,7 +836,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "算法：函数n!的阶比n\nn\n的阶低。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-33",
     "images": [],
     "answer": "TRUE",
@@ -565,7 +862,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "对于顺序存储的长度为N的线性表，删除第一个元素和插入最后一个元素的时间复杂度分别对应为O(1)和O(N)。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-34",
     "images": [],
     "answer": "FALSE",
@@ -582,7 +888,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "当待排序记录已经从小到大排序或者已经从大到小排序时，快速排序的执行时间最省。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-35",
     "images": [],
     "answer": "FALSE",
@@ -599,7 +914,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "下图所示的二叉树，是一棵完全二叉树。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-36",
     "images": [
       "data_structures_images/o_r1_2_1.png"
@@ -618,7 +942,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "在Python中类定义中，在属性的名称开头用两个下划线表示该属性是私有的。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-37",
     "images": [],
     "answer": "TRUE",
@@ -635,7 +968,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "Python列表中所有元素必须为相同类型的数据。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-38",
     "images": [],
     "answer": "FALSE",
@@ -652,7 +994,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "最好情况复杂度是在最理想的情况下，算法所能达到的最高效率。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-39",
     "images": [],
     "answer": "TRUE",
@@ -669,7 +1020,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "Python支持使用下标修改元组中的元素。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-40",
     "images": [],
     "answer": "FALSE",
@@ -686,7 +1046,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "在二叉排序树中，新结点总是作为树叶来插入的。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-41",
     "images": [],
     "answer": "TRUE",
@@ -703,7 +1072,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "Python列表、元组、字符串都属于有序序列。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-42",
     "images": [],
     "answer": "TRUE",
@@ -720,7 +1098,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "对一棵结点数量超过1的二叉搜索树进行中序遍历，将得到一个递增序列。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-43",
     "images": [],
     "answer": "TRUE",
@@ -737,7 +1124,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "用类创建一个对象时，会自动调用类中的构造方法_ _init_ _()。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-44",
     "images": [],
     "answer": "TRUE",
@@ -754,7 +1150,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "二叉树后序遍历序列的最后一个元素一定是根节点。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-45",
     "images": [],
     "answer": "TRUE",
@@ -771,7 +1176,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "子类在继承父类时，不能添加自己的属性和方法。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-46",
     "images": [],
     "answer": "FALSE",
@@ -788,7 +1202,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "线性表L如果需要频繁地进行不同下标元素的插入、删除操作，此时选择顺序存储结构更好。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-47",
     "images": [],
     "answer": "FALSE",
@@ -805,7 +1228,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "树中的元素个数不允许为0。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-48",
     "images": [],
     "answer": "FALSE",
@@ -822,7 +1254,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "链表是一种随机存取的存储结构。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-49",
     "images": [],
     "answer": "FALSE",
@@ -839,7 +1280,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "对二叉搜索树（BST）进行前序遍历，可得到一个递增的序列。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-50",
     "images": [],
     "answer": "FALSE",
@@ -856,7 +1306,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "完全二叉树中，若一个结点没有左孩子，则它必是树叶。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-51",
     "images": [],
     "answer": "TRUE",
@@ -873,7 +1332,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "二叉搜索树T的最小元素有可能不位于树根的左子树。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-52",
     "images": [],
     "answer": "TRUE",
@@ -890,7 +1358,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "Python类定义中每个成员方法都必须要有一个self参数，但在调用该成员方法时不必为其传递参数。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-53",
     "images": [],
     "answer": "TRUE",
@@ -907,7 +1384,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "二叉树的先序遍历序列的第一个结点一定是根结点。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-54",
     "images": [],
     "answer": "TRUE",
@@ -924,7 +1410,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "在一棵二叉排序树（左子树小，右子树大）中删除一个结点，若被删结点有左右子树，则可以从被删结点左子树中找最大结点，或右子树中找最小结点充当被删结点的角色。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-55",
     "images": [],
     "answer": "TRUE",
@@ -941,7 +1436,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "树结构中每个结点最多只有一个直接前驱。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-56",
     "images": [],
     "answer": "TRUE",
@@ -958,7 +1462,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "算法的时间复杂度越高，说明算法越高效。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-57",
     "images": [],
     "answer": "FALSE",
@@ -975,7 +1488,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "二叉搜索树T的最大元素一定位于树根的右子树。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-58",
     "images": [],
     "answer": "FALSE",
@@ -992,7 +1514,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "平均情况复杂度是算法处理所有可能输入的平均效率。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-59",
     "images": [],
     "answer": "TRUE",
@@ -1009,7 +1540,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "在Python中定义类时实例方法的第一个参数名称必须是self。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用1 / R1-60",
     "images": [],
     "answer": "FALSE",
@@ -2732,7 +3272,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "一棵二叉树的先序遍历和后序遍历顺序相反，那么这棵二叉树的每一个节点都没有左孩子或者右孩子。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-1",
     "images": [],
     "answer": "TRUE",
@@ -2749,7 +3298,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "位于同一层上的结点彼此称为兄弟结点。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-2",
     "images": [],
     "answer": "FALSE",
@@ -2766,7 +3324,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "用类创建一个对象时，会自动调用类中的构造方法_ _init_ _()。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-3",
     "images": [],
     "answer": "TRUE",
@@ -2783,7 +3350,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "算法的时间复杂度指的是算法所需时间随问题规模增长的增长率。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-4",
     "images": [],
     "answer": "TRUE",
@@ -2800,7 +3376,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "构造方法的名字在Python中固定为“__init__”。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-5",
     "images": [],
     "answer": "TRUE",
@@ -2817,7 +3402,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "完全二叉树中，若一个结点没有左孩子，则它必是树叶。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-6",
     "images": [],
     "answer": "TRUE",
@@ -2834,7 +3428,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "同一双亲的孩子彼此称为兄弟结点。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-7",
     "images": [],
     "answer": "TRUE",
@@ -2851,7 +3454,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "二分查找算法能适用于元素有序的顺序表。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-8",
     "images": [],
     "answer": "TRUE",
@@ -2868,7 +3480,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "Python列表中所有元素必须为相同类型的数据。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-9",
     "images": [],
     "answer": "FALSE",
@@ -2885,7 +3506,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "二叉搜索树T的最大元素有可能不位于树根的右子树。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-10",
     "images": [],
     "answer": "TRUE",
@@ -2902,7 +3532,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "中根遍历二叉查找树所得序列一定是有序序列。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-11",
     "images": [],
     "answer": "TRUE",
@@ -2919,7 +3558,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "快速排序的速度在所有排序方法中为最快，而且所需附加空间也最少。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-12",
     "images": [],
     "answer": "FALSE",
@@ -2936,7 +3584,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "对二叉搜索树（BST）进行前序遍历，可得到一个递增的序列。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-13",
     "images": [],
     "answer": "FALSE",
@@ -2953,7 +3610,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "二叉树通常有顺序存储结构和链式存储结构。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-14",
     "images": [],
     "answer": "TRUE",
@@ -2970,7 +3636,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "一般来讲，若线性表最频繁的操作是在中间插入和删除元素，则宜采用链式实现，不宜采用顺序实现。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-15",
     "images": [],
     "answer": "TRUE",
@@ -2987,7 +3662,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "当待排序记录已经从小到大排序或者已经从大到小排序时，快速排序的执行时间最省。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-16",
     "images": [],
     "answer": "FALSE",
@@ -3004,7 +3688,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "常见的顺序查找、二分法查找、散列（哈希）查找算法中，一般情况下二分法查找最快。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-17",
     "images": [],
     "answer": "FALSE",
@@ -3021,7 +3714,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "树中的元素个数不允许为0。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-18",
     "images": [],
     "answer": "FALSE",
@@ -3038,7 +3740,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "算法的时间复杂度越高，说明算法越高效。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-19",
     "images": [],
     "answer": "FALSE",
@@ -3055,7 +3766,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "线性表L如果需要频繁地进行不同下标元素的插入、删除操作，此时选择顺序存储结构更好。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-20",
     "images": [],
     "answer": "FALSE",
@@ -3072,7 +3792,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "二叉搜索树的最小元素一定位于树根的左子树。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-21",
     "images": [],
     "answer": "FALSE",
@@ -3089,7 +3818,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "对二叉搜索树（BST）进行后序遍历，可得到一个递减的序列。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-22",
     "images": [],
     "answer": "FALSE",
@@ -3106,7 +3844,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "创建对象是通过调用构造方法完成的。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-23",
     "images": [],
     "answer": "TRUE",
@@ -3123,7 +3870,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "继承的主要作用是代码复用，子类可以拥有父类的所有属性和方法。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-24",
     "images": [],
     "answer": "TRUE",
@@ -3140,7 +3896,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "二叉树只能用二叉链表表示。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-25",
     "images": [],
     "answer": "FALSE",
@@ -3157,7 +3922,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "对一棵二叉排序按前序方法遍历得出的结点序列是从小到大的序列。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-26",
     "images": [],
     "answer": "FALSE",
@@ -3174,7 +3948,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "对于顺序存储的长度为N的线性表，删除第一个元素和插入最后一个元素的时间复杂度分别对应为O(1)和O(N)。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-27",
     "images": [],
     "answer": "FALSE",
@@ -3191,7 +3974,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "Python类定义中每个成员方法都必须要有一个self参数，通常该参数都放在第一个位置上。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-28",
     "images": [],
     "answer": "TRUE",
@@ -3208,7 +4000,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "不论是入队列操作还是入栈操作,在顺序存储结构上都需要考虑\"溢出\"情况。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-29",
     "images": [],
     "answer": "TRUE",
@@ -3225,7 +4026,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "一个列表可以是另一个列表的元素。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-30",
     "images": [],
     "answer": "TRUE",
@@ -3242,7 +4052,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "Python中的元组是不可变的。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-31",
     "images": [],
     "answer": "TRUE",
@@ -3259,7 +4078,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "在Python中类定义中，在属性的名称开头用两个下划线表示该属性是私有的。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-32",
     "images": [],
     "answer": "TRUE",
@@ -3276,7 +4104,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "已知算法 A 的时间复杂度为 O(n\n3\n)，算法 B 的时间复杂度为 O(nlogn)，则实际执行时算法 B 一定比算法 A 快。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-33",
     "images": [],
     "answer": "FALSE",
@@ -3293,7 +4130,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "二叉树后序遍历序列的最后一个元素一定是根节点。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-34",
     "images": [],
     "answer": "TRUE",
@@ -3310,7 +4156,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "Python列表、元组、字符串都属于有序序列。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-35",
     "images": [],
     "answer": "TRUE",
@@ -3327,7 +4182,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "Python支持使用下标修改元组中的元素。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-36",
     "images": [],
     "answer": "FALSE",
@@ -3344,7 +4208,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "子类在继承父类时，不能添加自己的属性和方法。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-37",
     "images": [],
     "answer": "FALSE",
@@ -3361,7 +4234,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "链表是一种随机存取的存储结构。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-38",
     "images": [],
     "answer": "FALSE",
@@ -3378,7 +4260,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "二叉树中，若一个结点只有左孩子或右孩子，则该结点与其孩子结点的逻辑关系为一对一的关系。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-39",
     "images": [],
     "answer": "TRUE",
@@ -3395,7 +4286,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "最好情况复杂度是在最理想的情况下，算法所能达到的最高效率。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-40",
     "images": [],
     "answer": "TRUE",
@@ -3412,7 +4312,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "类的继承使得子类拥有父类的属性和方法。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-41",
     "images": [],
     "answer": "TRUE",
@@ -3429,7 +4338,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "树中子树的个数允许为0。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-42",
     "images": [],
     "answer": "TRUE",
@@ -3446,7 +4364,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "链表中逻辑上相邻的元素，其物理位置也一定相邻。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-43",
     "images": [],
     "answer": "FALSE",
@@ -3463,7 +4390,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "算法：函数n!的阶比n\nn\n的阶低。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-44",
     "images": [],
     "answer": "TRUE",
@@ -3480,7 +4416,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "对一棵结点数量超过1的二叉搜索树进行中序遍历，将得到一个递增序列。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-45",
     "images": [],
     "answer": "TRUE",
@@ -3497,7 +4442,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "在具有N个结点的单链表中，访问结点和增加结点的时间复杂度分别对应为O(1)和O(N)。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-46",
     "images": [],
     "answer": "FALSE",
@@ -3514,7 +4468,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "在二叉排序树中，每个结点的关键字都比左孩子关键字大，比右孩子关键字小。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-47",
     "images": [],
     "answer": "TRUE",
@@ -3531,7 +4494,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "在Python中，私有属性的命名以两个下划线字符开始，并用self引用。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-48",
     "images": [],
     "answer": "TRUE",
@@ -3548,7 +4520,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "类的构造方法只有在创建对象时才会被自动调用。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-49",
     "images": [],
     "answer": "TRUE",
@@ -3565,7 +4546,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "二叉树的先序遍历序列的第一个结点一定是根结点。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-50",
     "images": [],
     "answer": "TRUE",
@@ -3582,7 +4572,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "二分查找算法能适用于元素无序的顺序表。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-51",
     "images": [],
     "answer": "FALSE",
@@ -3599,7 +4598,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "算法分析的两个主要方面是时间复杂度和空间复杂度的分析。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-52",
     "images": [],
     "answer": "TRUE",
@@ -3616,7 +4624,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "一般来讲，若线性表最频繁的操作是在中间插入和删除元素，则宜采用顺序实现，不宜采用链式实现。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-53",
     "images": [],
     "answer": "FALSE",
@@ -3633,7 +4650,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "折半查找法的查找速度一定比顺序查找法快。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-54",
     "images": [],
     "answer": "FALSE",
@@ -3650,7 +4676,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "在二叉排序树中，新结点总是作为树叶来插入的。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-55",
     "images": [],
     "answer": "TRUE",
@@ -3667,7 +4702,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "二叉搜索树T的最大元素一定位于树根的右子树。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-56",
     "images": [],
     "answer": "FALSE",
@@ -3684,7 +4728,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "在Python中定义类时实例方法的第一个参数名称必须是self。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-57",
     "images": [],
     "answer": "FALSE",
@@ -3701,7 +4754,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "二叉搜索树T的最小元素有可能不位于树根的左子树。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-58",
     "images": [],
     "answer": "TRUE",
@@ -3718,7 +4780,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "构造方法的名字写作“__init__”,在定义对象时是自动调用的。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-59",
     "images": [],
     "answer": "TRUE",
@@ -3735,7 +4806,16 @@
     "type": "tf",
     "typeName": "判断题",
     "stem": "树结构中每个结点最多只有一个直接前驱。",
-    "options": [],
+    "options": [
+      {
+        "key": "TRUE",
+        "text": "正确"
+      },
+      {
+        "key": "FALSE",
+        "text": "错误"
+      }
+    ],
     "source": "练习题6-使用2 / R1-60",
     "images": [],
     "answer": "TRUE",
@@ -5455,362 +6535,324 @@
   },
   {
     "label": "DSP-R6-1",
-    "type": "blank",
+    "type": "essay",
     "typeName": "函数题",
     "stem": "设计一个名为Stock的类来表示一个公司的股票，包括以下内容：\n1）股票代码、股票名称、前一天股票价格、当天股票价格4个私有属性；\n2）构造方法，需初始化代码、名称、前一天价格和当天价格等属性；\n3）返回股票名字的get方法;\n4）返回股票代码的get方法;\n5）获取和设置股票前一天价格的get和set方法;\n6）获取和设置股票当前价格的get和set方法;\n7）名为getChangePercent()方法，返回前日收市价至当前价格的变化百分比；\n\n函数接口定义：\n[ Python ]\n1\n2\nclass Stock:\n\n裁判测试程序样例：\n[ Python ]\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\nsCode = input() #输入代码\nsName = input() #输入名称\npriceYesterday = float(input())  #输入昨日价格\npriceToday = float(input())  #输入今日价格\ns = Stock(sCode,sName,priceYesterday,priceToday)\nprint(\"代码:\",s.getCode())\nprint(\"名称:\",s.getName())\nprint(\"昨日价格:%.2f\\n今天价格:%.2f\" % (s.getPriceYesterday(),s.getPriceToday()))\ns.setPriceYesterday(50.25)\nprint(\"修正昨日价格为:%.2f\" % 50.25)\nprint(\"价格变化百分比:%.2f%%\" % (s.getChangePercent()*100))\n/* 请在这里填写答案 */\n输入样例：\n\n在这里给出一组输入。例如：\n\n[ in ]\n1\n2\n3\n4\n601318\n中国平安\n63.21\n64.39\n输出样例：\n\n在这里给出相应的输出。例如：\n\n[ out ]\n1\n2\n3\n4\n5\n6\n代码: 601318\n名称: 中国平安\n昨日价格:63.21\n今天价格:64.39\n修正昨日价格为:50.25\n价格变化百分比:28.14%",
     "options": [],
-    "answer": [
-      "class Stock:\n    def __init__(self, code, name, price_yesterday, price_today):\n        self.__code = code\n        self.__name = name\n        self.__price_yesterday = price_yesterday\n        self.__price_today = price_today\n\n    def getName(self):\n        return self.__name\n\n    def getCode(self):\n        return self.__code\n\n    def getPriceYesterday(self):\n        return self.__price_yesterday\n\n    def setPriceYesterday(self, price):\n        self.__price_yesterday = price\n\n    def getPriceToday(self):\n        return self.__price_today\n\n    def setPriceToday(self, price):\n        self.__price_today = price\n\n    def getChangePercent(self):\n        return (self.__price_today - self.__price_yesterday) / self.__price_yesterday"
-    ],
+    "answer": "class Stock:\n    def __init__(self, code, name, price_yesterday, price_today):\n        self.__code = code\n        self.__name = name\n        self.__price_yesterday = price_yesterday\n        self.__price_today = price_today\n\n    def getName(self):\n        return self.__name\n\n    def getCode(self):\n        return self.__code\n\n    def getPriceYesterday(self):\n        return self.__price_yesterday\n\n    def setPriceYesterday(self, price):\n        self.__price_yesterday = price\n\n    def getPriceToday(self):\n        return self.__price_today\n\n    def setPriceToday(self, price):\n        self.__price_today = price\n\n    def getChangePercent(self):\n        return (self.__price_today - self.__price_yesterday) / self.__price_yesterday",
     "images": [],
     "knowledge": "函数题：按裁判接口补齐函数或类",
     "chapter": "5. Python 程序设计题",
     "quickExplanation": "参考答案：\n```python\nclass Stock:\n    def __init__(self, code, name, price_yesterday, price_today):\n        self.__code = code\n        self.__name = name\n        self.__price_yesterday = price_yesterday\n        self.__price_today = price_today\n\n    def getName(self):\n        return self.__name\n\n    def getCode(self):\n        return self.__code\n\n    def getPriceYesterday(self):\n        return self.__price_yesterday\n\n    def setPriceYesterday(self, price):\n        self.__price_yesterday = price\n\n    def getPriceToday(self):\n        return self.__price_today\n\n    def setPriceToday(self, price):\n        self.__price_today = price\n\n    def getChangePercent(self):\n        return (self.__price_today - self.__price_yesterday) / self.__price_yesterday\n```\n\n解析：函数题不要改裁判给出的主程序，只补题目要求的类或函数名；方法名、返回值和打印位置必须与测试程序一致。",
     "knowledgeDetail": "函数题不要改裁判给出的主程序，只补题目要求的类或函数名；方法名、返回值和打印位置必须与测试程序一致。",
     "explanation": "【快速做题】\n参考答案：\n```python\nclass Stock:\n    def __init__(self, code, name, price_yesterday, price_today):\n        self.__code = code\n        self.__name = name\n        self.__price_yesterday = price_yesterday\n        self.__price_today = price_today\n\n    def getName(self):\n        return self.__name\n\n    def getCode(self):\n        return self.__code\n\n    def getPriceYesterday(self):\n        return self.__price_yesterday\n\n    def setPriceYesterday(self, price):\n        self.__price_yesterday = price\n\n    def getPriceToday(self):\n        return self.__price_today\n\n    def setPriceToday(self, price):\n        self.__price_today = price\n\n    def getChangePercent(self):\n        return (self.__price_today - self.__price_yesterday) / self.__price_yesterday\n```\n\n解析：函数题不要改裁判给出的主程序，只补题目要求的类或函数名；方法名、返回值和打印位置必须与测试程序一致。\n\n【知识点详解】\n函数题不要改裁判给出的主程序，只补题目要求的类或函数名；方法名、返回值和打印位置必须与测试程序一致。",
-    "blankCount": 1,
+    "blankCount": 0,
     "source": "编程题2练习 / R6-1",
     "id": 221
   },
   {
     "label": "DSP-R6-2",
-    "type": "blank",
+    "type": "essay",
     "typeName": "函数题",
     "stem": "编写一个名为Pet的类，它应具有以下属性：\n\n1\n2\n__name：表示宠物的名字\n__age：表示宠物的年龄\n\nPet类应该有一个__init__方法来创建这些属性。\n\n它还应有以下方法：\n\n1\n2\n3\n4\n5\nsetName方法：为__name属性赋值\nsetAge方法：为__age属性赋值\ngetName方法：返回__name属性的值\ngetAge方法：返回__age属性的值\nshow方法：返回Pet对象的信息\n函数接口定义：\n\nPet类定义：\n\n1\n2\nclass Pet:\n......\n裁判测试程序样例：\n[ Python ]\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n#  请在这里填写Pet类的定义\n\ndef main():\n\n# 获取数据\npet_name = input()\npet_age = int(input())\n\n# 创建一个Pet实例.\nmypet = Pet(pet_name, pet_age)\n\n# 显示输入的数据\nprint('Here is the data that you entered: ')\nprint('Pet name: ', mypet.getName())\nprint('Age of pet: ', mypet.getAge())\n# 输出描述\nmypet.show( )\n\nmain()\n\n输入样例：\n\n在这里给出一组输入。例如：\n\n[ in ]\n1\n2\nPeter\n2\n输出样例：\n\n在这里给出相应的输出。例如：\n\n[ out ]\n1\n2\n3\n4\nHere is the data that you entered:\nPet name:  Peter\nAge of pet:  2\nPeter is 2 years old!",
     "options": [],
-    "answer": [
-      "class Pet:\n    def __init__(self, name, age):\n        self.__name = name\n        self.__age = age\n\n    def setName(self, name):\n        self.__name = name\n\n    def setAge(self, age):\n        self.__age = age\n\n    def getName(self):\n        return self.__name\n\n    def getAge(self):\n        return self.__age\n\n    def show(self):\n        print(f\"{self.__name} is {self.__age} years old!\")"
-    ],
+    "answer": "class Pet:\n    def __init__(self, name, age):\n        self.__name = name\n        self.__age = age\n\n    def setName(self, name):\n        self.__name = name\n\n    def setAge(self, age):\n        self.__age = age\n\n    def getName(self):\n        return self.__name\n\n    def getAge(self):\n        return self.__age\n\n    def show(self):\n        print(f\"{self.__name} is {self.__age} years old!\")",
     "images": [],
     "knowledge": "函数题：按裁判接口补齐函数或类",
     "chapter": "5. Python 程序设计题",
     "quickExplanation": "参考答案：\n```python\nclass Pet:\n    def __init__(self, name, age):\n        self.__name = name\n        self.__age = age\n\n    def setName(self, name):\n        self.__name = name\n\n    def setAge(self, age):\n        self.__age = age\n\n    def getName(self):\n        return self.__name\n\n    def getAge(self):\n        return self.__age\n\n    def show(self):\n        print(f\"{self.__name} is {self.__age} years old!\")\n```\n\n解析：函数题不要改裁判给出的主程序，只补题目要求的类或函数名；方法名、返回值和打印位置必须与测试程序一致。",
     "knowledgeDetail": "函数题不要改裁判给出的主程序，只补题目要求的类或函数名；方法名、返回值和打印位置必须与测试程序一致。",
     "explanation": "【快速做题】\n参考答案：\n```python\nclass Pet:\n    def __init__(self, name, age):\n        self.__name = name\n        self.__age = age\n\n    def setName(self, name):\n        self.__name = name\n\n    def setAge(self, age):\n        self.__age = age\n\n    def getName(self):\n        return self.__name\n\n    def getAge(self):\n        return self.__age\n\n    def show(self):\n        print(f\"{self.__name} is {self.__age} years old!\")\n```\n\n解析：函数题不要改裁判给出的主程序，只补题目要求的类或函数名；方法名、返回值和打印位置必须与测试程序一致。\n\n【知识点详解】\n函数题不要改裁判给出的主程序，只补题目要求的类或函数名；方法名、返回值和打印位置必须与测试程序一致。",
-    "blankCount": 1,
+    "blankCount": 0,
     "source": "编程题2练习 / R6-2",
     "id": 222
   },
   {
     "label": "DSP-R6-3",
-    "type": "blank",
+    "type": "essay",
     "typeName": "函数题",
     "stem": "本题要求实现一个函数mult3()，带一个整数列表作为输入参数，仅仅输出列表中是3的倍数的那些数值，每个值占一行。\n\n函数接口定义：\n[ Python ]\n1\nmult3(lst)\n\nlst是传入的整数列表。\n\n裁判测试程序样例：\n[ Python ]\n1\n2\n3\n4\n5\n6\n7\n8\n# 请在这里填写答案\n\ndef main():\nmylist = list(map(int,input().split(\",\")))\nmult3(mylist)\n\nmain()\n\n输入样例：\n[ in ]\n1\n3,1,6,2,3,9,7,9,5,4,5\n输出样例：\n\n输出：\n\n[ out ]\n1\n2\n3\n4\n5\n3\n6\n3\n9\n9",
     "options": [],
-    "answer": [
-      "def mult3(lst):\n    for x in lst:\n        if x % 3 == 0:\n            print(x)"
-    ],
+    "answer": "def mult3(lst):\n    for x in lst:\n        if x % 3 == 0:\n            print(x)",
     "images": [],
     "knowledge": "函数题：按裁判接口补齐函数或类",
     "chapter": "5. Python 程序设计题",
     "quickExplanation": "参考答案：\n```python\ndef mult3(lst):\n    for x in lst:\n        if x % 3 == 0:\n            print(x)\n```\n\n解析：函数题不要改裁判给出的主程序，只补题目要求的类或函数名；方法名、返回值和打印位置必须与测试程序一致。",
     "knowledgeDetail": "函数题不要改裁判给出的主程序，只补题目要求的类或函数名；方法名、返回值和打印位置必须与测试程序一致。",
     "explanation": "【快速做题】\n参考答案：\n```python\ndef mult3(lst):\n    for x in lst:\n        if x % 3 == 0:\n            print(x)\n```\n\n解析：函数题不要改裁判给出的主程序，只补题目要求的类或函数名；方法名、返回值和打印位置必须与测试程序一致。\n\n【知识点详解】\n函数题不要改裁判给出的主程序，只补题目要求的类或函数名；方法名、返回值和打印位置必须与测试程序一致。",
-    "blankCount": 1,
+    "blankCount": 0,
     "source": "编程题2练习 / R6-3",
     "id": 223
   },
   {
     "label": "DSP-R6-4",
-    "type": "blank",
+    "type": "essay",
     "typeName": "函数题",
     "stem": "本题要求实现求Fibonacci(斐波那契)数列项的函数。Fibonacci数列的定义如下：\n\nf(n)=f(n−2)+f(n−1) (n≥3)，其中f(1)=1，f(2)=1。\n\n函数接口定义：\n1\n2\n函数接口：\nf(n)\n\n函数f应返回第n个Fibonacci数。题目保证输入输出在整型范围内。建议用递归实现。\n\n裁判测试程序样例：\n1\n2\n3\n4\n5\n6\n/* 请在这里填写答案 */\n\n在这里给出函数被调用进行测试的例子。例如：\nn=int(input())\nprint(f(n))\n\n输入样例：\n\n在这里给出一组输入。例如：\n\n[ in ]\n1\n6\n输出样例：\n\n在这里给出相应的输出。例如：\n\n[ out ]\n1\n8",
     "options": [],
-    "answer": [
-      "def f(n):\n    if n == 1 or n == 2:\n        return 1\n    return f(n - 1) + f(n - 2)"
-    ],
+    "answer": "def f(n):\n    if n == 1 or n == 2:\n        return 1\n    return f(n - 1) + f(n - 2)",
     "images": [],
     "knowledge": "函数题：按裁判接口补齐函数或类",
     "chapter": "5. Python 程序设计题",
     "quickExplanation": "参考答案：\n```python\ndef f(n):\n    if n == 1 or n == 2:\n        return 1\n    return f(n - 1) + f(n - 2)\n```\n\n解析：函数题不要改裁判给出的主程序，只补题目要求的类或函数名；方法名、返回值和打印位置必须与测试程序一致。",
     "knowledgeDetail": "函数题不要改裁判给出的主程序，只补题目要求的类或函数名；方法名、返回值和打印位置必须与测试程序一致。",
     "explanation": "【快速做题】\n参考答案：\n```python\ndef f(n):\n    if n == 1 or n == 2:\n        return 1\n    return f(n - 1) + f(n - 2)\n```\n\n解析：函数题不要改裁判给出的主程序，只补题目要求的类或函数名；方法名、返回值和打印位置必须与测试程序一致。\n\n【知识点详解】\n函数题不要改裁判给出的主程序，只补题目要求的类或函数名；方法名、返回值和打印位置必须与测试程序一致。",
-    "blankCount": 1,
+    "blankCount": 0,
     "source": "编程题2练习 / R6-4",
     "id": 224
   },
   {
     "label": "DSP-R7-1",
-    "type": "blank",
+    "type": "essay",
     "typeName": "编程题",
     "stem": "本题目要求读入2个整数A和B，然后输出它们的和。\n\n输入格式:\n\n在一行中给出一个被加数\n在另一行中给出一个加数\n\n输出格式:\n\n在一行中输出和值。\n\n输入样例:\n\n在这里给出一组输入。例如：\n\n[ in ]\n1\n2\n18\n-48\n输出样例:\n\n在这里给出相应的输出。例如：\n\n[ out ]\n1\n-30",
     "options": [],
-    "answer": [
-      "a = int(input())\nb = int(input())\nprint(a + b)"
-    ],
+    "answer": "a = int(input())\nb = int(input())\nprint(a + b)",
     "images": [],
     "knowledge": "顺序结构、循环与递归",
     "chapter": "5. Python 程序设计题",
     "quickExplanation": "参考答案：\n```python\na = int(input())\nb = int(input())\nprint(a + b)\n```\n\n解析：基础编程题先把输入读成正确类型，再按公式或循环累加；阶乘和 Fibonacci 题要先写递归出口，否则会无限递归。",
     "knowledgeDetail": "基础编程题先把输入读成正确类型，再按公式或循环累加；阶乘和 Fibonacci 题要先写递归出口，否则会无限递归。",
     "explanation": "【快速做题】\n参考答案：\n```python\na = int(input())\nb = int(input())\nprint(a + b)\n```\n\n解析：基础编程题先把输入读成正确类型，再按公式或循环累加；阶乘和 Fibonacci 题要先写递归出口，否则会无限递归。\n\n【知识点详解】\n基础编程题先把输入读成正确类型，再按公式或循环累加；阶乘和 Fibonacci 题要先写递归出口，否则会无限递归。",
-    "blankCount": 1,
+    "blankCount": 0,
     "source": "编程题2练习 / R7-1",
     "id": 225
   },
   {
     "label": "DSP-R7-2",
-    "type": "blank",
+    "type": "essay",
     "typeName": "编程题",
     "stem": "输入一个正整数m(20<=m<=100)，计算 11+12+13+...+m 的值。\n\n输入格式:\n\n在一行输入一个正整数m。\n\n输出格式:\n\n在一行中按照格式“sum = S”输出对应的和S.\n\n输入样例:\n\n在这里给出一组输入。例如：\n\n[ in ]\n1\n90\n输出样例:\n\n在这里给出相应的输出。例如：\n\n[ out ]\n1\nsum = 4040",
     "options": [],
-    "answer": [
-      "m = int(input())\ntotal = sum(range(11, m + 1))\nprint(f\"sum = {total}\")"
-    ],
+    "answer": "m = int(input())\ntotal = sum(range(11, m + 1))\nprint(f\"sum = {total}\")",
     "images": [],
     "knowledge": "顺序结构、循环与递归",
     "chapter": "5. Python 程序设计题",
     "quickExplanation": "参考答案：\n```python\nm = int(input())\ntotal = sum(range(11, m + 1))\nprint(f\"sum = {total}\")\n```\n\n解析：基础编程题先把输入读成正确类型，再按公式或循环累加；阶乘和 Fibonacci 题要先写递归出口，否则会无限递归。",
     "knowledgeDetail": "基础编程题先把输入读成正确类型，再按公式或循环累加；阶乘和 Fibonacci 题要先写递归出口，否则会无限递归。",
     "explanation": "【快速做题】\n参考答案：\n```python\nm = int(input())\ntotal = sum(range(11, m + 1))\nprint(f\"sum = {total}\")\n```\n\n解析：基础编程题先把输入读成正确类型，再按公式或循环累加；阶乘和 Fibonacci 题要先写递归出口，否则会无限递归。\n\n【知识点详解】\n基础编程题先把输入读成正确类型，再按公式或循环累加；阶乘和 Fibonacci 题要先写递归出口，否则会无限递归。",
-    "blankCount": 1,
+    "blankCount": 0,
     "source": "编程题2练习 / R7-2",
     "id": 226
   },
   {
     "label": "DSP-R7-3",
-    "type": "blank",
+    "type": "essay",
     "typeName": "编程题",
     "stem": "在同一行依次输入三个值a,b,c，用空格分开，输出 b*b-4*a*c的值\n\n输入格式:\n\n在一行中输入三个数。\n\n输出格式:\n\n在一行中输出公式值。\n\n输入样例:\n\n在这里给出一组输入。例如：\n\n[ in ]\n1\n3 4 5\n输出样例:\n\n在这里给出相应的输出。例如：\n\n[ out ]\n1\n-44",
     "options": [],
-    "answer": [
-      "a, b, c = map(int, input().split())\nprint(b * b - 4 * a * c)"
-    ],
+    "answer": "a, b, c = map(int, input().split())\nprint(b * b - 4 * a * c)",
     "images": [],
     "knowledge": "顺序结构、循环与递归",
     "chapter": "5. Python 程序设计题",
     "quickExplanation": "参考答案：\n```python\na, b, c = map(int, input().split())\nprint(b * b - 4 * a * c)\n```\n\n解析：基础编程题先把输入读成正确类型，再按公式或循环累加；阶乘和 Fibonacci 题要先写递归出口，否则会无限递归。",
     "knowledgeDetail": "基础编程题先把输入读成正确类型，再按公式或循环累加；阶乘和 Fibonacci 题要先写递归出口，否则会无限递归。",
     "explanation": "【快速做题】\n参考答案：\n```python\na, b, c = map(int, input().split())\nprint(b * b - 4 * a * c)\n```\n\n解析：基础编程题先把输入读成正确类型，再按公式或循环累加；阶乘和 Fibonacci 题要先写递归出口，否则会无限递归。\n\n【知识点详解】\n基础编程题先把输入读成正确类型，再按公式或循环累加；阶乘和 Fibonacci 题要先写递归出口，否则会无限递归。",
-    "blankCount": 1,
+    "blankCount": 0,
     "source": "编程题2练习 / R7-3",
     "id": 227
   },
   {
     "label": "DSP-R7-4",
-    "type": "blank",
+    "type": "essay",
     "typeName": "编程题",
     "stem": "本题要求编写程序，计算序列 1 + 1/3 + 1/5 + ... 的前N项之和。\n\n输入格式:\n\n输入在一行中给出一个正整数N。\n\n输出格式:\n\n在一行中按照“sum = S”的格式输出部分和的值S，精确到小数点后6位。题目保证计算结果不超过双精度范围。\n\n输入样例:\n[ in ]\n1\n23\n输出样例:\n[ out ]\n1\nsum = 2.549541",
     "options": [],
-    "answer": [
-      "n = int(input())\ntotal = sum(1 / (2 * i - 1) for i in range(1, n + 1))\nprint(f\"sum = {total:.6f}\")"
-    ],
+    "answer": "n = int(input())\ntotal = sum(1 / (2 * i - 1) for i in range(1, n + 1))\nprint(f\"sum = {total:.6f}\")",
     "images": [],
     "knowledge": "顺序结构、循环与递归",
     "chapter": "5. Python 程序设计题",
     "quickExplanation": "参考答案：\n```python\nn = int(input())\ntotal = sum(1 / (2 * i - 1) for i in range(1, n + 1))\nprint(f\"sum = {total:.6f}\")\n```\n\n解析：基础编程题先把输入读成正确类型，再按公式或循环累加；阶乘和 Fibonacci 题要先写递归出口，否则会无限递归。",
     "knowledgeDetail": "基础编程题先把输入读成正确类型，再按公式或循环累加；阶乘和 Fibonacci 题要先写递归出口，否则会无限递归。",
     "explanation": "【快速做题】\n参考答案：\n```python\nn = int(input())\ntotal = sum(1 / (2 * i - 1) for i in range(1, n + 1))\nprint(f\"sum = {total:.6f}\")\n```\n\n解析：基础编程题先把输入读成正确类型，再按公式或循环累加；阶乘和 Fibonacci 题要先写递归出口，否则会无限递归。\n\n【知识点详解】\n基础编程题先把输入读成正确类型，再按公式或循环累加；阶乘和 Fibonacci 题要先写递归出口，否则会无限递归。",
-    "blankCount": 1,
+    "blankCount": 0,
     "source": "编程题2练习 / R7-4",
     "id": 228
   },
   {
     "label": "DSP-R7-5",
-    "type": "blank",
+    "type": "essay",
     "typeName": "编程题",
     "stem": "编写求n!的程序。要求：编写一个函数实现求出给定的n的值的阶乘。主函数负责确定n的值、调用自定义的函数，并输出计算结果。\n\n输入格式:\n\n输入一个任意整数n的值。\n\n输出格式:\n\n若n=0或n=1，则n!=1；若n<0，输出“给定的数<0，no value!no value!”的结果。\n\n输入样例:\n\n在这里给出一组输入。例如：\n\n[ in ]\n1\n5\n输出样例:\n\n在这里给出相应的输出。例如：\n\n[ out ]\n1\n5!=120",
     "options": [],
-    "answer": [
-      "def fact(n):\n    if n == 0 or n == 1:\n        return 1\n    return n * fact(n - 1)\n\nn = int(input())\nif n < 0:\n    print(\"给定的数<0，no value!no value!\")\nelse:\n    print(f\"{n}!={fact(n)}\")"
-    ],
+    "answer": "def fact(n):\n    if n == 0 or n == 1:\n        return 1\n    return n * fact(n - 1)\n\nn = int(input())\nif n < 0:\n    print(\"给定的数<0，no value!no value!\")\nelse:\n    print(f\"{n}!={fact(n)}\")",
     "images": [],
     "knowledge": "顺序结构、循环与递归",
     "chapter": "5. Python 程序设计题",
     "quickExplanation": "参考答案：\n```python\ndef fact(n):\n    if n == 0 or n == 1:\n        return 1\n    return n * fact(n - 1)\n\nn = int(input())\nif n < 0:\n    print(\"给定的数<0，no value!no value!\")\nelse:\n    print(f\"{n}!={fact(n)}\")\n```\n\n解析：基础编程题先把输入读成正确类型，再按公式或循环累加；阶乘和 Fibonacci 题要先写递归出口，否则会无限递归。",
     "knowledgeDetail": "基础编程题先把输入读成正确类型，再按公式或循环累加；阶乘和 Fibonacci 题要先写递归出口，否则会无限递归。",
     "explanation": "【快速做题】\n参考答案：\n```python\ndef fact(n):\n    if n == 0 or n == 1:\n        return 1\n    return n * fact(n - 1)\n\nn = int(input())\nif n < 0:\n    print(\"给定的数<0，no value!no value!\")\nelse:\n    print(f\"{n}!={fact(n)}\")\n```\n\n解析：基础编程题先把输入读成正确类型，再按公式或循环累加；阶乘和 Fibonacci 题要先写递归出口，否则会无限递归。\n\n【知识点详解】\n基础编程题先把输入读成正确类型，再按公式或循环累加；阶乘和 Fibonacci 题要先写递归出口，否则会无限递归。",
-    "blankCount": 1,
+    "blankCount": 0,
     "source": "编程题2练习 / R7-5",
     "id": 229
   },
   {
     "label": "DSP-R7-6",
-    "type": "blank",
+    "type": "essay",
     "typeName": "编程题",
     "stem": "本题目要求计算下列分段函数f(x)的值：\n\n输入格式:\n\n输入在一行中给出实数x。\n\n输出格式:\n\n在一行中按“f(x) = result”的格式输出，其中x与result都保留一位小数。\n\n输入样例1:\n[ in ]\n1\n10\n输出样例1:\n[ out ]\n1\nf(10.0) = 0.1\n输入样例2:\n1\n0\n输出样例2:\n1\nf(0.0) = 0.0",
     "options": [],
-    "answer": [
-      "x = float(input())\nresult = 0 if x == 0 else 1 / x\nprint(f\"f({x:.1f}) = {result:.1f}\")"
-    ],
+    "answer": "x = float(input())\nresult = 0 if x == 0 else 1 / x\nprint(f\"f({x:.1f}) = {result:.1f}\")",
     "images": [],
     "knowledge": "条件分支与格式化输出",
     "chapter": "5. Python 程序设计题",
     "quickExplanation": "参考答案：\n```python\nx = float(input())\nresult = 0 if x == 0 else 1 / x\nprint(f\"f({x:.1f}) = {result:.1f}\")\n```\n\n解析：分段函数先按边界条件分支，再按题目指定格式输出。小数题要用格式化控制位数，字符串题要把单复数或象限文字精确写对。",
     "knowledgeDetail": "分段函数先按边界条件分支，再按题目指定格式输出。小数题要用格式化控制位数，字符串题要把单复数或象限文字精确写对。",
     "explanation": "【快速做题】\n参考答案：\n```python\nx = float(input())\nresult = 0 if x == 0 else 1 / x\nprint(f\"f({x:.1f}) = {result:.1f}\")\n```\n\n解析：分段函数先按边界条件分支，再按题目指定格式输出。小数题要用格式化控制位数，字符串题要把单复数或象限文字精确写对。\n\n【知识点详解】\n分段函数先按边界条件分支，再按题目指定格式输出。小数题要用格式化控制位数，字符串题要把单复数或象限文字精确写对。",
-    "blankCount": 1,
+    "blankCount": 0,
     "source": "编程题2练习 / R7-6",
     "id": 230
   },
   {
     "label": "DSP-R7-7",
-    "type": "blank",
+    "type": "essay",
     "typeName": "编程题",
     "stem": "为了提倡居民节约用电，某省电力公司执行“阶梯电价”，安装一户一表的居民用户电价分为两个“阶梯”：月用电量50千瓦时（含50千瓦时）以内的，电价为0.53元/千瓦时；超过50千瓦时的，超出部分的用电量，电价上调0.05元/千瓦时。请编写程序计算电费。\n\n输入格式:\n\n输入在一行中给出某用户的月用电量（单位：千瓦时）。\n\n输出格式:\n\n在一行中输出该用户应支付的电费（元），结果保留两位小数，格式如：“cost = 应付电费值”；若用电量小于0，则输出\"Invalid Value!\"。\n\n输入样例1:\n[ in ]\n1\n10\n输出样例1:\n[ out ]\n1\ncost = 5.30\n输入样例2:\n1\n100\n输出样例2:\n1\ncost = 55.50",
     "options": [],
-    "answer": [
-      "x = float(input())\nif x < 0:\n    print(\"Invalid Value!\")\nelif x <= 50:\n    print(f\"cost = {x * 0.53:.2f}\")\nelse:\n    print(f\"cost = {50 * 0.53 + (x - 50) * 0.58:.2f}\")"
-    ],
+    "answer": "x = float(input())\nif x < 0:\n    print(\"Invalid Value!\")\nelif x <= 50:\n    print(f\"cost = {x * 0.53:.2f}\")\nelse:\n    print(f\"cost = {50 * 0.53 + (x - 50) * 0.58:.2f}\")",
     "images": [],
     "knowledge": "条件分支与格式化输出",
     "chapter": "5. Python 程序设计题",
     "quickExplanation": "参考答案：\n```python\nx = float(input())\nif x < 0:\n    print(\"Invalid Value!\")\nelif x <= 50:\n    print(f\"cost = {x * 0.53:.2f}\")\nelse:\n    print(f\"cost = {50 * 0.53 + (x - 50) * 0.58:.2f}\")\n```\n\n解析：分段函数先按边界条件分支，再按题目指定格式输出。小数题要用格式化控制位数，字符串题要把单复数或象限文字精确写对。",
     "knowledgeDetail": "分段函数先按边界条件分支，再按题目指定格式输出。小数题要用格式化控制位数，字符串题要把单复数或象限文字精确写对。",
     "explanation": "【快速做题】\n参考答案：\n```python\nx = float(input())\nif x < 0:\n    print(\"Invalid Value!\")\nelif x <= 50:\n    print(f\"cost = {x * 0.53:.2f}\")\nelse:\n    print(f\"cost = {50 * 0.53 + (x - 50) * 0.58:.2f}\")\n```\n\n解析：分段函数先按边界条件分支，再按题目指定格式输出。小数题要用格式化控制位数，字符串题要把单复数或象限文字精确写对。\n\n【知识点详解】\n分段函数先按边界条件分支，再按题目指定格式输出。小数题要用格式化控制位数，字符串题要把单复数或象限文字精确写对。",
-    "blankCount": 1,
+    "blankCount": 0,
     "source": "编程题2练习 / R7-7",
     "id": 231
   },
   {
     "label": "DSP-R7-8",
-    "type": "blank",
+    "type": "essay",
     "typeName": "编程题",
     "stem": "朵拉编程的时候也想顺便练习英语。她编程从键盘读入一个整数n，如果n值为0或者1，向屏幕输出“0 indian boy.”或“1 indian boy.”；如果n大于1，比如9，则输出“9 indian boys.”。请你也编一个这样的程序。\n\n输入格式:\n\n整数n\n\n输出格式:\n\n见题干描述\n\n输入样例:\n[ in ]\n1\n9\n输出样例:\n[ out ]\n1\n9 indian boys.\n\n解题思路： 请参考《Python编程基础及应用实验教程》。\n该书是高等教育出版社《Python编程基础及应用》教材的配套实验指导书。\n\n拼尽全力还是不会？参考B站习题讲解\n哔哩哔哩up主：海洋饼干叔叔 Python课程 Python习题简洁的C和C++作者每天分享一篇关于C/C++/Python的技术文章，学习编程不迷路。",
     "options": [],
-    "answer": [
-      "n = int(input())\nword = \"boy\" if n == 0 or n == 1 else \"boys\"\nprint(f\"{n} indian {word}.\")"
-    ],
+    "answer": "n = int(input())\nword = \"boy\" if n == 0 or n == 1 else \"boys\"\nprint(f\"{n} indian {word}.\")",
     "images": [],
     "knowledge": "条件分支与格式化输出",
     "chapter": "5. Python 程序设计题",
     "quickExplanation": "参考答案：\n```python\nn = int(input())\nword = \"boy\" if n == 0 or n == 1 else \"boys\"\nprint(f\"{n} indian {word}.\")\n```\n\n解析：分段函数先按边界条件分支，再按题目指定格式输出。小数题要用格式化控制位数，字符串题要把单复数或象限文字精确写对。",
     "knowledgeDetail": "分段函数先按边界条件分支，再按题目指定格式输出。小数题要用格式化控制位数，字符串题要把单复数或象限文字精确写对。",
     "explanation": "【快速做题】\n参考答案：\n```python\nn = int(input())\nword = \"boy\" if n == 0 or n == 1 else \"boys\"\nprint(f\"{n} indian {word}.\")\n```\n\n解析：分段函数先按边界条件分支，再按题目指定格式输出。小数题要用格式化控制位数，字符串题要把单复数或象限文字精确写对。\n\n【知识点详解】\n分段函数先按边界条件分支，再按题目指定格式输出。小数题要用格式化控制位数，字符串题要把单复数或象限文字精确写对。",
-    "blankCount": 1,
+    "blankCount": 0,
     "source": "编程题2练习 / R7-8",
     "id": 232
   },
   {
     "label": "DSP-R7-9",
-    "type": "blank",
+    "type": "essay",
     "typeName": "编程题",
     "stem": "[平面坐标系象限图]\n\n请编程实现下述功能：\n\n使用代码x,y = eval(input())从键盘读入不为零的两个坐标值（浮点数）；注意两个坐标值应使用英文逗号分隔；\n结合上图，判定点(x,y)所在的象限。\n\n说明：程序约定x和y值不为0。\n\n输入格式:\n\nx,y\n\n输出格式:\n\n第1象限  或 第2象限  或 第3象限  或  第4象限\n\n输入样例:\n[ in ]\n1\n15.2,-11.3\n输出样例:\n[ out ]\n1\n第4象限\n\n解题思路： 请参考《Python编程基础及应用实验教程》。\n该书是高等教育出版社《Python编程基础及应用》教材的配套实验指导书。\n\n拼尽全力还是不会？参考B站习题讲解\n哔哩哔哩up主：海洋饼干叔叔 Python课程 Python习题简洁的C和C++作者每天分享一篇关于C/C++/Python的技术文章，学习编程不迷路。",
     "options": [],
-    "answer": [
-      "x, y = eval(input())\nif x > 0 and y > 0:\n    print(\"第1象限\")\nelif x < 0 and y > 0:\n    print(\"第2象限\")\nelif x < 0 and y < 0:\n    print(\"第3象限\")\nelse:\n    print(\"第4象限\")"
-    ],
+    "answer": "x, y = eval(input())\nif x > 0 and y > 0:\n    print(\"第1象限\")\nelif x < 0 and y > 0:\n    print(\"第2象限\")\nelif x < 0 and y < 0:\n    print(\"第3象限\")\nelse:\n    print(\"第4象限\")",
     "images": [],
     "knowledge": "条件分支与格式化输出",
     "chapter": "5. Python 程序设计题",
     "quickExplanation": "参考答案：\n```python\nx, y = eval(input())\nif x > 0 and y > 0:\n    print(\"第1象限\")\nelif x < 0 and y > 0:\n    print(\"第2象限\")\nelif x < 0 and y < 0:\n    print(\"第3象限\")\nelse:\n    print(\"第4象限\")\n```\n\n解析：分段函数先按边界条件分支，再按题目指定格式输出。小数题要用格式化控制位数，字符串题要把单复数或象限文字精确写对。",
     "knowledgeDetail": "分段函数先按边界条件分支，再按题目指定格式输出。小数题要用格式化控制位数，字符串题要把单复数或象限文字精确写对。",
     "explanation": "【快速做题】\n参考答案：\n```python\nx, y = eval(input())\nif x > 0 and y > 0:\n    print(\"第1象限\")\nelif x < 0 and y > 0:\n    print(\"第2象限\")\nelif x < 0 and y < 0:\n    print(\"第3象限\")\nelse:\n    print(\"第4象限\")\n```\n\n解析：分段函数先按边界条件分支，再按题目指定格式输出。小数题要用格式化控制位数，字符串题要把单复数或象限文字精确写对。\n\n【知识点详解】\n分段函数先按边界条件分支，再按题目指定格式输出。小数题要用格式化控制位数，字符串题要把单复数或象限文字精确写对。",
-    "blankCount": 1,
+    "blankCount": 0,
     "source": "编程题2练习 / R7-9",
     "id": 233
   },
   {
     "label": "DSP-R7-10",
-    "type": "blank",
+    "type": "essay",
     "typeName": "编程题",
     "stem": "为鼓励居民节约用水，自来水公司采取按用水量阶梯式计价的办法，居民应交水费y（元）与月用水量x（吨）相关：当x不超过15吨时，y=4x/3；超过后，y=2.5x−17.5。请编写程序实现水费的计算。\n\n输入格式：\n\n输入在一行中给出非负实数x。\n\n输出格式：\n\n在一行输出应交的水费，精确到小数点后2位。\n\n输入样例1：\n[ in ]\n1\n12\n输出样例1：\n[ out ]\n1\n16.00\n输入样例2：\n1\n16\n输出样例2：\n1\n22.50",
     "options": [],
-    "answer": [
-      "x = float(input())\nif x <= 15:\n    y = 4 * x / 3\nelse:\n    y = 2.5 * x - 17.5\nprint(f\"{y:.2f}\")"
-    ],
+    "answer": "x = float(input())\nif x <= 15:\n    y = 4 * x / 3\nelse:\n    y = 2.5 * x - 17.5\nprint(f\"{y:.2f}\")",
     "images": [],
     "knowledge": "条件分支与格式化输出",
     "chapter": "5. Python 程序设计题",
     "quickExplanation": "参考答案：\n```python\nx = float(input())\nif x <= 15:\n    y = 4 * x / 3\nelse:\n    y = 2.5 * x - 17.5\nprint(f\"{y:.2f}\")\n```\n\n解析：分段函数先按边界条件分支，再按题目指定格式输出。小数题要用格式化控制位数，字符串题要把单复数或象限文字精确写对。",
     "knowledgeDetail": "分段函数先按边界条件分支，再按题目指定格式输出。小数题要用格式化控制位数，字符串题要把单复数或象限文字精确写对。",
     "explanation": "【快速做题】\n参考答案：\n```python\nx = float(input())\nif x <= 15:\n    y = 4 * x / 3\nelse:\n    y = 2.5 * x - 17.5\nprint(f\"{y:.2f}\")\n```\n\n解析：分段函数先按边界条件分支，再按题目指定格式输出。小数题要用格式化控制位数，字符串题要把单复数或象限文字精确写对。\n\n【知识点详解】\n分段函数先按边界条件分支，再按题目指定格式输出。小数题要用格式化控制位数，字符串题要把单复数或象限文字精确写对。",
-    "blankCount": 1,
+    "blankCount": 0,
     "source": "编程题2练习 / R7-10",
     "id": 234
   },
   {
     "label": "DSP-R7-11",
-    "type": "blank",
+    "type": "essay",
     "typeName": "编程题",
     "stem": "输入一个字符串，判断该字符串是否为回文。回文就是字符串中心对称，从左向右读和从右向左读的内容是一样的。\n\n输入格式:\n\n输入在一行中给出一个不超过80个字符长度的、以回车结束的非空字符串。\n\n输出格式:\n\n输出在第1行中输出字符串。如果它是回文字符串，在第2行中输出Yes，否则输出No。\n\n输入样例1:\n[ in ]\n1\nlevel\n输出样例1:\n[ out ]\n1\n2\nlevel\nYes\n输入样例2:\n[ in ]\n1\n1 + 2 = 2 + 1 =\n输出样例2:\n[ out ]\n1\n2\n1 + 2 = 2 + 1 =\nNo",
     "options": [],
-    "answer": [
-      "s = input()\nprint(s)\nprint(\"Yes\" if s == s[::-1] else \"No\")"
-    ],
+    "answer": "s = input()\nprint(s)\nprint(\"Yes\" if s == s[::-1] else \"No\")",
     "images": [],
     "knowledge": "字符串处理",
     "chapter": "5. Python 程序设计题",
     "quickExplanation": "参考答案：\n```python\ns = input()\nprint(s)\nprint(\"Yes\" if s == s[::-1] else \"No\")\n```\n\n解析：回文题比较字符串与反转串；变位词题比较两个字符串排序后的结果，空格、大小写和重复字符都按输入原样参与判断。",
     "knowledgeDetail": "回文题比较字符串与反转串；变位词题比较两个字符串排序后的结果，空格、大小写和重复字符都按输入原样参与判断。",
     "explanation": "【快速做题】\n参考答案：\n```python\ns = input()\nprint(s)\nprint(\"Yes\" if s == s[::-1] else \"No\")\n```\n\n解析：回文题比较字符串与反转串；变位词题比较两个字符串排序后的结果，空格、大小写和重复字符都按输入原样参与判断。\n\n【知识点详解】\n回文题比较字符串与反转串；变位词题比较两个字符串排序后的结果，空格、大小写和重复字符都按输入原样参与判断。",
-    "blankCount": 1,
+    "blankCount": 0,
     "source": "编程题2练习 / R7-11",
     "id": 235
   },
   {
     "label": "DSP-R7-12",
-    "type": "blank",
+    "type": "essay",
     "typeName": "编程题",
     "stem": "如果一个字符串是 另一个字符串的重新排列组合，那么这两个字符串互为变位词。比如，”heart”与”earth”互为变位 词，”Mary”与”arMy”也互为变位词。\n\n输入格式:\n\n第一行输入第一个字符串，第二行输入第二个字符串。\n\n输出格式:\n\n输出“yes”,表示是互换词，输出“no”,表示不是互换词。\n\n输入样例1:\n\n在这里给出一组输入。例如：\n\n[ in ]\n1\n2\nMary\narMy\n输出样例1\n\n在这里给出相应的输出。例如：\n\n[ out ]\n1\nyes\n输入样例2:\n\n在这里给出一组输入。例如：\n\n[ in ]\n1\n2\nhello 114\n114 hello\n输出样例2:\n\n在这里给出相应的输出。例如：\n\n[ out ]\n1\nyes\n输入样例3:\n\n在这里给出一组输入。例如：\n\n[ in ]\n1\n2\nWellcom\nmocllew\n输出样例3:\n\n在这里给出相应的输出。例如：\n\n[ out ]\n1\nno",
     "options": [],
-    "answer": [
-      "s1 = input()\ns2 = input()\nprint(\"yes\" if sorted(s1) == sorted(s2) else \"no\")"
-    ],
+    "answer": "s1 = input()\ns2 = input()\nprint(\"yes\" if sorted(s1) == sorted(s2) else \"no\")",
     "images": [],
     "knowledge": "字符串处理",
     "chapter": "5. Python 程序设计题",
     "quickExplanation": "参考答案：\n```python\ns1 = input()\ns2 = input()\nprint(\"yes\" if sorted(s1) == sorted(s2) else \"no\")\n```\n\n解析：回文题比较字符串与反转串；变位词题比较两个字符串排序后的结果，空格、大小写和重复字符都按输入原样参与判断。",
     "knowledgeDetail": "回文题比较字符串与反转串；变位词题比较两个字符串排序后的结果，空格、大小写和重复字符都按输入原样参与判断。",
     "explanation": "【快速做题】\n参考答案：\n```python\ns1 = input()\ns2 = input()\nprint(\"yes\" if sorted(s1) == sorted(s2) else \"no\")\n```\n\n解析：回文题比较字符串与反转串；变位词题比较两个字符串排序后的结果，空格、大小写和重复字符都按输入原样参与判断。\n\n【知识点详解】\n回文题比较字符串与反转串；变位词题比较两个字符串排序后的结果，空格、大小写和重复字符都按输入原样参与判断。",
-    "blankCount": 1,
+    "blankCount": 0,
     "source": "编程题2练习 / R7-12",
     "id": 236
   },
   {
     "label": "DSP-R7-13",
-    "type": "blank",
+    "type": "essay",
     "typeName": "编程题",
     "stem": "括号()的组合千奇百怪，Drizzle 想知道各种组合的括号可以是否合法\n合法要求：每个同类型的左括号必须有与之对应的同类的右括号以正确的顺序闭合\n\n要求:\n\n输入：输入一个括号字符串\n输出：输出是否合法，是则True，否则False\n\n示例:\n\n输入：\n\n[ in ]\n1\n(){}[]\n\n输出：\n\n[ out ]\n1\nTrue\n范围:\n\n对于 100% 的数据：括号字符串长度 ≤ 100",
     "options": [],
-    "answer": [
-      "s = input()\nstack = []\nmatch = {\")\": \"(\", \"]\": \"[\", \"}\": \"{\"}\nok = True\nfor ch in s:\n    if ch in \"([{\":\n        stack.append(ch)\n    elif ch in match:\n        if not stack or stack[-1] != match[ch]:\n            ok = False\n            break\n        stack.pop()\nprint(ok and not stack)"
-    ],
+    "answer": "s = input()\nstack = []\nmatch = {\")\": \"(\", \"]\": \"[\", \"}\": \"{\"}\nok = True\nfor ch in s:\n    if ch in \"([{\":\n        stack.append(ch)\n    elif ch in match:\n        if not stack or stack[-1] != match[ch]:\n            ok = False\n            break\n        stack.pop()\nprint(ok and not stack)",
     "images": [],
     "knowledge": "栈与括号匹配",
     "chapter": "5. Python 程序设计题",
     "quickExplanation": "参考答案：\n```python\ns = input()\nstack = []\nmatch = {\")\": \"(\", \"]\": \"[\", \"}\": \"{\"}\nok = True\nfor ch in s:\n    if ch in \"([{\":\n        stack.append(ch)\n    elif ch in match:\n        if not stack or stack[-1] != match[ch]:\n            ok = False\n            break\n        stack.pop()\nprint(ok and not stack)\n```\n\n解析：括号题用栈保存尚未匹配的左括号。遇到右括号时必须与栈顶同类型匹配，匹配后弹出；扫描结束栈为空才说明全部闭合。",
     "knowledgeDetail": "括号题用栈保存尚未匹配的左括号。遇到右括号时必须与栈顶同类型匹配，匹配后弹出；扫描结束栈为空才说明全部闭合。",
     "explanation": "【快速做题】\n参考答案：\n```python\ns = input()\nstack = []\nmatch = {\")\": \"(\", \"]\": \"[\", \"}\": \"{\"}\nok = True\nfor ch in s:\n    if ch in \"([{\":\n        stack.append(ch)\n    elif ch in match:\n        if not stack or stack[-1] != match[ch]:\n            ok = False\n            break\n        stack.pop()\nprint(ok and not stack)\n```\n\n解析：括号题用栈保存尚未匹配的左括号。遇到右括号时必须与栈顶同类型匹配，匹配后弹出；扫描结束栈为空才说明全部闭合。\n\n【知识点详解】\n括号题用栈保存尚未匹配的左括号。遇到右括号时必须与栈顶同类型匹配，匹配后弹出；扫描结束栈为空才说明全部闭合。",
-    "blankCount": 1,
+    "blankCount": 0,
     "source": "编程题2练习 / R7-13",
     "id": 237
   },
   {
     "label": "DSP-R7-14",
-    "type": "blank",
+    "type": "essay",
     "typeName": "编程题",
     "stem": "Alan最近眼神不好使，经常分不清楚括号，所以想请你帮忙，给定一个只包括 '('，')'，'{'，'}'，'['，']' 的字符串，由于不小心输入错误，Alan还输入了几个空格。想让你帮忙编写程序确定括号是否都是正常闭合。\n\n左括号必须用相同类型的右括号闭合。\n左括号必须以正确的顺序闭合。\n空字符串被认定为True\n空格可以去掉\n输入格式:\n\n输入空字符串或一行只包含'('，')'，'{'，'}'，'['，']' 以及空格的字符串。\n\n输出格式:\n\n如果所有括号正确闭合，输出“True”，否则输出“False”。\n\n输入样例:\n\n在这里给出一组输入。例如：\n\n[ in ]\n1\n()\n输出样例:\n\n在这里给出相应的输出。例如：\n\n[ out ]\n1\nTrue\n输入样例:\n\n在这里给出一组输入。例如：\n\n[ in ]\n1\n{[()]()}\n输出样例:\n\n在这里给出相应的输出。例如：\n\n[ out ]\n1\nTrue\n输入样例:\n\n在这里给出一组输入。例如：\n\n[ in ]\n1\n{{()[]}\n输出样例:\n\n在这里给出相应的输出。例如：\n\n[ out ]\n1\nFalse",
     "options": [],
-    "answer": [
-      "s = input().replace(\" \", \"\")\nstack = []\nmatch = {\")\": \"(\", \"]\": \"[\", \"}\": \"{\"}\nok = True\nfor ch in s:\n    if ch in \"([{\":\n        stack.append(ch)\n    elif ch in match:\n        if not stack or stack[-1] != match[ch]:\n            ok = False\n            break\n        stack.pop()\nprint(ok and not stack)"
-    ],
+    "answer": "s = input().replace(\" \", \"\")\nstack = []\nmatch = {\")\": \"(\", \"]\": \"[\", \"}\": \"{\"}\nok = True\nfor ch in s:\n    if ch in \"([{\":\n        stack.append(ch)\n    elif ch in match:\n        if not stack or stack[-1] != match[ch]:\n            ok = False\n            break\n        stack.pop()\nprint(ok and not stack)",
     "images": [],
     "knowledge": "栈与括号匹配",
     "chapter": "5. Python 程序设计题",
     "quickExplanation": "参考答案：\n```python\ns = input().replace(\" \", \"\")\nstack = []\nmatch = {\")\": \"(\", \"]\": \"[\", \"}\": \"{\"}\nok = True\nfor ch in s:\n    if ch in \"([{\":\n        stack.append(ch)\n    elif ch in match:\n        if not stack or stack[-1] != match[ch]:\n            ok = False\n            break\n        stack.pop()\nprint(ok and not stack)\n```\n\n解析：括号题用栈保存尚未匹配的左括号。遇到右括号时必须与栈顶同类型匹配，匹配后弹出；扫描结束栈为空才说明全部闭合。",
     "knowledgeDetail": "括号题用栈保存尚未匹配的左括号。遇到右括号时必须与栈顶同类型匹配，匹配后弹出；扫描结束栈为空才说明全部闭合。",
     "explanation": "【快速做题】\n参考答案：\n```python\ns = input().replace(\" \", \"\")\nstack = []\nmatch = {\")\": \"(\", \"]\": \"[\", \"}\": \"{\"}\nok = True\nfor ch in s:\n    if ch in \"([{\":\n        stack.append(ch)\n    elif ch in match:\n        if not stack or stack[-1] != match[ch]:\n            ok = False\n            break\n        stack.pop()\nprint(ok and not stack)\n```\n\n解析：括号题用栈保存尚未匹配的左括号。遇到右括号时必须与栈顶同类型匹配，匹配后弹出；扫描结束栈为空才说明全部闭合。\n\n【知识点详解】\n括号题用栈保存尚未匹配的左括号。遇到右括号时必须与栈顶同类型匹配，匹配后弹出；扫描结束栈为空才说明全部闭合。",
-    "blankCount": 1,
+    "blankCount": 0,
     "source": "编程题2练习 / R7-14",
     "id": 238
   },
   {
     "label": "DSP-R7-15",
-    "type": "blank",
+    "type": "essay",
     "typeName": "编程题",
     "stem": "设表达式中允许包含3种括号：圆括号、方括号和大括号。即小括号、中括号和大括号。 编写一个算法来判断表达式中的括号是否正确配对，要求利用栈的结构实现。\n\n输入格式:\n\n输入一行带圆括号、方括号和大括号的字符串。\n\n输出格式:\n\n若匹配，输出yes。若不匹配，输出no。。\n\n输入样例:\n\n在这里给出一组输入。例如：\n\n[ in ]\n1\n([1+2])\n输出样例:\n\n在这里给出相应的输出。例如：\n\n[ out ]\n1\nyes\n输入样例:\n\n在这里给出一组输入。例如：\n\n[ in ]\n1\n([\n输出样例:\n\n在这里给出相应的输出。例如：\n\n[ out ]\n1\nno",
     "options": [],
-    "answer": [
-      "s = input()\nstack = []\nmatch = {\")\": \"(\", \"]\": \"[\", \"}\": \"{\"}\nok = True\nfor ch in s:\n    if ch in \"([{\":\n        stack.append(ch)\n    elif ch in match:\n        if not stack or stack[-1] != match[ch]:\n            ok = False\n            break\n        stack.pop()\nprint(\"yes\" if ok and not stack else \"no\")"
-    ],
+    "answer": "s = input()\nstack = []\nmatch = {\")\": \"(\", \"]\": \"[\", \"}\": \"{\"}\nok = True\nfor ch in s:\n    if ch in \"([{\":\n        stack.append(ch)\n    elif ch in match:\n        if not stack or stack[-1] != match[ch]:\n            ok = False\n            break\n        stack.pop()\nprint(\"yes\" if ok and not stack else \"no\")",
     "images": [],
     "knowledge": "栈与括号匹配",
     "chapter": "5. Python 程序设计题",
     "quickExplanation": "参考答案：\n```python\ns = input()\nstack = []\nmatch = {\")\": \"(\", \"]\": \"[\", \"}\": \"{\"}\nok = True\nfor ch in s:\n    if ch in \"([{\":\n        stack.append(ch)\n    elif ch in match:\n        if not stack or stack[-1] != match[ch]:\n            ok = False\n            break\n        stack.pop()\nprint(\"yes\" if ok and not stack else \"no\")\n```\n\n解析：括号题用栈保存尚未匹配的左括号。遇到右括号时必须与栈顶同类型匹配，匹配后弹出；扫描结束栈为空才说明全部闭合。",
     "knowledgeDetail": "括号题用栈保存尚未匹配的左括号。遇到右括号时必须与栈顶同类型匹配，匹配后弹出；扫描结束栈为空才说明全部闭合。",
     "explanation": "【快速做题】\n参考答案：\n```python\ns = input()\nstack = []\nmatch = {\")\": \"(\", \"]\": \"[\", \"}\": \"{\"}\nok = True\nfor ch in s:\n    if ch in \"([{\":\n        stack.append(ch)\n    elif ch in match:\n        if not stack or stack[-1] != match[ch]:\n            ok = False\n            break\n        stack.pop()\nprint(\"yes\" if ok and not stack else \"no\")\n```\n\n解析：括号题用栈保存尚未匹配的左括号。遇到右括号时必须与栈顶同类型匹配，匹配后弹出；扫描结束栈为空才说明全部闭合。\n\n【知识点详解】\n括号题用栈保存尚未匹配的左括号。遇到右括号时必须与栈顶同类型匹配，匹配后弹出；扫描结束栈为空才说明全部闭合。",
-    "blankCount": 1,
+    "blankCount": 0,
     "source": "编程题2练习 / R7-15",
     "id": 239
   }

@@ -202,6 +202,7 @@ public class MainActivity extends Activity {
     private SeekBar questionSeekBar;
     private FrameLayout questionSeekShell;
     private TextView stemView;
+    private LinearLayout essayTopActionList;
     private LinearLayout memoryReasonContainer;
     private LinearLayout feedbackContainer;
     private LinearLayout filterRowView;
@@ -770,8 +771,9 @@ public class MainActivity extends Activity {
                 Question q = new Question();
                 q.id = obj.getInt("id");
                 q.label = obj.getString("label");
-                q.type = obj.getString("type");
+                String rawType = obj.getString("type");
                 q.typeName = obj.getString("typeName");
+                q.type = normalizeQuestionType(rawType, q.typeName);
                 q.stem = obj.getString("stem");
                 q.answer = obj.get("answer");
                 q.chapter = obj.optString("chapter", "");
@@ -791,6 +793,7 @@ public class MainActivity extends Activity {
                         ));
                     }
                 }
+                ensureDefaultOptions(q);
                 JSONArray imgs = obj.optJSONArray("images");
                 if (imgs != null) {
                     for (int j = 0; j < imgs.length(); j++) {
@@ -815,6 +818,26 @@ public class MainActivity extends Activity {
         } catch (Exception e) {
             Toast.makeText(this, "题库加载失败：" + e.getMessage(), Toast.LENGTH_LONG).show();
         }
+    }
+
+    private String normalizeQuestionType(String type, String typeName) {
+        String normalized = type == null ? "" : type.trim();
+        String name = typeName == null ? "" : typeName.trim();
+        if ("blank".equals(normalized) && isCodeQuestionTypeName(name)) {
+            return QUESTION_TYPE_ESSAY;
+        }
+        return normalized;
+    }
+
+    private void ensureDefaultOptions(Question q) {
+        if (q == null || !"tf".equals(q.type) || !q.options.isEmpty()) return;
+        q.options.add(new Option("TRUE", "正确"));
+        q.options.add(new Option("FALSE", "错误"));
+    }
+
+    private boolean isCodeQuestionTypeName(String typeName) {
+        if (typeName == null) return false;
+        return typeName.contains("编程") || typeName.contains("函数") || typeName.contains("程序");
     }
 
     private void loadMemoryCards() {
@@ -1650,6 +1673,12 @@ public class MainActivity extends Activity {
         contentContainer.setPivotX(0f);
         contentContainer.setPivotY(0f);
         questionZoomFrame.addView(contentContainer, new FrameLayout.LayoutParams(-1, -2));
+
+        essayTopActionList = new LinearLayout(this);
+        essayTopActionList.setOrientation(LinearLayout.VERTICAL);
+        essayTopActionList.setPadding(0, dp(2), 0, dp(8));
+        essayTopActionList.setVisibility(View.GONE);
+        contentContainer.addView(essayTopActionList, new LinearLayout.LayoutParams(-1, -2));
 
         stemView = text("", 24, TEXT, true);
         stemView.setLineSpacing(dp(6), 1.0f);
@@ -2994,16 +3023,22 @@ public class MainActivity extends Activity {
         if (!questionPageAnimating) {
             resetQuestionPageSurface();
             resetQuestionZoom(false);
+            if (scrollView != null) {
+                scrollView.scrollTo(0, 0);
+            }
             hideQuestionSwipePreview();
         }
         feedbackContainer.setPadding(dp(16), dp(14), dp(16), dp(14));
         feedbackContainer.setOnClickListener(null);
         installQuestionPageSwipeProxy(feedbackContainer);
-        stemView.setTextSize(24);
         selected.clear();
         blankInputs.clear();
         submitted = false;
         lastAnswerOk = null;
+        if (essayTopActionList != null) {
+            essayTopActionList.removeAllViews();
+            essayTopActionList.setVisibility(View.GONE);
+        }
         optionList.removeAllViews();
         imageList.removeAllViews();
         memoryReasonContainer.removeAllViews();
@@ -3027,7 +3062,12 @@ public class MainActivity extends Activity {
         }
 
         Question q = currentQuestion();
+        stemView.setTextSize(questionStemTextSize(q));
         persistStudyProgress(q.label);
+        if (isCodeAnswerQuestion(q) && essayTopActionList != null && !rememberMode) {
+            renderEssayActionsInto(q, essayTopActionList);
+            essayTopActionList.setVisibility(View.VISIBLE);
+        }
         if ("tf".equals(q.type) || "single".equals(q.type)) {
             submitButton.setText("");
             submitButton.setEnabled(false);
@@ -3057,7 +3097,9 @@ public class MainActivity extends Activity {
         if ("blank".equals(q.type)) {
             renderBlankInputs(q);
         } else if (isEssayQuestion(q)) {
-            renderEssayActions(q);
+            if (!isCodeAnswerQuestion(q)) {
+                renderEssayActions(q);
+            }
         } else {
             for (Option opt : q.options) {
                 addOptionView(q, opt);
@@ -4479,9 +4521,14 @@ public class MainActivity extends Activity {
     }
 
     private void renderEssayActions(final Question q) {
+        renderEssayActionsInto(q, optionList);
+    }
+
+    private void renderEssayActionsInto(final Question q, LinearLayout target) {
         if (rememberMode) {
             return;
         }
+        if (target == null) return;
         Button showAnswer = bigButton("查看参考答案", true);
         showAnswer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -4492,11 +4539,11 @@ public class MainActivity extends Activity {
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(-1, dp(52));
         lp.topMargin = dp(4);
         lp.bottomMargin = dp(10);
-        optionList.addView(showAnswer, lp);
+        target.addView(showAnswer, lp);
 
         TextView hint = text("大题不会自动判分。先看答案，再按自己的掌握程度点“会了 / 不会”。", 13, MUTED, false);
         hint.setLineSpacing(dp(3), 1.0f);
-        optionList.addView(hint, new LinearLayout.LayoutParams(-1, -2));
+        target.addView(hint, new LinearLayout.LayoutParams(-1, -2));
     }
 
     private void showEssayAnswer(final Question q) {
@@ -4518,7 +4565,7 @@ public class MainActivity extends Activity {
         }
         StringBuilder sb = new StringBuilder();
         sb.append("# 参考答案\n\n");
-        sb.append(displayAnswer(q)).append("\n\n");
+        sb.append(answerMarkdown(q)).append("\n\n");
         if (q.quickExplanation != null && q.quickExplanation.trim().length() > 0) {
             sb.append("## 怎么抓这题\n\n");
             sb.append(markdownizeExplanationBlock(q.quickExplanation)).append("\n\n");
@@ -4724,7 +4771,7 @@ public class MainActivity extends Activity {
             sb.append("# ").append(ok ? "回答正确" : "回答错误，已加入错题本").append("\n\n");
         }
         sb.append("## 本题结果\n\n");
-        sb.append("- **正确答案：** ").append(displayAnswer(q)).append("\n");
+        appendAnswerLine(sb, q);
         sb.append("- **知识点：** ").append(q.chapter).append(" / ").append(q.knowledge).append("\n");
         sb.append("- **错题本：** ").append(cleanProgressText(wrongBookProgressText(q, ok))).append("\n");
         return sb.toString();
@@ -4738,7 +4785,7 @@ public class MainActivity extends Activity {
             sb.append("# ").append(ok ? "回答正确" : "回答错误，已加入错题本").append("\n\n");
         }
         sb.append("## 本题结果\n\n");
-        sb.append("- **正确答案：** ").append(displayAnswer(q)).append("\n");
+        appendAnswerLine(sb, q);
         sb.append("- **知识点：** ").append(q.chapter).append(" / ").append(q.knowledge).append("\n");
         sb.append("- **错题本：** ").append(cleanProgressText(wrongBookProgressText(q, ok))).append("\n\n");
 
@@ -4756,6 +4803,28 @@ public class MainActivity extends Activity {
         return sb.toString();
     }
 
+    private void appendAnswerLine(StringBuilder sb, Question q) {
+        String answer = answerMarkdown(q);
+        if (answer.indexOf('\n') >= 0) {
+            sb.append("- **正确答案：**\n\n").append(answer).append("\n");
+        } else {
+            sb.append("- **正确答案：** ").append(answer).append("\n");
+        }
+    }
+
+    private String answerMarkdown(Question q) {
+        if (isCodeAnswerQuestion(q)) {
+            List<String> answers = answerList(q);
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < answers.size(); i++) {
+                if (i > 0) sb.append("\n\n");
+                sb.append("```python\n").append(trimTrailingBlankLines(answers.get(i))).append("\n```");
+            }
+            return sb.toString();
+        }
+        return displayAnswer(q);
+    }
+
     private String cleanProgressText(String text) {
         return oneLine(text).replace("错题本规则：", "");
     }
@@ -4764,8 +4833,19 @@ public class MainActivity extends Activity {
         StringBuilder sb = new StringBuilder();
         String[] lines = text.replace("\r\n", "\n").replace('\r', '\n').split("\n");
         boolean inTable = false;
+        boolean inCodeBlock = false;
         for (String rawLine : lines) {
             String line = rawLine.trim();
+            if (line.startsWith("```")) {
+                sb.append(line).append("\n");
+                inCodeBlock = !inCodeBlock;
+                inTable = false;
+                continue;
+            }
+            if (inCodeBlock) {
+                sb.append(rawLine).append("\n");
+                continue;
+            }
             if (line.length() == 0) {
                 sb.append("\n");
                 inTable = false;
@@ -4821,11 +4901,32 @@ public class MainActivity extends Activity {
         container.setVisibility(View.VISIBLE);
         String[] lines = markdown.replace("\r\n", "\n").replace('\r', '\n').split("\n");
         StringBuilder paragraph = new StringBuilder();
+        StringBuilder codeBlock = new StringBuilder();
         boolean inOptionJudgmentSection = false;
         boolean inQuickReasonSection = false;
+        boolean inCodeBlock = false;
+        String codeLanguage = "";
         for (int i = 0; i < lines.length; i++) {
             String rawLine = lines[i];
             String line = rawLine.trim();
+            if (line.startsWith("```")) {
+                if (inCodeBlock) {
+                    addMarkdownCodeBlock(container, codeBlock.toString(), codeLanguage);
+                    codeBlock.setLength(0);
+                    codeLanguage = "";
+                    inCodeBlock = false;
+                } else {
+                    flushMarkdownParagraph(container, paragraph, inQuickReasonSection && !inOptionJudgmentSection);
+                    codeLanguage = line.length() > 3 ? line.substring(3).trim() : "";
+                    inCodeBlock = true;
+                }
+                continue;
+            }
+            if (inCodeBlock) {
+                if (codeBlock.length() > 0) codeBlock.append('\n');
+                codeBlock.append(rawLine);
+                continue;
+            }
             if (line.length() == 0) {
                 flushMarkdownParagraph(container, paragraph, inQuickReasonSection && !inOptionJudgmentSection);
                 addMarkdownSpacer(container, dp(4));
@@ -4876,6 +4977,9 @@ public class MainActivity extends Activity {
                 if (paragraph.length() > 0) paragraph.append('\n');
                 paragraph.append(line);
             }
+        }
+        if (inCodeBlock) {
+            addMarkdownCodeBlock(container, codeBlock.toString(), codeLanguage);
         }
         flushMarkdownParagraph(container, paragraph, inQuickReasonSection && !inOptionJudgmentSection);
     }
@@ -5111,6 +5215,38 @@ public class MainActivity extends Activity {
         lp.bottomMargin = dp(bottomMargin);
         lp.leftMargin = leftMargin;
         container.addView(tv, lp);
+    }
+
+    private void addMarkdownCodeBlock(LinearLayout container, String value, String language) {
+        HorizontalScrollView scroll = new HorizontalScrollView(this);
+        scroll.setHorizontalScrollBarEnabled(true);
+        scroll.setOverScrollMode(View.OVER_SCROLL_IF_CONTENT_SCROLLS);
+        installMarkdownTableSwipeGuard(scroll);
+
+        TextView tv = text("", 13, TEXT, false);
+        tv.setTypeface(Typeface.MONOSPACE);
+        tv.setText(trimTrailingBlankLines(value == null ? "" : value));
+        tv.setTextIsSelectable(true);
+        tv.setIncludeFontPadding(true);
+        tv.setLineSpacing(dp(2), 1.0f);
+        tv.setPadding(dp(12), dp(10), dp(12), dp(10));
+        tv.setMinWidth(dp(260));
+
+        int fill = THEME_LIGHT.equals(themeMode)
+                ? Color.rgb(247, 249, 252)
+                : Color.rgb(30, 35, 46);
+        int stroke = THEME_LIGHT.equals(themeMode)
+                ? Color.argb(120, 196, 208, 228)
+                : Color.argb(90, 220, 230, 250);
+        tv.setBackground(roundedStrokeBackground(fill, stroke, 10, 1));
+
+        scroll.addView(tv, new ViewGroup.LayoutParams(-2, -2));
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(-1, -2);
+        lp.topMargin = dp(6);
+        lp.bottomMargin = dp(10);
+        lp.leftMargin = dp(2);
+        lp.rightMargin = dp(2);
+        container.addView(scroll, lp);
     }
 
     private boolean isReasonHighlightLine(String line) {
@@ -5975,7 +6111,12 @@ public class MainActivity extends Activity {
         String quick = markdownizeExplanationBlock(q.quickExplanation == null ? "" : q.quickExplanation.trim());
         if (isEssayQuestion(q)) {
             StringBuilder sb = new StringBuilder();
-            sb.append("- **参考答案：** ").append(displayAnswer(q)).append("\n\n");
+            String answer = answerMarkdown(q);
+            if (answer.indexOf('\n') >= 0) {
+                sb.append("- **参考答案：**\n\n").append(answer).append("\n\n");
+            } else {
+                sb.append("- **参考答案：** ").append(answer).append("\n\n");
+            }
             if (quick.length() > 0) {
                 sb.append(quick).append("\n\n");
             }
@@ -7236,7 +7377,7 @@ public class MainActivity extends Activity {
 
     private String displayAnswer(Question q) {
         if (isEssayQuestion(q)) {
-            return answerString(q);
+            return join(answerList(q), "\n\n");
         }
         if ("blank".equals(q.type)) {
             return join(answerList(q), "；");
@@ -7261,6 +7402,30 @@ public class MainActivity extends Activity {
 
     private boolean isEssayQuestion(Question q) {
         return q != null && QUESTION_TYPE_ESSAY.equals(q.type);
+    }
+
+    private boolean isCodeAnswerQuestion(Question q) {
+        return q != null && isCodeQuestionTypeName(q.typeName);
+    }
+
+    private int questionStemTextSize(Question q) {
+        if (isCodeAnswerQuestion(q)) return 17;
+        int length = q == null || q.stem == null ? 0 : q.stem.length();
+        if (length > 520) return 19;
+        if (length > 260) return 21;
+        return 24;
+    }
+
+    private String trimTrailingBlankLines(String value) {
+        if (value == null) return "";
+        String out = value.replace("\r\n", "\n").replace('\r', '\n');
+        while (out.startsWith("\n")) {
+            out = out.substring(1);
+        }
+        while (out.endsWith("\n")) {
+            out = out.substring(0, out.length() - 1);
+        }
+        return out;
     }
 
     private int correctChoiceCount(Question q) {
