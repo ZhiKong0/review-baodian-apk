@@ -2,8 +2,8 @@
   {
     "chapter": "1. 线性数据结构",
     "knowledge": "线性数据结构",
-    "questionCount": 34,
-    "typeDistribution": "判断题 10；单选题 24",
+    "questionCount": 40,
+    "typeDistribution": "判断题 10；单选题 24；填空题 2；程序填空题 4",
     "labels": [
       "DS6A-R1-3",
       "DS6A-R1-5",
@@ -38,7 +38,13 @@
       "DS6B-R2-33",
       "DS6B-R2-39",
       "DS6B-R2-45",
-      "DS6B-R2-48"
+      "DS6B-R2-48",
+      "F-R1-1",
+      "F-R1-12",
+      "F-R2-1",
+      "F-R2-2",
+      "F-R2-3",
+      "F-R2-5"
     ],
     "layerHint": "线性表的顺序存储与链式存储（19题）；栈、队列与受限线性表（8题）；数据结构基本概念（7题）",
     "chapterMap": "1. 线性数据结构 -> 线性表的顺序存储与链式存储（19题） / 栈、队列与受限线性表（8题） / 数据结构基本概念（7题）",
@@ -90,8 +96,8 @@
   {
     "chapter": "2. 树与二叉搜索树",
     "knowledge": "树与二叉搜索树",
-    "questionCount": 63,
-    "typeDistribution": "判断题 41；单选题 22",
+    "questionCount": 69,
+    "typeDistribution": "判断题 41；单选题 22；填空题 6",
     "labels": [
       "DS6A-R1-6",
       "DS6A-R1-8",
@@ -155,7 +161,13 @@
       "DS6B-R2-37",
       "DS6B-R2-46",
       "DS6B-R2-47",
-      "DS6B-R2-49"
+      "DS6B-R2-49",
+      "B-4-1",
+      "B-4-2",
+      "F-R1-3",
+      "F-R1-4",
+      "F-R1-9",
+      "F-R1-11"
     ],
     "layerHint": "树、二叉树与二叉搜索树（63题）",
     "chapterMap": "2. 树与二叉搜索树 -> 树、二叉树与二叉搜索树（63题）",
@@ -325,8 +337,8 @@
   {
     "chapter": "4. Python 基础与面向对象",
     "knowledge": "Python 基础与面向对象",
-    "questionCount": 53,
-    "typeDistribution": "判断题 40；单选题 13",
+    "questionCount": 62,
+    "typeDistribution": "判断题 40；单选题 13；填空题 6；程序填空题 3",
     "labels": [
       "DS6A-R1-1",
       "DS6A-R1-4",
@@ -380,7 +392,16 @@
       "DS6B-R2-38",
       "DS6B-R2-42",
       "DS6B-R2-43",
-      "DS6B-R2-44"
+      "DS6B-R2-44",
+      "F-R1-2",
+      "F-R1-7",
+      "F-R1-8",
+      "F-R1-10",
+      "F-R1-13",
+      "F-R1-14",
+      "F-R2-4",
+      "F-R2-6",
+      "F-R2-7"
     ],
     "layerHint": "Python 类、对象与方法（36题）；Python 序列类型与列表操作（17题）",
     "chapterMap": "4. Python 基础与面向对象 -> Python 类、对象与方法（36题） / Python 序列类型与列表操作（17题）",
@@ -425,6 +446,41 @@
       "DS6A-R1-25：Python 序列类型与列表操作",
       "DS6A-R1-26：Python 类、对象与方法",
       "DS6A-R1-37：Python 类、对象与方法"
+    ]
+  },
+  {
+    "chapter": "5. 程序填空与代码理解",
+    "knowledge": "程序填空与代码理解",
+    "questionCount": 2,
+    "typeDistribution": "填空题 2",
+    "labels": [
+      "F-R1-5",
+      "F-R1-6"
+    ],
+    "layerHint": "程序填空要顺着变量含义、控制流和输出格式补空。",
+    "chapterMap": [],
+    "eyeLines": [],
+    "selfChecks": [],
+    "corePoints": [
+      "链表结点保存 data 和 next，遍历靠 current 沿 next 前进。",
+      "队列用列表实现时，要先确认题目把队尾放在哪一端。",
+      "range(start, stop, step) 右端不取，step 决定递增或递减。",
+      "程序填空答案必须和上下文变量名、缩进、输出格式一致。"
+    ],
+    "mustRemember": [
+      "表头插入链表：先 new.next = old_head，再 head = new。",
+      "阶乘循环：fact 累乘 i，i 每轮加 1。",
+      "三位数个位：i % 10；十位：i // 10 % 10。"
+    ],
+    "traps": [
+      "不要把 range 的 stop 当作会取到的值。",
+      "不要把链表遍历写成下标访问。",
+      "不要把程序填空题转成函数题或编程题，它需要逐空输入答案。"
+    ],
+    "questionTips": [
+      "F-R2-1/F-R2-2/F-R2-5：链表结点、遍历和表头插入。",
+      "F-R2-3：列表实现队列，队尾在下标 0，出队从尾部 pop。",
+      "F-R2-4/F-R2-6/F-R2-7：range、while 累乘、数位拆分。"
     ]
   },
   {

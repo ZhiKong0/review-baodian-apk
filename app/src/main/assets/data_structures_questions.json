@@ -6855,5 +6855,523 @@
     "blankCount": 0,
     "source": "编程题2练习 / R7-15",
     "id": 239
+  },
+  {
+    "id": 240,
+    "label": "B-4-1",
+    "type": "blank",
+    "typeName": "填空题",
+    "stem": "给定一组整数：\n\n64, 85, 68, 97, 28, 73, 16, 48, 51, 35\n\n将它们插入到二叉排序树中，请写出二叉排序树的先序遍历结果：",
+    "options": [],
+    "answer": [
+      "64",
+      "28",
+      "16",
+      "48",
+      "35",
+      "51",
+      "85",
+      "68",
+      "73",
+      "97"
+    ],
+    "images": [],
+    "knowledge": "BST 插入建树与形态判断",
+    "chapter": "2. 树与二叉搜索树",
+    "explanation": "【快速做题】\n逐空答案：第1空：64；第2空：28；第3空：16；第4空：48；第5空：35；第6空：51；第7空：85；第8空：68；第9空：73；第10空：97\n按输入顺序建立 BST：64 作根；小于 64 的 28 进入左子树，大于 64 的 85 进入右子树；最后按先序“根-左-右”输出。\n\n【知识点详解】\n这棵树的结构可按比较路径得到：64 的左子树根是 28，28 的左孩子是 16，右孩子是 48，48 的左孩子是 35、右孩子是 51；64 的右子树根是 85，85 的左孩子是 68，68 的右孩子是 73，85 的右孩子是 97。先序遍历先访问根，再完整访问左子树，最后访问右子树，所以序列是 64,28,16,48,35,51,85,68,73,97。",
+    "quickExplanation": "逐空答案：第1空：64；第2空：28；第3空：16；第4空：48；第5空：35；第6空：51；第7空：85；第8空：68；第9空：73；第10空：97\n按输入顺序建立 BST：64 作根；小于 64 的 28 进入左子树，大于 64 的 85 进入右子树；最后按先序“根-左-右”输出。",
+    "knowledgeDetail": "这棵树的结构可按比较路径得到：64 的左子树根是 28，28 的左孩子是 16，右孩子是 48，48 的左孩子是 35、右孩子是 51；64 的右子树根是 85，85 的左孩子是 68，68 的右孩子是 73，85 的右孩子是 97。先序遍历先访问根，再完整访问左子树，最后访问右子树，所以序列是 64,28,16,48,35,51,85,68,73,97。",
+    "blankCount": 10,
+    "source": "26-1 二叉树练习2：二叉搜索树"
+  },
+  {
+    "id": 241,
+    "label": "B-4-2",
+    "type": "blank",
+    "typeName": "填空题",
+    "stem": "给定一组整数：\n\n47, 25, 87, 36, 90, 18, 65, 31, 79, 58\n\n将它们插入到空二叉排序树中，请写出二叉排序树的先序遍历结果：",
+    "options": [],
+    "answer": [
+      "47",
+      "25",
+      "18",
+      "36",
+      "31",
+      "87",
+      "65",
+      "58",
+      "79",
+      "90"
+    ],
+    "images": [],
+    "knowledge": "BST 插入建树与形态判断",
+    "chapter": "2. 树与二叉搜索树",
+    "explanation": "【快速做题】\n逐空答案：第1空：47；第2空：25；第3空：18；第4空：36；第5空：31；第6空：87；第7空：65；第8空：58；第9空：79；第10空：90\n按输入顺序建立 BST：47 作根；25 落在左侧，87 落在右侧；继续逐个比较插入后，按先序“根-左-右”输出。\n\n【知识点详解】\n插入过程形成的关键结构是：47 为根；左子树 25，25 的左孩子 18，右孩子 36，36 的左孩子 31；右子树 87，87 的左孩子 65，65 的左孩子 58、右孩子 79，87 的右孩子 90。先序遍历从根 47 开始，再读左子树 25,18,36,31，最后读右子树 87,65,58,79,90。",
+    "quickExplanation": "逐空答案：第1空：47；第2空：25；第3空：18；第4空：36；第5空：31；第6空：87；第7空：65；第8空：58；第9空：79；第10空：90\n按输入顺序建立 BST：47 作根；25 落在左侧，87 落在右侧；继续逐个比较插入后，按先序“根-左-右”输出。",
+    "knowledgeDetail": "插入过程形成的关键结构是：47 为根；左子树 25，25 的左孩子 18，右孩子 36，36 的左孩子 31；右子树 87，87 的左孩子 65，65 的左孩子 58、右孩子 79，87 的右孩子 90。先序遍历从根 47 开始，再读左子树 25,18,36,31，最后读右子树 87,65,58,79,90。",
+    "blankCount": 10,
+    "source": "26-1 二叉树练习2：二叉搜索树"
+  },
+  {
+    "id": 242,
+    "label": "F-R1-1",
+    "type": "blank",
+    "typeName": "填空题",
+    "stem": "数据结构可以从逻辑上分为两大类：____和____，其中后者包括集合结构、树状结构和图状结构。\n\n请填：动态结构、静态结构、紧凑结构、非紧凑结构、线性结构、非线性结构、内部结构、外部结构。",
+    "options": [],
+    "answer": [
+      "线性结构",
+      "非线性结构"
+    ],
+    "images": [],
+    "knowledge": "数据结构的逻辑分类",
+    "chapter": "1. 线性数据结构",
+    "explanation": "【快速做题】\n逐空答案：第1空：线性结构；第2空：非线性结构\n逻辑结构按元素关系分为线性结构和非线性结构。线性结构是一对一，非线性结构包含集合、树和图。\n\n【知识点详解】\n数据结构的逻辑结构描述元素之间“谁和谁有关系”。线性表、栈、队列都可以看成前后相邻的一条线；树是一对多层次关系，图是多对多关系，集合只强调同属一个集合，所以它们归入非线性结构。",
+    "quickExplanation": "逐空答案：第1空：线性结构；第2空：非线性结构\n逻辑结构按元素关系分为线性结构和非线性结构。线性结构是一对一，非线性结构包含集合、树和图。",
+    "knowledgeDetail": "数据结构的逻辑结构描述元素之间“谁和谁有关系”。线性表、栈、队列都可以看成前后相邻的一条线；树是一对多层次关系，图是多对多关系，集合只强调同属一个集合，所以它们归入非线性结构。",
+    "blankCount": 2,
+    "source": "26-1 自测5（填空题21题）"
+  },
+  {
+    "id": 243,
+    "label": "F-R1-2",
+    "type": "blank",
+    "typeName": "填空题",
+    "stem": "print(\"%5.2f\" % (2.683))的输出结果是____。",
+    "options": [],
+    "answer": [
+      "2.68"
+    ],
+    "images": [],
+    "knowledge": "Python 序列与基础语法",
+    "chapter": "4. Python 基础与面向对象",
+    "explanation": "【快速做题】\n逐空答案：第1空：2.68\n`%5.2f` 表示按浮点数输出，总宽度至少 5，小数保留 2 位；2.683 四舍五入后是 2.68。\n\n【知识点详解】\n宽度 5 只影响前面是否补空格，小数位才决定显示几位。2.683 保留两位小数看第三位 3，不进位，所以数值部分为 2.68；如果界面不显示前导空格，答案填写 2.68 即可。",
+    "quickExplanation": "逐空答案：第1空：2.68\n`%5.2f` 表示按浮点数输出，总宽度至少 5，小数保留 2 位；2.683 四舍五入后是 2.68。",
+    "knowledgeDetail": "宽度 5 只影响前面是否补空格，小数位才决定显示几位。2.683 保留两位小数看第三位 3，不进位，所以数值部分为 2.68；如果界面不显示前导空格，答案填写 2.68 即可。",
+    "blankCount": 1,
+    "source": "26-1 自测5（填空题21题）"
+  },
+  {
+    "id": 244,
+    "label": "F-R1-3",
+    "type": "blank",
+    "typeName": "填空题",
+    "stem": "给定一组整数：\n\n47, 25, 87, 36, 90, 18, 65, 31, 79, 58\n\n将它们插入到空二叉排序树中，请写出二叉排序树的先序遍历结果：\n____,____,____,____,____,\n____,____,____,____,____",
+    "options": [],
+    "answer": [
+      "47",
+      "25",
+      "18",
+      "36",
+      "31",
+      "87",
+      "65",
+      "58",
+      "79",
+      "90"
+    ],
+    "images": [],
+    "knowledge": "二叉树、遍历与 BST",
+    "chapter": "2. 树与二叉搜索树",
+    "explanation": "【快速做题】\n逐空答案：第1空：47；第2空：25；第3空：18；第4空：36；第5空：31；第6空：87；第7空：65；第8空：58；第9空：79；第10空：90\n按输入顺序建立 BST：47 作根；25 落在左侧，87 落在右侧；继续逐个比较插入后，按先序“根-左-右”输出。\n\n【知识点详解】\n插入过程形成的关键结构是：47 为根；左子树 25，25 的左孩子 18，右孩子 36，36 的左孩子 31；右子树 87，87 的左孩子 65，65 的左孩子 58、右孩子 79，87 的右孩子 90。先序遍历从根 47 开始，再读左子树 25,18,36,31，最后读右子树 87,65,58,79,90。",
+    "quickExplanation": "逐空答案：第1空：47；第2空：25；第3空：18；第4空：36；第5空：31；第6空：87；第7空：65；第8空：58；第9空：79；第10空：90\n按输入顺序建立 BST：47 作根；25 落在左侧，87 落在右侧；继续逐个比较插入后，按先序“根-左-右”输出。",
+    "knowledgeDetail": "插入过程形成的关键结构是：47 为根；左子树 25，25 的左孩子 18，右孩子 36，36 的左孩子 31；右子树 87，87 的左孩子 65，65 的左孩子 58、右孩子 79，87 的右孩子 90。先序遍历从根 47 开始，再读左子树 25,18,36,31，最后读右子树 87,65,58,79,90。",
+    "blankCount": 10,
+    "source": "26-1 自测5（填空题21题）"
+  },
+  {
+    "id": 245,
+    "label": "F-R1-4",
+    "type": "blank",
+    "typeName": "填空题",
+    "stem": "观察下图所示的二叉树\n\n先序遍历的序列为:____\n后序遍历的序列为:____\n中序遍历的序列为:____",
+    "options": [],
+    "answer": [
+      "BDHEGIAFC",
+      "EHGDFACIB",
+      "EHDGBFAIC"
+    ],
+    "images": [
+      "data_structures_images/f_r1_4_1.jpg"
+    ],
+    "knowledge": "二叉树、遍历与 BST",
+    "chapter": "2. 树与二叉搜索树",
+    "explanation": "【快速做题】\n逐空答案：第1空：BDHEGIAFC；第2空：EHGDFACIB；第3空：EHDGBFAIC\n三种遍历只差根结点访问时机：先序根在前，中序根在左右子树之间，后序根在最后；按图中左右孩子逐层递归即可得到三个序列。\n\n【知识点详解】\n二叉树遍历题不要按字母大小猜。看任意一棵子树：先序先写这棵子树的根，再写左子树和右子树；中序先写左子树，再写根，再写右子树；后序先写左右子树，最后写根。每一层都重复同一规则。",
+    "quickExplanation": "逐空答案：第1空：BDHEGIAFC；第2空：EHGDFACIB；第3空：EHDGBFAIC\n三种遍历只差根结点访问时机：先序根在前，中序根在左右子树之间，后序根在最后；按图中左右孩子逐层递归即可得到三个序列。",
+    "knowledgeDetail": "二叉树遍历题不要按字母大小猜。看任意一棵子树：先序先写这棵子树的根，再写左子树和右子树；中序先写左子树，再写根，再写右子树；后序先写左右子树，最后写根。每一层都重复同一规则。",
+    "blankCount": 3,
+    "source": "26-1 自测5（填空题21题）"
+  },
+  {
+    "id": 246,
+    "label": "F-R1-5",
+    "type": "blank",
+    "typeName": "填空题",
+    "stem": "python代码中单行注释使用的符号是____。",
+    "options": [],
+    "answer": [
+      "#"
+    ],
+    "images": [],
+    "knowledge": "程序填空与代码执行",
+    "chapter": "5. 程序填空与代码理解",
+    "explanation": "【快速做题】\n逐空答案：第1空：#\nPython 单行注释以 `#` 开始，从 `#` 到本行末尾都会被解释器当作注释。\n\n【知识点详解】\n注释不会执行，只用于说明代码。多行字符串有时可临时充当说明文字，但真正的单行注释符号就是井号 `#`。\n补充概念：这类题要把定义中的限制条件逐字落到题干上，只要题干把对象、方向、顺序或前提换掉，结论就会改变。",
+    "quickExplanation": "逐空答案：第1空：#\nPython 单行注释以 `#` 开始，从 `#` 到本行末尾都会被解释器当作注释。",
+    "knowledgeDetail": "注释不会执行，只用于说明代码。多行字符串有时可临时充当说明文字，但真正的单行注释符号就是井号 `#`。\n补充概念：这类题要把定义中的限制条件逐字落到题干上，只要题干把对象、方向、顺序或前提换掉，结论就会改变。",
+    "blankCount": 1,
+    "source": "26-1 自测5（填空题21题）"
+  },
+  {
+    "id": 247,
+    "label": "F-R1-6",
+    "type": "blank",
+    "typeName": "填空题",
+    "stem": "若a=1,b=2,那么 (a or b) 的值为____。",
+    "options": [],
+    "answer": [
+      "1"
+    ],
+    "images": [],
+    "knowledge": "程序填空与代码执行",
+    "chapter": "5. 程序填空与代码理解",
+    "explanation": "【快速做题】\n逐空答案：第1空：1\n`or` 返回第一个真值操作数；a=1 已经是真值，所以 `(a or b)` 的结果是 1。\n\n【知识点详解】\nPython 的逻辑运算不一定返回 True/False 本身，而是返回参与运算的对象。`x or y` 若 x 为真就直接返回 x，否则返回 y。本题 a 为 1，属于真值，因此不会再取 b。",
+    "quickExplanation": "逐空答案：第1空：1\n`or` 返回第一个真值操作数；a=1 已经是真值，所以 `(a or b)` 的结果是 1。",
+    "knowledgeDetail": "Python 的逻辑运算不一定返回 True/False 本身，而是返回参与运算的对象。`x or y` 若 x 为真就直接返回 x，否则返回 y。本题 a 为 1，属于真值，因此不会再取 b。",
+    "blankCount": 1,
+    "source": "26-1 自测5（填空题21题）"
+  },
+  {
+    "id": 248,
+    "label": "F-R1-7",
+    "type": "blank",
+    "typeName": "填空题",
+    "stem": "Python输出 print(\"hello\" 'world')的结果是____。",
+    "options": [],
+    "answer": [
+      "helloworld"
+    ],
+    "images": [],
+    "knowledge": "Python 序列与基础语法",
+    "chapter": "4. Python 基础与面向对象",
+    "explanation": "【快速做题】\n逐空答案：第1空：helloworld\n相邻的字符串字面量会在编译时自动拼接，`\"hello\" 'world'` 等价于 `\"helloworld\"`。\n\n【知识点详解】\n这里不是 print 输出两个参数，因为两个字符串之间没有逗号。Python 会把相邻字符串常量合成一个字符串，所以输出没有空格。\n补充概念：Python 面向对象题要分清类、对象、方法和属性。对象保存自己的状态，方法通过当前对象去读取或修改这些状态。",
+    "quickExplanation": "逐空答案：第1空：helloworld\n相邻的字符串字面量会在编译时自动拼接，`\"hello\" 'world'` 等价于 `\"helloworld\"`。",
+    "knowledgeDetail": "这里不是 print 输出两个参数，因为两个字符串之间没有逗号。Python 会把相邻字符串常量合成一个字符串，所以输出没有空格。\n补充概念：Python 面向对象题要分清类、对象、方法和属性。对象保存自己的状态，方法通过当前对象去读取或修改这些状态。",
+    "blankCount": 1,
+    "source": "26-1 自测5（填空题21题）"
+  },
+  {
+    "id": 249,
+    "label": "F-R1-8",
+    "type": "blank",
+    "typeName": "填空题",
+    "stem": "print(\"%6.1f\" % (3.14))的输出结果是____。",
+    "options": [],
+    "answer": [
+      "3.1"
+    ],
+    "images": [],
+    "knowledge": "Python 序列与基础语法",
+    "chapter": "4. Python 基础与面向对象",
+    "explanation": "【快速做题】\n逐空答案：第1空：3.1\n`%6.1f` 表示总宽度至少 6，小数保留 1 位；3.14 保留一位小数是 3.1。\n\n【知识点详解】\n格式化输出中，点号后的 1 控制小数位数，6 控制最小宽度。3.14 的第二位小数是 4，不进位，所以输出数值为 3.1；前导空格通常不作为填空答案要求。",
+    "quickExplanation": "逐空答案：第1空：3.1\n`%6.1f` 表示总宽度至少 6，小数保留 1 位；3.14 保留一位小数是 3.1。",
+    "knowledgeDetail": "格式化输出中，点号后的 1 控制小数位数，6 控制最小宽度。3.14 的第二位小数是 4，不进位，所以输出数值为 3.1；前导空格通常不作为填空答案要求。",
+    "blankCount": 1,
+    "source": "26-1 自测5（填空题21题）"
+  },
+  {
+    "id": 250,
+    "label": "F-R1-9",
+    "type": "blank",
+    "typeName": "填空题",
+    "stem": "给定一组整数：\n\n64, 85, 68, 97, 28, 73, 16, 48, 51, 35\n\n将它们插入到二叉排序树中，请写出二叉排序树的先序遍历结果：\n____,____,____,____,____,\n____,____,____,____,____",
+    "options": [],
+    "answer": [
+      "64",
+      "28",
+      "16",
+      "48",
+      "35",
+      "51",
+      "85",
+      "68",
+      "73",
+      "97"
+    ],
+    "images": [],
+    "knowledge": "二叉树、遍历与 BST",
+    "chapter": "2. 树与二叉搜索树",
+    "explanation": "【快速做题】\n逐空答案：第1空：64；第2空：28；第3空：16；第4空：48；第5空：35；第6空：51；第7空：85；第8空：68；第9空：73；第10空：97\n按输入顺序建立 BST：64 作根；小于 64 的 28 进入左子树，大于 64 的 85 进入右子树；最后按先序“根-左-右”输出。\n\n【知识点详解】\n这棵树的结构可按比较路径得到：64 的左子树根是 28，28 的左孩子是 16，右孩子是 48，48 的左孩子是 35、右孩子是 51；64 的右子树根是 85，85 的左孩子是 68，68 的右孩子是 73，85 的右孩子是 97。先序遍历先访问根，再完整访问左子树，最后访问右子树，所以序列是 64,28,16,48,35,51,85,68,73,97。",
+    "quickExplanation": "逐空答案：第1空：64；第2空：28；第3空：16；第4空：48；第5空：35；第6空：51；第7空：85；第8空：68；第9空：73；第10空：97\n按输入顺序建立 BST：64 作根；小于 64 的 28 进入左子树，大于 64 的 85 进入右子树；最后按先序“根-左-右”输出。",
+    "knowledgeDetail": "这棵树的结构可按比较路径得到：64 的左子树根是 28，28 的左孩子是 16，右孩子是 48，48 的左孩子是 35、右孩子是 51；64 的右子树根是 85，85 的左孩子是 68，68 的右孩子是 73，85 的右孩子是 97。先序遍历先访问根，再完整访问左子树，最后访问右子树，所以序列是 64,28,16,48,35,51,85,68,73,97。",
+    "blankCount": 10,
+    "source": "26-1 自测5（填空题21题）"
+  },
+  {
+    "id": 251,
+    "label": "F-R1-10",
+    "type": "blank",
+    "typeName": "填空题",
+    "stem": "布尔类型的值包括True和____。",
+    "options": [],
+    "answer": [
+      "False"
+    ],
+    "images": [],
+    "knowledge": "Python 面向对象",
+    "chapter": "4. Python 基础与面向对象",
+    "explanation": "【快速做题】\n逐空答案：第1空：False\nPython 布尔类型只有两个值：`True` 和 `False`，大小写必须这样写。\n\n【知识点详解】\n`true`、`false`、`TRUE`、`FALSE` 都不是 Python 的布尔字面量。考试填空要注意首字母大写，其余小写。\n补充概念：Python 面向对象题要分清类、对象、方法和属性。对象保存自己的状态，方法通过当前对象去读取或修改这些状态。",
+    "quickExplanation": "逐空答案：第1空：False\nPython 布尔类型只有两个值：`True` 和 `False`，大小写必须这样写。",
+    "knowledgeDetail": "`true`、`false`、`TRUE`、`FALSE` 都不是 Python 的布尔字面量。考试填空要注意首字母大写，其余小写。\n补充概念：Python 面向对象题要分清类、对象、方法和属性。对象保存自己的状态，方法通过当前对象去读取或修改这些状态。",
+    "blankCount": 1,
+    "source": "26-1 自测5（填空题21题）"
+  },
+  {
+    "id": 252,
+    "label": "F-R1-11",
+    "type": "blank",
+    "typeName": "填空题",
+    "stem": "观察下图所示的二叉树\n\n先序遍历的序列为:____\n后序遍历的序列为:____\n中序遍历的序列为:____",
+    "options": [],
+    "answer": [
+      "FBEHCDA",
+      "ECHBAIGDF",
+      "EBCFHADIG"
+    ],
+    "images": [
+      "data_structures_images/f_r1_11_1.jpg"
+    ],
+    "knowledge": "二叉树、遍历与 BST",
+    "chapter": "2. 树与二叉搜索树",
+    "explanation": "【快速做题】\n逐空答案：第1空：FBEHCDA；第2空：ECHBAIGDF；第3空：EBCFHADIG\n三种遍历只差根结点访问时机：先序根在前，中序根在左右子树之间，后序根在最后；按图中左右孩子逐层递归即可得到三个序列。\n\n【知识点详解】\n二叉树遍历题不要按字母大小猜。看任意一棵子树：先序先写这棵子树的根，再写左子树和右子树；中序先写左子树，再写根，再写右子树；后序先写左右子树，最后写根。每一层都重复同一规则。",
+    "quickExplanation": "逐空答案：第1空：FBEHCDA；第2空：ECHBAIGDF；第3空：EBCFHADIG\n三种遍历只差根结点访问时机：先序根在前，中序根在左右子树之间，后序根在最后；按图中左右孩子逐层递归即可得到三个序列。",
+    "knowledgeDetail": "二叉树遍历题不要按字母大小猜。看任意一棵子树：先序先写这棵子树的根，再写左子树和右子树；中序先写左子树，再写根，再写右子树；后序先写左右子树，最后写根。每一层都重复同一规则。",
+    "blankCount": 3,
+    "source": "26-1 自测5（填空题21题）"
+  },
+  {
+    "id": 253,
+    "label": "F-R1-12",
+    "type": "blank",
+    "typeName": "填空题",
+    "stem": "在计算机中，数据元素之间的关系有两种基本表示方法：\n\n(1)____，其特点是借助元素在存储器中的相对位置来表示数据元素之间的逻辑关系；\n\n(2)____，其特点是借助指示元素存储地址的指针来表示数据元素之间的逻辑关系。\n\n请填：顺序映像/非顺序映像或顺序存储结构/链式存储结构。",
+    "options": [],
+    "answer": [
+      "顺序存储结构",
+      "链式存储结构"
+    ],
+    "images": [],
+    "knowledge": "线性表与链式/顺序存储",
+    "chapter": "1. 线性数据结构",
+    "explanation": "【快速做题】\n逐空答案：第1空：顺序存储结构；第2空：链式存储结构\n顺序存储靠元素在内存中的相对位置表示关系；链式存储靠指针保存下一个元素的地址。\n\n【知识点详解】\n顺序存储结构要求一组连续存储单元，优点是能用下标快速定位；链式存储结构的结点可分散存放，靠指针域连接，优点是插入和删除时少搬移元素。题干中的“相对位置”和“指示地址的指针”分别对应这两个概念。",
+    "quickExplanation": "逐空答案：第1空：顺序存储结构；第2空：链式存储结构\n顺序存储靠元素在内存中的相对位置表示关系；链式存储靠指针保存下一个元素的地址。",
+    "knowledgeDetail": "顺序存储结构要求一组连续存储单元，优点是能用下标快速定位；链式存储结构的结点可分散存放，靠指针域连接，优点是插入和删除时少搬移元素。题干中的“相对位置”和“指示地址的指针”分别对应这两个概念。",
+    "blankCount": 2,
+    "source": "26-1 自测5（填空题21题）"
+  },
+  {
+    "id": 254,
+    "label": "F-R1-13",
+    "type": "blank",
+    "typeName": "填空题",
+    "stem": "布尔类型的值包括True和____。",
+    "options": [],
+    "answer": [
+      "False"
+    ],
+    "images": [],
+    "knowledge": "Python 面向对象",
+    "chapter": "4. Python 基础与面向对象",
+    "explanation": "【快速做题】\n逐空答案：第1空：False\nPython 布尔类型只有两个值：`True` 和 `False`，大小写必须这样写。\n\n【知识点详解】\n`true`、`false`、`TRUE`、`FALSE` 都不是 Python 的布尔字面量。考试填空要注意首字母大写，其余小写。\n补充概念：Python 面向对象题要分清类、对象、方法和属性。对象保存自己的状态，方法通过当前对象去读取或修改这些状态。",
+    "quickExplanation": "逐空答案：第1空：False\nPython 布尔类型只有两个值：`True` 和 `False`，大小写必须这样写。",
+    "knowledgeDetail": "`true`、`false`、`TRUE`、`FALSE` 都不是 Python 的布尔字面量。考试填空要注意首字母大写，其余小写。\n补充概念：Python 面向对象题要分清类、对象、方法和属性。对象保存自己的状态，方法通过当前对象去读取或修改这些状态。",
+    "blankCount": 1,
+    "source": "26-1 自测5（填空题21题）"
+  },
+  {
+    "id": 255,
+    "label": "F-R1-14",
+    "type": "blank",
+    "typeName": "填空题",
+    "stem": "下述代码从键盘读入了以逗号分隔的两个整数a，b：\n\na,b = eval(input())\nprint(a,b,type(a),type(b))\n\n当操作者输入 4,5 时，程序的执行结果如下：\n\n4,5\n4 5 <class 'int'> <class 'int'>\n\n注意：4,5中间的逗号必须是英文逗号。\n\n请以上述代码为基础，完成下述填空，并在计算机上调试运行。\n\n请输入   5,7  ，此时，a =____，b =____；\n\na是否大于b？ print(a>b  )，执行结果是：False ；\n\na是否是奇数？print(____)，执行结果____;",
+    "options": [],
+    "answer": [
+      "5",
+      "7",
+      "a % 2 == 1",
+      "True"
+    ],
+    "images": [],
+    "knowledge": "Python 面向对象",
+    "chapter": "4. Python 基础与面向对象",
+    "explanation": "【快速做题】\n逐空答案：第1空：5；第2空：7；第3空：a % 2 == 1；第4空：True\n`eval(input())` 读入 `5,7` 会得到两个整数 5 和 7；判断奇数可用 `a % 2 == 1`，此时 5 是奇数，所以结果为 True。\n\n【知识点详解】\n`a,b = eval(input())` 要求输入形式像 Python 表达式里的元组，因此逗号必须是英文逗号。`%` 是取余运算，整数除以 2 余 1 表示奇数。a=5、b=7 时 a>b 为 False，但 a 是奇数这一判断为 True。",
+    "quickExplanation": "逐空答案：第1空：5；第2空：7；第3空：a % 2 == 1；第4空：True\n`eval(input())` 读入 `5,7` 会得到两个整数 5 和 7；判断奇数可用 `a % 2 == 1`，此时 5 是奇数，所以结果为 True。",
+    "knowledgeDetail": "`a,b = eval(input())` 要求输入形式像 Python 表达式里的元组，因此逗号必须是英文逗号。`%` 是取余运算，整数除以 2 余 1 表示奇数。a=5、b=7 时 a>b 为 False，但 a 是奇数这一判断为 True。",
+    "blankCount": 4,
+    "source": "26-1 自测5（填空题21题）"
+  },
+  {
+    "id": 256,
+    "label": "F-R2-1",
+    "type": "blank",
+    "typeName": "程序填空题",
+    "stem": "链表中节点类的定义与实现 ：Node\n\n链表中节点的结构如图。\n\n完成相应的节点类的定义。\n\nclass Node:\ndef __init__(self,initdata):\nself.data =____self.next = None\n\ndef getData(self):\nreturn____\ndef getNext(self):\nreturn____\ndef setData(self,newdata):\n____\ndef setNext(self,newnext):\n____",
+    "options": [],
+    "answer": [
+      "initdata",
+      "self.data",
+      "self.next",
+      "self.data = newdata",
+      "self.next = newnext"
+    ],
+    "images": [
+      "data_structures_images/f_r2_1_1.png"
+    ],
+    "knowledge": "线性表与链式/顺序存储",
+    "chapter": "1. 线性数据结构",
+    "explanation": "【快速做题】\n逐空答案：第1空：initdata；第2空：self.data；第3空：self.next；第4空：self.data = newdata；第5空：self.next = newnext\nNode 结点要保存数据域 data 和指针域 next；get 方法返回字段，set 方法修改字段。\n\n【知识点详解】\n`__init__(self, initdata)` 中的 `initdata` 是创建结点时传入的数据，应赋给 `self.data`；新结点一开始还没指向下一个结点，所以 `self.next = None`。`getData/getNext` 分别返回当前数据和后继指针；`setData/setNext` 分别更新这两个字段。",
+    "quickExplanation": "逐空答案：第1空：initdata；第2空：self.data；第3空：self.next；第4空：self.data = newdata；第5空：self.next = newnext\nNode 结点要保存数据域 data 和指针域 next；get 方法返回字段，set 方法修改字段。",
+    "knowledgeDetail": "`__init__(self, initdata)` 中的 `initdata` 是创建结点时传入的数据，应赋给 `self.data`；新结点一开始还没指向下一个结点，所以 `self.next = None`。`getData/getNext` 分别返回当前数据和后继指针；`setData/setNext` 分别更新这两个字段。",
+    "blankCount": 5,
+    "source": "26-1 自测5（填空题21题）"
+  },
+  {
+    "id": 257,
+    "label": "F-R2-2",
+    "type": "blank",
+    "typeName": "程序填空题",
+    "stem": "链表的遍历技术\n\n遍历是指系统地访问每一个节点，具体做法是用一个外部引用从列表的头节点开始，依次访问每个指向的下一个节点。\n\n链表的遍历是链表操作中非常重要的一个常用操作，例如判断链表的长度length()就会用到遍历。请将下面的代码进行补齐。\n\nclass Node:\ndef __init__(self,initdata):\nself.data = initdata\nself.next = None\n\ndef getData(self):\nreturn self.data\n\ndef getNext(self):\nreturn self.next\n...\n...\n\nclass UnorderedList:\n...\ndef length(self):\ncurrent = self.head\ncount = 0\nwhile____:\ncount = count + 1\n____return count",
+    "options": [],
+    "answer": [
+      "current != None",
+      "current = current.getNext()"
+    ],
+    "images": [
+      "data_structures_images/f_r2_2_1.png",
+      "data_structures_images/f_r2_2_2.png"
+    ],
+    "knowledge": "线性表与链式/顺序存储",
+    "chapter": "1. 线性数据结构",
+    "explanation": "【快速做题】\n逐空答案：第1空：current != None；第2空：current = current.getNext()\n链表遍历从 head 开始，只要 current 不是 None 就继续；每轮处理后让 current 移到下一个结点。\n\n【知识点详解】\n链表没有下标连续地址，遍历只能沿 next 指针走。`current != None` 表示还没走到链表尾部；`current = current.getNext()` 是向后移动一步。如果忘记更新 current，循环会卡在同一个结点。",
+    "quickExplanation": "逐空答案：第1空：current != None；第2空：current = current.getNext()\n链表遍历从 head 开始，只要 current 不是 None 就继续；每轮处理后让 current 移到下一个结点。",
+    "knowledgeDetail": "链表没有下标连续地址，遍历只能沿 next 指针走。`current != None` 表示还没走到链表尾部；`current = current.getNext()` 是向后移动一步。如果忘记更新 current，循环会卡在同一个结点。",
+    "blankCount": 2,
+    "source": "26-1 自测5（填空题21题）"
+  },
+  {
+    "id": 258,
+    "label": "F-R2-3",
+    "type": "blank",
+    "typeName": "程序填空题",
+    "stem": "数据结构队列(Queue)的实现\n\n本题目要求利用列表实现队列的数据结构Queue，补齐代码中的空格。\n\n设定队列的尾部在列表的位置0处。可以使用insert函数项队列的尾部添加新元素，实现入队操作。\n\nclass Queue:\ndef __init__(self):\nself.items =____\ndef isEmpty(self):\nreturn self.items == []\n\ndef enqueue(self, item):\nself.items.insert(0,item)\n\ndef dequeue(self):\nreturn self.____\ndef size(self):\nreturn len(self.items)",
+    "options": [],
+    "answer": [
+      "[]",
+      "items.pop()"
+    ],
+    "images": [],
+    "knowledge": "栈与队列",
+    "chapter": "1. 线性数据结构",
+    "explanation": "【快速做题】\n逐空答案：第1空：[]；第2空：items.pop()\n队列内部先用空列表保存元素；题目规定队尾在下标 0，入队用 insert(0,item)，出队就从列表尾部 pop。\n\n【知识点详解】\n队列要求先进先出。新元素从下标 0 插入后，较早进入的元素会逐渐被挤到列表后面，因此出队时用 `self.items.pop()` 取列表末尾，正好取到最早入队的元素。答案中的 `items.pop()` 对应题目原代码写法。",
+    "quickExplanation": "逐空答案：第1空：[]；第2空：items.pop()\n队列内部先用空列表保存元素；题目规定队尾在下标 0，入队用 insert(0,item)，出队就从列表尾部 pop。",
+    "knowledgeDetail": "队列要求先进先出。新元素从下标 0 插入后，较早进入的元素会逐渐被挤到列表后面，因此出队时用 `self.items.pop()` 取列表末尾，正好取到最早入队的元素。答案中的 `items.pop()` 对应题目原代码写法。",
+    "blankCount": 2,
+    "source": "26-1 自测5（填空题21题）"
+  },
+  {
+    "id": 259,
+    "label": "F-R2-4",
+    "type": "blank",
+    "typeName": "程序填空题",
+    "stem": "range函数练习 - 实验4 装番茄和啤酒的容器 - 《Python编程基础及应用实验教程》(高等教育出版社)\n\n请根据注释要求为range()函数添加合适的参数。\n\nprint(list(range(____)))    期望输出:[0, 1, 2, 3]\nprint(list(range(____,____)))       期望输出:[7, 8, 9, 10]\nprint(list(range(1,____,____)))     期望输出:[1, 4, 7, 10, 13]\nprint(list(range(____,2,____)))     期望输出:[15, 11, 7, 3]\nprint(list(range(____,20,____)))    期望输出:[-20, -14, -8, -2, 4, 10, 16]\nprint(list(range(____,-22,____)))   期望输出:[-1, -8, -15]\n\n解题思路： 请参考《Python编程基础及应用实验教程》。\n该书是高等教育出版社《Python编程基础及应用》教材的配套实验指导书。\n\n拼尽全力还是不会？参考B站习题讲解\n\n哔哩哔哩up主：海洋饼干叔叔 Python课程\nPython习题\n简洁的C和C++\n作者每天分享一篇关于C/C++/Python的技术文章，学习编程不迷路。",
+    "options": [],
+    "answer": [
+      "4",
+      "7",
+      "11",
+      "14",
+      "3",
+      "15",
+      "-4",
+      "-20",
+      "6",
+      "-1",
+      "-7"
+    ],
+    "images": [
+      "data_structures_images/f_r2_4_23.png"
+    ],
+    "knowledge": "Python 序列与基础语法",
+    "chapter": "4. Python 基础与面向对象",
+    "explanation": "【快速做题】\n逐空答案：第1空：4；第2空：7；第3空：11；第4空：14；第5空：3；第6空：15；第7空：-4；第8空：-20；第9空：6；第10空：-1；第11空：-7\nrange 的 stop 不取到；要得到递减序列时 step 写负数。逐空按目标输出反推 start、stop、step。\n\n【知识点详解】\n`range(4)` 得到 0,1,2,3；`range(7,11)` 得到 7 到 10；`range(1,14,3)` 得到 1,4,7,10,13。递减时 stop 要越过最后一个目标值，例如从 15 每次减 4 到 -17，应写 `range(15,-20,-4)`。",
+    "quickExplanation": "逐空答案：第1空：4；第2空：7；第3空：11；第4空：14；第5空：3；第6空：15；第7空：-4；第8空：-20；第9空：6；第10空：-1；第11空：-7\nrange 的 stop 不取到；要得到递减序列时 step 写负数。逐空按目标输出反推 start、stop、step。",
+    "knowledgeDetail": "`range(4)` 得到 0,1,2,3；`range(7,11)` 得到 7 到 10；`range(1,14,3)` 得到 1,4,7,10,13。递减时 stop 要越过最后一个目标值，例如从 15 每次减 4 到 -17，应写 `range(15,-20,-4)`。",
+    "blankCount": 11,
+    "source": "26-1 自测5（填空题21题）"
+  },
+  {
+    "id": 260,
+    "label": "F-R2-5",
+    "type": "blank",
+    "typeName": "程序填空题",
+    "stem": "链表中节点的添加：add\n\n链表中添加新数据项最快捷的位置是表头， 整个链表的首位置。节点添加步骤的顺序很重要，如图所示。\n\nNode类定义如下，\nclass Node:\nself.data...\nself.next...\n其中包含getData()，    getNext()， setData(newdata) ， setNext(newnext)等方法。\n\nclass UnorderedList:\ndef __init__(self):\nself.head = None\n\ndef add(self,item):\ntemp =____________",
+    "options": [],
+    "answer": [
+      "Node(item)",
+      "temp.setNext(self.head)",
+      "self.head = temp"
+    ],
+    "images": [
+      "data_structures_images/f_r2_5_1.png"
+    ],
+    "knowledge": "线性表与链式/顺序存储",
+    "chapter": "1. 线性数据结构",
+    "explanation": "【快速做题】\n逐空答案：第1空：Node(item)；第2空：temp.setNext(self.head)；第3空：self.head = temp\n表头插入链表要先创建新结点，再让新结点指向旧 head，最后把 head 改成新结点。\n\n【知识点详解】\n顺序不能反：如果先 `self.head = temp`，旧表头就丢了，链表后半段断开。正确流程是 `temp = Node(item)`，`temp.setNext(self.head)`，`self.head = temp`。",
+    "quickExplanation": "逐空答案：第1空：Node(item)；第2空：temp.setNext(self.head)；第3空：self.head = temp\n表头插入链表要先创建新结点，再让新结点指向旧 head，最后把 head 改成新结点。",
+    "knowledgeDetail": "顺序不能反：如果先 `self.head = temp`，旧表头就丢了，链表后半段断开。正确流程是 `temp = Node(item)`，`temp.setNext(self.head)`，`self.head = temp`。",
+    "blankCount": 3,
+    "source": "26-1 自测5（填空题21题）"
+  },
+  {
+    "id": 261,
+    "label": "F-R2-6",
+    "type": "blank",
+    "typeName": "程序填空题",
+    "stem": "n的阶乘\n\n使用while循环实现计算n的阶乘。\n\n输入样例\n输出样例\n4!=24\n请将以下程序补充完整：\nn =____(input())\nfact = 1\ni = 1\nwhile i <= n:\nfact =____i =____print('{}!={}'.format(____))",
+    "options": [],
+    "answer": [
+      "int",
+      "fact * i",
+      "i + 1",
+      "n, fact"
+    ],
+    "images": [],
+    "knowledge": "Python 序列与基础语法",
+    "chapter": "4. Python 基础与面向对象",
+    "explanation": "【快速做题】\n逐空答案：第1空：int；第2空：fact * i；第3空：i + 1；第4空：n, fact\n输入要转成 int；循环中 fact 每轮乘当前 i，i 每轮加 1；format 里传入 n 和 fact。\n\n【知识点详解】\n阶乘 n! 是 1×2×...×n。`fact` 初值为 1，`i` 从 1 开始，到 n 为止逐个累乘。`'{}!={}'.format(n, fact)` 的两个占位符分别显示 n 和最终阶乘值。",
+    "quickExplanation": "逐空答案：第1空：int；第2空：fact * i；第3空：i + 1；第4空：n, fact\n输入要转成 int；循环中 fact 每轮乘当前 i，i 每轮加 1；format 里传入 n 和 fact。",
+    "knowledgeDetail": "阶乘 n! 是 1×2×...×n。`fact` 初值为 1，`i` 从 1 开始，到 n 为止逐个累乘。`'{}!={}'.format(n, fact)` 的两个占位符分别显示 n 和最终阶乘值。",
+    "blankCount": 4,
+    "source": "26-1 自测5（填空题21题）"
+  },
+  {
+    "id": 262,
+    "label": "F-R2-7",
+    "type": "blank",
+    "typeName": "程序填空题",
+    "stem": "择数\n\n所有三位数中十位数与个位数之和是奇数的数字有多少个？直接输出结果,注意不要输出多余信息！\n\n请补充下面程序来实现。\n\nn=0\n\nfor    i    in    range(____):\n\ngw= i%10\nsw=____\nif____:\nn=n+1\n\nprint(n)",
+    "options": [],
+    "answer": [
+      "100,1000",
+      "i//10%10",
+      "(gw+sw)%2==1"
+    ],
+    "images": [],
+    "knowledge": "Python 序列与基础语法",
+    "chapter": "4. Python 基础与面向对象",
+    "explanation": "【快速做题】\n逐空答案：第1空：100,1000；第2空：i//10%10；第3空：(gw+sw)%2==1\n三位数范围是 `range(100,1000)`；个位是 `i%10`，十位是 `i//10%10`；两位之和为奇数时 `(gw+sw)%2==1`。\n\n【知识点详解】\n`i % 10` 取最后一位；`i // 10` 去掉个位，再 `% 10` 就得到十位。判断一个数是否为奇数，看它除以 2 的余数是否为 1。",
+    "quickExplanation": "逐空答案：第1空：100,1000；第2空：i//10%10；第3空：(gw+sw)%2==1\n三位数范围是 `range(100,1000)`；个位是 `i%10`，十位是 `i//10%10`；两位之和为奇数时 `(gw+sw)%2==1`。",
+    "knowledgeDetail": "`i % 10` 取最后一位；`i // 10` 去掉个位，再 `% 10` 就得到十位。判断一个数是否为奇数，看它除以 2 的余数是否为 1。",
+    "blankCount": 3,
+    "source": "26-1 自测5（填空题21题）"
   }
 ]

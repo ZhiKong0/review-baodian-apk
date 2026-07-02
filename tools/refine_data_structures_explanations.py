@@ -666,6 +666,123 @@ def code_explanation(q: dict) -> tuple[str, str]:
     return quick, detail
 
 
+def answer_items(q: dict) -> list[str]:
+    answer = q.get("answer", [])
+    if isinstance(answer, list):
+        return [str(item) for item in answer]
+    return [str(answer)]
+
+
+def blank_explanation(q: dict) -> tuple[str, str]:
+    stem = clean_text(q.get("stem", ""))
+    answers = answer_items(q)
+    answer_line = "；".join(f"第{i + 1}空：{value}" for i, value in enumerate(answers))
+
+    def finish(reason: str, detail: str) -> tuple[str, str]:
+        quick = f"逐空答案：{answer_line}\n{reason}"
+        return quick, detail
+
+    if q["label"] in {"B-4-1", "F-R1-9"}:
+        return finish(
+            "按输入顺序建立 BST：64 作根；小于 64 的 28 进入左子树，大于 64 的 85 进入右子树；最后按先序“根-左-右”输出。",
+            "这棵树的结构可按比较路径得到：64 的左子树根是 28，28 的左孩子是 16，右孩子是 48，48 的左孩子是 35、右孩子是 51；64 的右子树根是 85，85 的左孩子是 68，68 的右孩子是 73，85 的右孩子是 97。先序遍历先访问根，再完整访问左子树，最后访问右子树，所以序列是 64,28,16,48,35,51,85,68,73,97。",
+        )
+    if q["label"] in {"B-4-2", "F-R1-3"}:
+        return finish(
+            "按输入顺序建立 BST：47 作根；25 落在左侧，87 落在右侧；继续逐个比较插入后，按先序“根-左-右”输出。",
+            "插入过程形成的关键结构是：47 为根；左子树 25，25 的左孩子 18，右孩子 36，36 的左孩子 31；右子树 87，87 的左孩子 65，65 的左孩子 58、右孩子 79，87 的右孩子 90。先序遍历从根 47 开始，再读左子树 25,18,36,31，最后读右子树 87,65,58,79,90。",
+        )
+    if q["label"] in {"F-R1-4", "F-R1-11"}:
+        return finish(
+            "三种遍历只差根结点访问时机：先序根在前，中序根在左右子树之间，后序根在最后；按图中左右孩子逐层递归即可得到三个序列。",
+            "二叉树遍历题不要按字母大小猜。看任意一棵子树：先序先写这棵子树的根，再写左子树和右子树；中序先写左子树，再写根，再写右子树；后序先写左右子树，最后写根。每一层都重复同一规则。",
+        )
+    if q["label"] == "F-R1-1":
+        return finish(
+            "逻辑结构按元素关系分为线性结构和非线性结构。线性结构是一对一，非线性结构包含集合、树和图。",
+            "数据结构的逻辑结构描述元素之间“谁和谁有关系”。线性表、栈、队列都可以看成前后相邻的一条线；树是一对多层次关系，图是多对多关系，集合只强调同属一个集合，所以它们归入非线性结构。",
+        )
+    if q["label"] == "F-R1-12":
+        return finish(
+            "顺序存储靠元素在内存中的相对位置表示关系；链式存储靠指针保存下一个元素的地址。",
+            "顺序存储结构要求一组连续存储单元，优点是能用下标快速定位；链式存储结构的结点可分散存放，靠指针域连接，优点是插入和删除时少搬移元素。题干中的“相对位置”和“指示地址的指针”分别对应这两个概念。",
+        )
+    if q["label"] == "F-R1-2":
+        return finish(
+            "`%5.2f` 表示按浮点数输出，总宽度至少 5，小数保留 2 位；2.683 四舍五入后是 2.68。",
+            "宽度 5 只影响前面是否补空格，小数位才决定显示几位。2.683 保留两位小数看第三位 3，不进位，所以数值部分为 2.68；如果界面不显示前导空格，答案填写 2.68 即可。",
+        )
+    if q["label"] == "F-R1-8":
+        return finish(
+            "`%6.1f` 表示总宽度至少 6，小数保留 1 位；3.14 保留一位小数是 3.1。",
+            "格式化输出中，点号后的 1 控制小数位数，6 控制最小宽度。3.14 的第二位小数是 4，不进位，所以输出数值为 3.1；前导空格通常不作为填空答案要求。",
+        )
+    if q["label"] == "F-R1-5":
+        return finish(
+            "Python 单行注释以 `#` 开始，从 `#` 到本行末尾都会被解释器当作注释。",
+            "注释不会执行，只用于说明代码。多行字符串有时可临时充当说明文字，但真正的单行注释符号就是井号 `#`。",
+        )
+    if q["label"] == "F-R1-6":
+        return finish(
+            "`or` 返回第一个真值操作数；a=1 已经是真值，所以 `(a or b)` 的结果是 1。",
+            "Python 的逻辑运算不一定返回 True/False 本身，而是返回参与运算的对象。`x or y` 若 x 为真就直接返回 x，否则返回 y。本题 a 为 1，属于真值，因此不会再取 b。",
+        )
+    if q["label"] == "F-R1-7":
+        return finish(
+            "相邻的字符串字面量会在编译时自动拼接，`\"hello\" 'world'` 等价于 `\"helloworld\"`。",
+            "这里不是 print 输出两个参数，因为两个字符串之间没有逗号。Python 会把相邻字符串常量合成一个字符串，所以输出没有空格。",
+        )
+    if q["label"] in {"F-R1-10", "F-R1-13"}:
+        return finish(
+            "Python 布尔类型只有两个值：`True` 和 `False`，大小写必须这样写。",
+            "`true`、`false`、`TRUE`、`FALSE` 都不是 Python 的布尔字面量。考试填空要注意首字母大写，其余小写。",
+        )
+    if q["label"] == "F-R1-14":
+        return finish(
+            "`eval(input())` 读入 `5,7` 会得到两个整数 5 和 7；判断奇数可用 `a % 2 == 1`，此时 5 是奇数，所以结果为 True。",
+            "`a,b = eval(input())` 要求输入形式像 Python 表达式里的元组，因此逗号必须是英文逗号。`%` 是取余运算，整数除以 2 余 1 表示奇数。a=5、b=7 时 a>b 为 False，但 a 是奇数这一判断为 True。",
+        )
+    if q["label"] == "F-R2-1":
+        return finish(
+            "Node 结点要保存数据域 data 和指针域 next；get 方法返回字段，set 方法修改字段。",
+            "`__init__(self, initdata)` 中的 `initdata` 是创建结点时传入的数据，应赋给 `self.data`；新结点一开始还没指向下一个结点，所以 `self.next = None`。`getData/getNext` 分别返回当前数据和后继指针；`setData/setNext` 分别更新这两个字段。",
+        )
+    if q["label"] == "F-R2-2":
+        return finish(
+            "链表遍历从 head 开始，只要 current 不是 None 就继续；每轮处理后让 current 移到下一个结点。",
+            "链表没有下标连续地址，遍历只能沿 next 指针走。`current != None` 表示还没走到链表尾部；`current = current.getNext()` 是向后移动一步。如果忘记更新 current，循环会卡在同一个结点。",
+        )
+    if q["label"] == "F-R2-3":
+        return finish(
+            "队列内部先用空列表保存元素；题目规定队尾在下标 0，入队用 insert(0,item)，出队就从列表尾部 pop。",
+            "队列要求先进先出。新元素从下标 0 插入后，较早进入的元素会逐渐被挤到列表后面，因此出队时用 `self.items.pop()` 取列表末尾，正好取到最早入队的元素。答案中的 `items.pop()` 对应题目原代码写法。",
+        )
+    if q["label"] == "F-R2-4":
+        return finish(
+            "range 的 stop 不取到；要得到递减序列时 step 写负数。逐空按目标输出反推 start、stop、step。",
+            "`range(4)` 得到 0,1,2,3；`range(7,11)` 得到 7 到 10；`range(1,14,3)` 得到 1,4,7,10,13。递减时 stop 要越过最后一个目标值，例如从 15 每次减 4 到 -17，应写 `range(15,-20,-4)`。",
+        )
+    if q["label"] == "F-R2-5":
+        return finish(
+            "表头插入链表要先创建新结点，再让新结点指向旧 head，最后把 head 改成新结点。",
+            "顺序不能反：如果先 `self.head = temp`，旧表头就丢了，链表后半段断开。正确流程是 `temp = Node(item)`，`temp.setNext(self.head)`，`self.head = temp`。",
+        )
+    if q["label"] == "F-R2-6":
+        return finish(
+            "输入要转成 int；循环中 fact 每轮乘当前 i，i 每轮加 1；format 里传入 n 和 fact。",
+            "阶乘 n! 是 1×2×...×n。`fact` 初值为 1，`i` 从 1 开始，到 n 为止逐个累乘。`'{}!={}'.format(n, fact)` 的两个占位符分别显示 n 和最终阶乘值。",
+        )
+    if q["label"] == "F-R2-7":
+        return finish(
+            "三位数范围是 `range(100,1000)`；个位是 `i%10`，十位是 `i//10%10`；两位之和为奇数时 `(gw+sw)%2==1`。",
+            "`i % 10` 取最后一位；`i // 10` 去掉个位，再 `% 10` 就得到十位。判断一个数是否为奇数，看它除以 2 的余数是否为 1。",
+        )
+    return finish(
+        "逐空填写时先看空所在语句的变量含义，再检查答案是否满足题目给出的输出或数据结构定义。",
+        "填空题不是只背答案，关键是知道空位承担什么角色：可能是初始化字段、推进循环、提取数位、格式化输出，或按遍历规则写出序列。",
+    )
+
+
 def concept_extension(q: dict) -> str:
     stem = clean_text(q.get("stem", ""))
     knowledge = clean_text(q.get("knowledge", ""))
@@ -702,6 +819,8 @@ def refine(q: dict) -> dict:
         quick, detail = single_explanation(q)
     elif q.get("type") == "essay":
         quick, detail = code_explanation(q)
+    elif q.get("type") == "blank":
+        quick, detail = blank_explanation(q)
     else:
         quick = q.get("quickExplanation", "")
         detail = q.get("knowledgeDetail", "")
@@ -764,7 +883,7 @@ def write_report(before: list[dict], after: list[dict]) -> None:
     repeated_stems = {stem: labels for stem, labels in same_stem.items() if len(labels) > 1}
 
     lines = [
-        "# 数据结构 239 题解析优化报告",
+        "# 数据结构题库解析优化报告",
         "",
         f"- 题量：{len(after)}",
         f"- 题型：{'; '.join(f'{k} {v}' for k, v in by_type.items())}",
