@@ -8,9 +8,9 @@
     "https://ghfast.top/https://github.com/ZhiKong0/exam-prep-handbook-apk/releases/download/v2.10.67/exam-prep-handbook.apk",
     "https://ghfast.top/https://github.com/ZhiKong0/exam-prep-handbook-apk/releases/latest/download/exam-prep-handbook.apk"
   ],
-  "releaseHtmlUrl": "https://github.com/ZhiKong0/exam-prep-handbook-apk/releases/latest",
+  "releaseHtmlUrl": "https://github.com/ZhiKong0/exam-prep-handbook-apk/releases/tag/v2.10.67",
   "releaseNotes": "# v2.10.67\n\n- 数据结构 PTA 题库确认包含李俊老师图片中的三套复习题：练习题6 使用1、练习题6 使用2、编程题2 练习题。\n- 修复数据结构判断题没有“正确 / 错误”可选项的问题。\n- 修复函数题、编程题被当作填空题渲染的问题，现在按参考答案题显示，并把代码答案渲染为等宽小字号代码块。\n- 长代码题顶部新增“查看参考答案”入口，切题/切题型后会回到题目顶部，避免答案按钮被旧滚动位置挡住。",
   "apkSize": 34865760,
-  "sha256": "453b975554d84bf9511774bfa9d02a61a54f85c2ced1a9ea88047b376a650106",
-  "generatedAt": "2026-07-02T10:24:38.393358+00:00"
+  "sha256": "cd57286a747e0708bba3d01a7837b2522cde267c7cce9a065b0106f63dfd0090",
+  "generatedAt": "2026-07-02T10:28:08.423866+00:00"
 }
