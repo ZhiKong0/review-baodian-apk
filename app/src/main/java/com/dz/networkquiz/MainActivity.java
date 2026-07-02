@@ -823,6 +823,9 @@ public class MainActivity extends Activity {
     private String normalizeQuestionType(String type, String typeName) {
         String normalized = type == null ? "" : type.trim();
         String name = typeName == null ? "" : typeName.trim();
+        if ("programming".equals(normalized) || "program".equals(normalized) || "function".equals(normalized)) {
+            return QUESTION_TYPE_ESSAY;
+        }
         if ("blank".equals(normalized) && isCodeQuestionTypeName(name)) {
             return QUESTION_TYPE_ESSAY;
         }
@@ -837,7 +840,9 @@ public class MainActivity extends Activity {
 
     private boolean isCodeQuestionTypeName(String typeName) {
         if (typeName == null) return false;
-        return typeName.contains("编程") || typeName.contains("函数") || typeName.contains("程序");
+        String name = typeName.trim();
+        if (name.contains("程序填空")) return false;
+        return name.contains("编程") || name.contains("函数") || name.contains("程序题");
     }
 
     private void loadMemoryCards() {
