@@ -17,6 +17,100 @@ def clean_text(value: str) -> str:
     return text.strip()
 
 
+def clean_pta_objective_stem(value: str) -> str:
+    text = (value or "").replace("\r\n", "\n").replace("\r", "\n").replace("\u00a0", " ")
+    if not any(token in text for token in ["复制内容", "全屏", "格式", "收起", "▾", "[ C", "[C"]):
+        return text.strip()
+    lines: list[str] = []
+    for raw in text.split("\n"):
+        line = raw.strip()
+        if not line:
+            lines.append("")
+            continue
+        if line in {"复制内容", "格式", "全屏", "全屏浏览", "切换布局", "收起", "展开", "▾"}:
+            continue
+        if re.fullmatch(r"\[\s*(C|C\+\+|Python|python|Java|in|out)\s*\]", line):
+            continue
+        lines.append(raw.rstrip())
+    lines = strip_sequential_line_number_lines(lines)
+    text = "\n".join(lines)
+    text = re.sub(r"\n{3,}", "\n\n", text)
+    return text.strip()
+
+
+def strip_sequential_line_number_lines(lines: list[str]) -> list[str]:
+    out: list[str] = []
+    i = 0
+    while i < len(lines):
+        line = lines[i].strip()
+        if line == "1":
+            j = i
+            expected = 1
+            while j < len(lines) and lines[j].strip() == str(expected):
+                j += 1
+                expected += 1
+            if expected > 2 and j < len(lines):
+                i = j
+                continue
+        out.append(lines[i])
+        i += 1
+    while out and out[0].strip() == "":
+        out.pop(0)
+    while out and out[-1].strip() == "":
+        out.pop()
+    return out
+
+
+def normalize_complexity_option_text(value: str) -> str:
+    text = (value or "").replace("\r\n", "\n").replace("\r", "\n")
+    text = text.replace("\u200b", "").replace("\u00a0", " ")
+    compact = re.sub(r"\s+", "", text)
+    replacements = {
+        "O(n2)": "O(n^2)",
+        "Θ(n2)": "Θ(n^2)",
+        "O(n3)": "O(n^3)",
+        "Θ(n3)": "Θ(n^3)",
+        "O(2n)": "O(2^n)",
+        "Θ(2n)": "Θ(2^n)",
+        "O(n1/2)": "O(√n)",
+        "Θ(n1/2)": "Θ(√n)",
+        "O(n½)": "O(√n)",
+        "Θ(n½)": "Θ(√n)",
+        "O(log2n)": "O(log2 n)",
+        "Θ(log2n)": "Θ(log2 n)",
+        "O(log3n)": "O(log3 n)",
+        "Θ(log3n)": "Θ(log3 n)",
+        "log2n": "log2 n",
+    }
+    if compact in replacements:
+        return replacements[compact]
+    if compact in {"O(n)", "O(1)", "Θ(n)", "Θ(1)", "O(mn)", "Θ(mn)"}:
+        return compact
+    return clean_text(text)
+
+
+def normalize_question_text_fields(q: dict) -> dict:
+    q = dict(q)
+    if q.get("type") == "single":
+        q["stem"] = clean_pta_objective_stem(q.get("stem", ""))
+    if q.get("options"):
+        options = []
+        for option in q.get("options", []):
+            item = dict(option)
+            item["text"] = normalize_complexity_option_text(str(item.get("text", "")))
+            options.append(item)
+        q["options"] = options
+    if q.get("label") in {"DS6A-R2-14", "DS6B-R2-35"}:
+        for option in q.get("options", []):
+            if (
+                (q.get("label") == "DS6A-R2-14" and option.get("key") == "C")
+                or (q.get("label") == "DS6B-R2-35" and option.get("key") == "A")
+            ) and option.get("text") == "O(n)":
+                # PTA lost the radical in one distractor while exporting the HTML.
+                option["text"] = "O(√n)"
+    return q
+
+
 def option_text(q: dict, key: str) -> str:
     for option in q.get("options", []):
         if option.get("key") == key:
@@ -536,10 +630,11 @@ def single_explanation(q: dict) -> tuple[str, str]:
             )
 
     if "时间复杂度" in stem or "算法" in stem:
-        if "while" in stem and ("(y+1)" in stem or "≥(y+1)" in stem):
+        compact_stem = stem.replace(" ", "")
+        if "while" in stem and ("(y+1)" in compact_stem or "≥(y+1)" in compact_stem):
             return finish(
                 "循环条件相当于 `(y+1)^2 <= n`，y 从 0 增到约 √n，因此循环次数是 Θ(√n)。",
-                "每次循环 y 增 1，直到 y^2 接近 n。能执行的最大 y 大约是 √n，所以运行次数不是 n，也不是 log n，而是平方根级别。",
+                "通法：先找真正重复执行的语句，再把循环次数写成关于 n 的式子。本题 x 固定为 n，循环每次只让 y 加 1；能继续循环的条件是 `n >= (y+1)^2`。当 y 增到接近 √n 时，`(y+1)^2` 会超过 n，循环停止。所以执行次数大约是 √n 次，复杂度是 Θ(√n)。它不是 O(n)，因为 y 不需要从 1 加到 n；也不是 O(log n)，因为 y 不是每次乘倍数增长。",
                 "没有根据循环终止条件推出 y 只增长到 √n。",
             )
         if "for ( i=0; i<n" in stem and "j<m" in stem:
@@ -556,8 +651,8 @@ def single_explanation(q: dict) -> tuple[str, str]:
             )
         if "return n * (n + 1) / 2" in stem:
             return finish(
-                "函数只做固定次数的算术运算，没有循环或递归，时间复杂度是 O(1)。",
-                "复杂度看执行步数如何随 n 增长。公式里出现 n 不代表循环 n 次；这段代码无论 n 多大，都只是乘法、加法、除法和返回。",
+                "这段函数没有循环、没有递归，也没有按 n 次访问数据；它只是用一个公式做乘法、加法、除法并返回，所以执行步数不随 n 变大，时间复杂度是 O(1)。",
+                "复杂度题的通法是先数“会随输入规模增长而重复执行的语句”，再保留最高增长阶。第一看循环：单层从 1 到 n 通常是 O(n)，两层嵌套通常相乘，像 n×n 是 O(n^2)；第二看循环变量变化：每次乘 2、乘 3 通常是对数级；第三看递归：看每层做多少事、递归深度多少；第四看本题这种纯公式：表达式里有 n 只是数值参与计算，不代表执行 n 次。`n * (n + 1) / 2` 用常数次算术运算直接得到结果，不会真的从 1 加到 n，因此是 O(1)。",
                 "把公式中的 n 误当成执行次数。",
             )
         if "i=i*3" in stem or "i=i * 3" in stem:
@@ -836,7 +931,7 @@ def concept_extension(q: dict) -> str:
 
 
 def refine(q: dict) -> dict:
-    q = dict(q)
+    q = normalize_question_text_fields(q)
     if q.get("type") == "tf":
         quick, detail = tf_explanation(q)
     elif q.get("type") == "single":
@@ -887,6 +982,16 @@ def validate(questions: list[dict]) -> list[str]:
             errors.append(f"{q['label']}: 兄弟结点题混入 BST 无关解析")
     for q in questions:
         label = q["label"]
+        if q.get("type") == "single":
+            stem = q.get("stem", "")
+            for noise in ["复制内容", "格式", "全屏", "收起", "▾", "[ C ]", "[ C++ ]"]:
+                if noise in stem:
+                    errors.append(f"{label}: 单选题题干仍包含 PTA 噪声 {noise}")
+            if re.search(r"\n\s*1\s*\n\s*2\s*\n", stem):
+                errors.append(f"{label}: 单选题题干仍包含 PTA 行号")
+            for option in q.get("options", []):
+                if "\n" in str(option.get("text", "")) or "\u200b" in str(option.get("text", "")):
+                    errors.append(f"{label}: 选项仍包含换行/零宽字符")
         if len(q.get("quickExplanation", "")) < 50:
             errors.append(f"{label}: quickExplanation 太短")
         if len(q.get("knowledgeDetail", "")) < 70:

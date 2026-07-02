@@ -4195,13 +4195,21 @@ public class MainActivity extends Activity {
             }
             return;
         }
+        if (shouldRenderMixedCodeStem(q)) {
+            stemView.setText("");
+            stemView.setVisibility(View.GONE);
+            if (mathStemContainer != null) {
+                renderMarkdown(mathStemContainer, buildMixedCodeStemMarkdown(q));
+            }
+            return;
+        }
         if (q != null && !q.stemImages.isEmpty()) {
             stemView.setText("");
             stemView.setVisibility(View.GONE);
             return;
         }
         stemView.setVisibility(View.VISIBLE);
-        stemView.setText(inlineMarkdown(q == null ? "" : q.stem));
+        stemView.setText(inlineMarkdown(q == null ? "" : normalizePlainQuestionStemText(q.stem)));
     }
 
     private String buildCodeQuestionStemMarkdown(Question q) {
@@ -4242,10 +4250,10 @@ public class MainActivity extends Activity {
     private String normalizeCodeQuestionStemText(String value) {
         String text = value == null ? "" : value.replace("\r\n", "\n").replace('\r', '\n');
         text = text.replace('\u00A0', ' ');
-        text = text.replaceAll("(?m)^\\s*(复制内容|格式|全屏|全屏浏览|切换布局)\\s*$", "");
+        text = text.replaceAll("(?m)^\\s*(复制内容|格式|全屏|全屏浏览|切换布局|收起|展开|▾)\\s*$", "");
         text = text.replaceAll("(?m)^\\s*分数\\s+\\d+(?:\\.\\d+)?\\s*$", "");
         text = text.replaceAll("(?m)^\\s*(作者|单位)\\s+.*$", "");
-        text = text.replaceAll("(?m)^\\s*\\[\\s*(?:Python|python|in|out)\\s*\\]\\s*$", "");
+        text = text.replaceAll("(?m)^\\s*\\[\\s*(?:Python|python|in|out|C|C\\+\\+|Java)\\s*\\]\\s*$", "");
         text = text.replaceAll("(?m)^\\s*/\\*\\s*请在这里填写答案\\s*\\*/\\s*$", "");
         text = text.replaceAll("(?m)^\\s*#\\s*请在这里填写.*$", "");
         text = text.replace("#  请在这里填写Pet类的定义", "# 请在这里填写 Pet 类的定义");
@@ -4259,6 +4267,85 @@ public class MainActivity extends Activity {
         text = text.replaceAll("(?m)^\\s*Python \\(python3\\)\\s*$", "");
         text = text.replaceAll("\\n{3,}", "\n\n");
         return text.trim();
+    }
+
+    private String normalizePlainQuestionStemText(String value) {
+        return normalizeCodeQuestionStemText(value);
+    }
+
+    private boolean shouldRenderMixedCodeStem(Question q) {
+        if (q == null || q.stem == null || q.stemImages.size() > 0) return false;
+        if (isCodeAnswerQuestion(q)) return false;
+        String cleaned = normalizeCodeQuestionStemText(q.stem);
+        if (cleaned.length() == 0) return false;
+        if (containsPtaNoise(q.stem)) return true;
+        String[] lines = cleaned.split("\n");
+        for (String raw : lines) {
+            if (isCodeStartLine(raw == null ? "" : raw.trim())) return true;
+        }
+        return looksLikeCodeBlock(cleaned);
+    }
+
+    private boolean containsPtaNoise(String value) {
+        if (value == null) return false;
+        return value.contains("复制内容") || value.contains("全屏") || value.contains("收起")
+                || value.contains("格式") || value.contains("▾")
+                || value.matches("(?s).*\\n\\s*1\\s*\\n\\s*2\\s*\\n.*");
+    }
+
+    private String buildMixedCodeStemMarkdown(Question q) {
+        String cleaned = stripPtaLineNumbers(normalizeCodeQuestionStemText(q == null ? "" : q.stem));
+        String[] lines = cleaned.split("\n");
+        int codeStart = -1;
+        for (int i = 0; i < lines.length; i++) {
+            String line = lines[i] == null ? "" : lines[i].trim();
+            if (isCodeStartLine(line)) {
+                codeStart = i;
+                break;
+            }
+        }
+        if (codeStart < 0) {
+            StringBuilder fallback = new StringBuilder();
+            appendReadableParagraphs(fallback, cleaned);
+            return fallback.toString().trim();
+        }
+
+        StringBuilder sb = new StringBuilder();
+        StringBuilder preface = new StringBuilder();
+        for (int i = 0; i < codeStart; i++) {
+            String line = lines[i] == null ? "" : lines[i].trim();
+            if (line.length() == 0) {
+                if (preface.length() > 0 && preface.charAt(preface.length() - 1) != '\n') preface.append('\n');
+            } else {
+                if (preface.length() > 0) preface.append('\n');
+                preface.append(line);
+            }
+        }
+        appendReadableParagraphs(sb, preface.toString());
+
+        List<String> codeLines = new ArrayList<>();
+        for (int i = codeStart; i < lines.length; i++) {
+            codeLines.add(lines[i] == null ? "" : lines[i]);
+        }
+        String code = trimTrailingBlankLines(join(codeLines, "\n"));
+        if (code.length() > 0) {
+            sb.append("```").append(codeFenceLanguage("", code)).append("\n")
+                    .append(code).append("\n```\n");
+        }
+        return sb.toString().trim();
+    }
+
+    private boolean isCodeStartLine(String line) {
+        if (line == null) return false;
+        String value = line.trim();
+        if (value.length() == 0) return false;
+        if (value.matches("^(int|long|double|float|void|char|bool|boolean)\\s+[A-Za-z_]\\w*\\s*\\(.*\\)\\s*\\{?$")) return true;
+        if (value.startsWith("for ") || value.startsWith("for(") || value.startsWith("while ") || value.startsWith("while(")) return true;
+        if (value.startsWith("if ") || value.startsWith("if(") || value.startsWith("else")) return true;
+        if (value.startsWith("return ") || value.startsWith("class ") || value.startsWith("def ")) return true;
+        if (value.contains("input(") || value.contains("print(")) return true;
+        if (value.matches("^[A-Za-z_]\\w*(\\[[^\\]]+\\])?\\s*=.*;?$")) return true;
+        return false;
     }
 
     private List<ProblemSection> splitCodeProblemSections(String text) {
@@ -4344,7 +4431,8 @@ public class MainActivity extends Activity {
                     || line.startsWith("import ") || line.startsWith("from ") || line.startsWith("for ")
                     || line.startsWith("while ") || line.startsWith("if ") || line.startsWith("elif ")
                     || line.startsWith("else:") || line.startsWith("#") || line.contains("input(")
-                    || line.contains("print(") || line.contains("__init__") || line.contains(" = ")) {
+                    || line.contains("print(") || line.contains("__init__") || line.contains(" = ")
+                    || isCodeStartLine(line)) {
                 signal++;
             }
         }
@@ -4355,6 +4443,10 @@ public class MainActivity extends Activity {
         String text = (title == null ? "" : title) + "\n" + (body == null ? "" : body);
         if (text.contains("input(") || text.contains("print(") || text.contains("class ") || text.contains("def ")) {
             return "python";
+        }
+        if (text.contains("int ") || text.contains("while(") || text.contains("for(")
+                || text.contains("while ") || text.contains("for ")) {
+            return "c";
         }
         return "";
     }

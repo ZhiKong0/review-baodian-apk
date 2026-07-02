@@ -7,9 +7,9 @@
 ## 去模板化指标
 
 - quickExplanation 唯一数：193 -> 193
-- knowledgeDetail 唯一数：124 -> 126
+- knowledgeDetail 唯一数：126 -> 125
 - 低于 80 字 quick：104 -> 104
-- 低于 100 字 detail：85 -> 77
+- 低于 100 字 detail：77 -> 77
 - 重复题干数：99（来自 DS6A/DS6B 随机卷重复题，解析允许随同题重复）
 
 ## 优化原则
