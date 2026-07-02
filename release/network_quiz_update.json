@@ -8,9 +8,9 @@
     "https://ghfast.top/https://github.com/ZhiKong0/exam-prep-handbook-apk/releases/download/v2.10.78/exam-prep-handbook.apk",
     "https://ghfast.top/https://github.com/ZhiKong0/exam-prep-handbook-apk/releases/latest/download/exam-prep-handbook.apk"
   ],
-  "releaseHtmlUrl": "https://github.com/ZhiKong0/exam-prep-handbook-apk/releases/latest",
-  "releaseNotes": "# v2.10.78\n\n- Auto release after fix: Fix data structures code stem rendering v2.10.77\n- 修复数据结构客观题中的 PTA 代码块渲染，去掉“复制内容 / 格式 / 全屏 / 收起”和行号噪声。\n- 单选题里的代码片段现在使用小号等宽代码块显示，不再被放成大标题。\n- 清理复杂度题选项格式，统一显示 `O(n^2)`、`O(√n)`、`O(log3 n)` 等形式。\n- 优化复杂度题解析，补充“先找重复执行语句，再按循环/倍增/递归/纯公式判断增长阶”的通法。",
+  "releaseHtmlUrl": "https://github.com/ZhiKong0/exam-prep-handbook-apk/releases/tag/v2.10.78",
+  "releaseNotes": "# v2.10.78\n\n- 修复数据结构客观题中的 PTA 代码块渲染，去掉“复制内容 / 格式 / 全屏 / 收起”和行号噪声。\n- 单选题里的代码片段现在使用小号等宽代码块显示，不再被放成大标题。\n- 清理复杂度题选项格式，统一显示 `O(n^2)`、`O(√n)`、`O(log3 n)` 等形式。\n- 优化复杂度题解析，补充“先找重复执行语句，再按循环/倍增/递归/纯公式判断增长阶”的通法。",
   "apkSize": 34906722,
-  "sha256": "6a8ec7bca584c2534a38fa89307adf9c1bc16084d29505f042e9aa0ee1eac92f",
-  "generatedAt": "2026-07-02T18:10:13.142682+00:00"
+  "sha256": "a567c6058e2073bb0d7930f125c4e7427ea95eb5dd54070829acfb662f71cb63",
+  "generatedAt": "2026-07-02T18:12:27.378294+00:00"
 }
