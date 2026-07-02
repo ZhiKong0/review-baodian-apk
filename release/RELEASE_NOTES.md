@@ -1,5 +1,6 @@
-# v2.10.77
+# v2.10.78
 
+- Auto release after fix: Fix data structures code stem rendering v2.10.77
 - 修复数据结构客观题中的 PTA 代码块渲染，去掉“复制内容 / 格式 / 全屏 / 收起”和行号噪声。
 - 单选题里的代码片段现在使用小号等宽代码块显示，不再被放成大标题。
 - 清理复杂度题选项格式，统一显示 `O(n^2)`、`O(√n)`、`O(log3 n)` 等形式。

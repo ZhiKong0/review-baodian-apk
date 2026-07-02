@@ -1,16 +1,16 @@
 {
   "packageName": "com.dz.networkquiz",
-  "versionCode": 101,
-  "versionName": "2.10.76",
+  "versionCode": 103,
+  "versionName": "2.10.78",
   "apkFileName": "exam-prep-handbook.apk",
-  "apkDownloadUrl": "https://ghfast.top/https://github.com/ZhiKong0/exam-prep-handbook-apk/releases/download/v2.10.76/exam-prep-handbook.apk",
+  "apkDownloadUrl": "https://ghfast.top/https://github.com/ZhiKong0/exam-prep-handbook-apk/releases/download/v2.10.78/exam-prep-handbook.apk",
   "apkDownloadCandidates": [
-    "https://ghfast.top/https://github.com/ZhiKong0/exam-prep-handbook-apk/releases/download/v2.10.76/exam-prep-handbook.apk",
+    "https://ghfast.top/https://github.com/ZhiKong0/exam-prep-handbook-apk/releases/download/v2.10.78/exam-prep-handbook.apk",
     "https://ghfast.top/https://github.com/ZhiKong0/exam-prep-handbook-apk/releases/latest/download/exam-prep-handbook.apk"
   ],
-  "releaseHtmlUrl": "https://github.com/ZhiKong0/exam-prep-handbook-apk/releases/tag/v2.10.76",
-  "releaseNotes": "# v2.10.76\n\n- 优化数据结构题库解析，去掉“复述题干式”的模板话术。\n- 修复树与二叉树判断题解析：兄弟结点题现在明确讲清“同层不等于同父，兄弟必须同一双亲”。\n- 优化线性表存储结构等单选题的选项辨析，区分“找正确项”和“找错误项”。\n- 增加解析质量校验，拦截“本题判断的是”“正确项是”“做题抓手”等空泛模板句。",
-  "apkSize": 34906720,
-  "sha256": "476be2eaf382ae0f92871b86b686d12abc8ad0fb34082b490762a35675996111",
-  "generatedAt": "2026-07-02T17:07:03.113169+00:00"
+  "releaseHtmlUrl": "https://github.com/ZhiKong0/exam-prep-handbook-apk/releases/latest",
+  "releaseNotes": "# v2.10.78\n\n- Auto release after fix: Fix data structures code stem rendering v2.10.77\n- 修复数据结构客观题中的 PTA 代码块渲染，去掉“复制内容 / 格式 / 全屏 / 收起”和行号噪声。\n- 单选题里的代码片段现在使用小号等宽代码块显示，不再被放成大标题。\n- 清理复杂度题选项格式，统一显示 `O(n^2)`、`O(√n)`、`O(log3 n)` 等形式。\n- 优化复杂度题解析，补充“先找重复执行语句，再按循环/倍增/递归/纯公式判断增长阶”的通法。",
+  "apkSize": 34906722,
+  "sha256": "6a8ec7bca584c2534a38fa89307adf9c1bc16084d29505f042e9aa0ee1eac92f",
+  "generatedAt": "2026-07-02T18:10:13.142682+00:00"
 }
