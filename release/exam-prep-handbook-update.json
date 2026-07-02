@@ -11,6 +11,6 @@
   "releaseHtmlUrl": "https://github.com/ZhiKong0/exam-prep-handbook-apk/releases/tag/v2.10.76",
   "releaseNotes": "# v2.10.76\n\n- 优化数据结构题库解析，去掉“复述题干式”的模板话术。\n- 修复树与二叉树判断题解析：兄弟结点题现在明确讲清“同层不等于同父，兄弟必须同一双亲”。\n- 优化线性表存储结构等单选题的选项辨析，区分“找正确项”和“找错误项”。\n- 增加解析质量校验，拦截“本题判断的是”“正确项是”“做题抓手”等空泛模板句。",
   "apkSize": 34906720,
-  "sha256": "949324abe41df5f1290245d3e65dc645e79aea8f0a5dada5563be8b63cfa7ed3",
-  "generatedAt": "2026-07-02T17:05:13.244273+00:00"
+  "sha256": "476be2eaf382ae0f92871b86b686d12abc8ad0fb34082b490762a35675996111",
+  "generatedAt": "2026-07-02T17:07:03.113169+00:00"
 }
