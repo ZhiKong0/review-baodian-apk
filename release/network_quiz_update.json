@@ -1,16 +1,16 @@
 {
   "packageName": "com.dz.networkquiz",
-  "versionCode": 99,
-  "versionName": "2.10.74",
+  "versionCode": 101,
+  "versionName": "2.10.76",
   "apkFileName": "exam-prep-handbook.apk",
-  "apkDownloadUrl": "https://ghfast.top/https://github.com/ZhiKong0/exam-prep-handbook-apk/releases/download/v2.10.74/exam-prep-handbook.apk",
+  "apkDownloadUrl": "https://ghfast.top/https://github.com/ZhiKong0/exam-prep-handbook-apk/releases/download/v2.10.76/exam-prep-handbook.apk",
   "apkDownloadCandidates": [
-    "https://ghfast.top/https://github.com/ZhiKong0/exam-prep-handbook-apk/releases/download/v2.10.74/exam-prep-handbook.apk",
+    "https://ghfast.top/https://github.com/ZhiKong0/exam-prep-handbook-apk/releases/download/v2.10.76/exam-prep-handbook.apk",
     "https://ghfast.top/https://github.com/ZhiKong0/exam-prep-handbook-apk/releases/latest/download/exam-prep-handbook.apk"
   ],
-  "releaseHtmlUrl": "https://github.com/ZhiKong0/exam-prep-handbook-apk/releases/tag/v2.10.74",
-  "releaseNotes": "# v2.10.74\n\n- 修复数据结构课程“填空题不见了”的问题，补回 16 道填空题和 7 道程序填空题。\n- 数据结构题库现在共 262 题：判断题 120、单选题 100、填空题 16、程序填空题 7、函数题 4、编程题 15。\n- 填空题题干已清理 PTA 噪声文本，并补充逐空答案与贴题解析。\n- 导图章节覆盖同步更新，题型筛选中重新显示“填空题”和“程序填空题”。",
-  "apkSize": 34902627,
-  "sha256": "93441061e3afd617a85cac620d3c4776352267f825730b7025eb9ba119def5bc",
-  "generatedAt": "2026-07-02T16:46:57.149149+00:00"
+  "releaseHtmlUrl": "https://github.com/ZhiKong0/exam-prep-handbook-apk/releases/latest",
+  "releaseNotes": "# v2.10.76\n\n- Auto release after fix: Improve data structures explanations v2.10.75\n- 优化数据结构题库解析，去掉“复述题干式”的模板话术。\n- 修复树与二叉树判断题解析：兄弟结点题现在明确讲清“同层不等于同父，兄弟必须同一双亲”。\n- 优化线性表存储结构等单选题的选项辨析，区分“找正确项”和“找错误项”。\n- 增加解析质量校验，拦截“本题判断的是”“正确项是”“做题抓手”等空泛模板句。",
+  "apkSize": 34906720,
+  "sha256": "0ee7657f005809fd1088b67759c356e263e5207cfcc8a23ec4bc0ccedf70ecb8",
+  "generatedAt": "2026-07-02T17:03:52.853343+00:00"
 }
