@@ -43,14 +43,22 @@ def with_options(q: dict, reason: str, wrong_hint: str = "") -> str:
     if not q.get("options") or q.get("type") == "tf":
         return reason
     answer = str(q.get("answer", ""))
+    stem = clean_text(q.get("stem", ""))
+    asks_wrong = any(token in stem for token in ["错误", "不正确", "不属于", "不存在", "存在错误"])
     lines = [reason, "", "选项辨析："]
     for option in q["options"]:
         key = option.get("key", "")
         text = clean_text(option.get("text", ""))
         if key in answer:
-            lines.append(f"- {key}：{text}。正确，和上面的定义或推导一致。")
+            if asks_wrong:
+                lines.append(f"- {key}：{text}。应选，它正是题目要找的错误项或不符合项。")
+            else:
+                lines.append(f"- {key}：{text}。应选，符合本题的定义、运算过程或结构规则。")
         else:
-            hint = wrong_hint or "不符合本题条件，属于相近概念或干扰结论。"
+            if asks_wrong:
+                hint = wrong_hint or "这个说法本身是成立的，不是题目要找的错误项。"
+            else:
+                hint = wrong_hint or "不符合本题条件，属于相近概念或干扰结论。"
             lines.append(f"- {key}：{text}。不选，{hint}")
     return "\n".join(lines)
 
@@ -161,17 +169,18 @@ def tf_explanation(q: dict) -> tuple[str, str]:
                 "数据结构的逻辑结构和存储结构不是一回事。同一棵二叉树可以选择不同存储方式，不能说只能用某一种表示。",
             )
 
+    if "同一层" in stem and "兄弟" in stem:
+        return finish(
+            "兄弟结点不是“同一层的所有结点”，而是“同一个双亲结点的孩子”。同一双亲一定在同一层；同一层却可能分属不同双亲。",
+            "树里的亲属关系要看父子连接，而不是只看层号。比如 A 和 B 都在第 3 层，但 A 的双亲是 X，B 的双亲是 Y，那么 A、B 只是同层结点，不是兄弟结点。只有两个结点连到同一个父结点下面，才互称兄弟。因此“位于同一层上的结点彼此称为兄弟结点”把必要条件当成了充分条件，结论错误。",
+        )
+    if "同一双亲" in stem and "兄弟" in stem:
+        return finish(
+            "兄弟结点的定义就是：拥有同一个双亲结点的孩子结点。题干条件和定义完全一致。",
+            "树结构中的“双亲、孩子、兄弟”都是按边连接关系定义的。某结点的直接上层相连结点叫双亲；直接下层相连结点叫孩子；若两个孩子连在同一个双亲下面，它们互为兄弟。同一双亲会推出同一层，但判断兄弟关系的核心依据仍然是双亲是否相同。",
+        )
+
     if "树" in stem:
-        if "同一层" in stem and "兄弟" in stem:
-            return finish(
-                "兄弟结点要求拥有同一个双亲，只在同一层还不够。",
-                "同层结点可能属于不同父结点的子树，它们只是层号相同，不一定是兄弟。兄弟关系看双亲是否相同，不看是否同层。",
-            )
-        if "同一双亲" in stem and "兄弟" in stem:
-            return finish(
-                "兄弟结点的定义就是同一个双亲结点的孩子结点。",
-                "树结构中的关系以父子层次为核心：双亲、孩子、兄弟分别描述相邻层和同父结点之间的关系。",
-            )
         if "子树的个数允许为0" in stem:
             return finish(
                 "叶子结点没有孩子，因此以它为根的子树个数可以是 0。",
@@ -288,9 +297,15 @@ def tf_explanation(q: dict) -> tuple[str, str]:
                 "可以把两者逐项比较：`n! = 1×2×...×n`，`n^n = n×n×...×n`。除最后一项外，前面每项都比 n 小，因此 n! 明显更低阶。",
             )
 
+    domain = clean_text(q.get("knowledge") or q.get("chapter") or "数据结构概念")
+    if is_true:
+        return finish(
+            f"这句话成立，因为它没有改变“{domain}”中的对象、前提和限制条件。",
+            f"判断概念题时，要把句子拆成对象、条件、结论三部分：对象是不是同一个，条件有没有少写或扩大，结论有没有说绝对。本题答案为 {ans}，说明题干给出的关系与该知识点的定义相容。复习时不要只背一句话，要看定义中的限制条件是否被完整保留。",
+        )
     return finish(
-        f"本题判断的是“{stem}”这句话是否符合定义。",
-        f"这题要把概念本身说完整：{q.get('knowledge', q.get('chapter', '相关知识点'))}。结论为 {ans}，不是因为文字像不像教材表述，而是因为题干中的条件和定义是否完全一致。",
+        f"这句话不成立，错在它把“{domain}”中的条件扩大、缩小或换成了相近概念。",
+        f"判断概念题时，最常见的错法是把必要条件当充分条件，或把相邻概念混在一起。本题答案为 {ans}，说明题干里的对象、前提或结论至少有一处没有满足定义。复习时要把定义中的限定词留下来，例如是否要求同一双亲、是否要求有序、是否要求连续存储、是否要求固定操作端。",
     )
 
 
@@ -378,6 +393,12 @@ def single_explanation(q: dict) -> tuple[str, str]:
             "链表的优势是插入、删除方便，因为定位后改指针即可，不需要搬移一大片元素。",
             "顺序表支持随机存取且存储密度高，但中间插入删除要移动元素；链表每个结点额外保存指针，不能随机存取，却适合频繁增删。",
             "要么是顺序表的优势，要么不是链表相对顺序表的主要优点。",
+        )
+    if "线性表存储结构" in stem and "存在错误" in stem:
+        return finish(
+            "错误说法是“顺序存储适合频繁的插入删除操作”。顺序表中间插入或删除时，后续元素往往要整体后移或前移，代价高；频繁增删更适合链式存储。",
+            "顺序存储的元素物理位置连续，优点是可按下标快速访问，缺点是中间位置增删会牵动大量元素。链式存储不要求地址连续，结点之间靠指针连接；只要找到位置，插入删除主要改前驱和后继指针。因此 A、C、D 都是正确描述，B 把顺序表和链表的适用场景说反了。",
+            "这个说法是线性表存储结构的正确描述，题目问的是哪一项错误。",
         )
     if "线性表在" in stem and "链式存储" in stem:
         return finish(
@@ -571,8 +592,8 @@ def single_explanation(q: dict) -> tuple[str, str]:
             )
 
     return finish(
-        f"正确项是 {correct}，它直接符合“{q.get('knowledge', q.get('chapter', '本题知识点'))}”的定义或推导。",
-        f"本题属于 {q.get('chapter', '数据结构')}。要真正判断选项，需要把概念落到题目条件上：先确定题目问的是定义、操作规则、遍历顺序还是复杂度，再检查选项是否满足这个规则。",
+        f"答案项是 {correct}。判断这类题时，先把题干要求转成一个明确规则，再逐项排除不满足规则的选项。",
+        f"本题对应 {q.get('knowledge', q.get('chapter', '数据结构'))}。解析没有更细的专门规则时，也不能只背选项；应先确认题目问的是定义、操作规则、遍历顺序还是复杂度，再把每个选项代入这个规则。若题干要求“选错误项”，答案项往往是把两个相近概念的适用条件说反了。",
     )
 
 
@@ -787,25 +808,28 @@ def concept_extension(q: dict) -> str:
     stem = clean_text(q.get("stem", ""))
     knowledge = clean_text(q.get("knowledge", ""))
     chapter = clean_text(q.get("chapter", ""))
-    text = stem + " " + knowledge + " " + chapter
-    if "链表" in text or "顺序" in text or "队列" in text or "栈" in text:
+    text = stem + " " + knowledge
+    broad_text = text + " " + chapter
+    if "兄弟" in text or "双亲" in text or "孩子" in text:
+        return "补充概念：树中的关系按连接来定。双亲是直接连在上一层的结点，孩子是直接连在下一层的结点，兄弟必须共享同一个双亲；同层只是层号相同，不能直接推出兄弟关系。"
+    if "链表" in broad_text or "顺序" in broad_text or "队列" in broad_text or "栈" in broad_text:
         return "补充概念：线性结构的难点在于区分“逻辑关系”和“存储方式”。顺序表靠连续地址支持快速下标访问；链表靠指针维持前后关系，适合增删；栈限制同端进出，队列限制队尾进、队头出。"
     if "二叉搜索树" in text or "二叉排序树" in text or "BST" in text:
         return "补充概念：二叉搜索树的核心不是树长什么样，而是每个结点都满足左子树小于根、右子树大于或等于根。中序遍历会把这种大小关系摊平成升序序列。"
-    if "二叉树" in text or "树" in text:
+    if "二叉树" in broad_text or "树" in broad_text:
         return "补充概念：树表示层次关系，普通二叉树每个结点最多两个孩子；先序、中序、后序的区别只在访问根的位置，分别是根在前、根在中间、根在最后。"
-    if "复杂度" in text or "查找" in text or "排序" in text or "算法" in text:
+    if "复杂度" in broad_text or "查找" in broad_text or "排序" in broad_text or "算法" in broad_text:
         return "补充概念：复杂度看的是输入规模变大时步骤数如何增长，只保留主导增长项。循环次数相乘、递增求和、乘法增长取对数，是这类题最常用的推导来源。"
-    if "Python" in text or "列表" in text or "元组" in text or "类" in text or "self" in text:
-        if "缩进" in text or "类定义" in text:
+    if "Python" in broad_text or "列表" in broad_text or "元组" in broad_text or "类" in broad_text or "self" in broad_text:
+        if "缩进" in broad_text or "类定义" in broad_text:
             return "补充概念：Python 类体由缩进划定。缩进在 class 下面的函数才是成员方法；如果和 class 平齐，就只是类外普通函数。"
-        if "__init__" in text or "构造" in text:
+        if "__init__" in broad_text or "构造" in broad_text:
             return "补充概念：`__init__` 在对象创建后自动执行，用来初始化当前实例的属性；它的第一个参数接收当前对象，通常写作 self。"
-        if "self" in text or "方法" in text:
+        if "self" in broad_text or "方法" in broad_text:
             return "补充概念：实例方法定义时要给当前对象留出第一个形参，通常写 self；调用 `对象.方法()` 时，这个实参由解释器自动传入。"
-        if "append" in text or "列表" in text:
+        if "append" in broad_text or "列表" in broad_text:
             return "补充概念：列表是可变序列，`append(x)` 会原地把 x 作为一个整体追加到末尾；如果 x 是列表，就会形成嵌套列表。"
-        if "元组" in text:
+        if "元组" in broad_text:
             return "补充概念：元组和字符串属于不可变序列，元素位置确定但不能按下标改值；列表是可变序列，可以追加、删除和修改元素。"
         return "补充概念：Python 面向对象题要分清类、对象、方法和属性。对象保存自己的状态，方法通过当前对象去读取或修改这些状态。"
     return "补充概念：这类题要把定义中的限制条件逐字落到题干上，只要题干把对象、方向、顺序或前提换掉，结论就会改变。"
@@ -842,9 +866,25 @@ def validate(questions: list[dict]) -> list[str]:
     if [q["id"] for q in questions] != list(range(1, len(questions) + 1)):
         errors.append("id 不连续")
     text = json.dumps(questions, ensure_ascii=False)
-    for bad in ["�", "????", "题眼：", "做题抓手", "先定位题眼", "本题入口"]:
+    for bad in [
+        "�",
+        "????",
+        "题眼：",
+        "做题抓手",
+        "先定位题眼",
+        "本题入口",
+        "和上面的定义或推导一致",
+        "正确项是",
+        "它直接符合",
+        "本题判断的是",
+        "这题要把概念本身说完整",
+        "不是因为文字像不像教材表述",
+    ]:
         if bad in text:
             errors.append(f"仍包含禁用或乱码片段：{bad}")
+    for q in questions:
+        if "兄弟" in clean_text(q.get("stem", "")) and "二叉搜索树的核心" in q.get("knowledgeDetail", ""):
+            errors.append(f"{q['label']}: 兄弟结点题混入 BST 无关解析")
     for q in questions:
         label = q["label"]
         if len(q.get("quickExplanation", "")) < 50:
